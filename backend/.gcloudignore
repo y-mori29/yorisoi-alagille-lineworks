@@ -1,0 +1,37 @@
+# gcloud builds submit のアップロード対象から除外するもの。
+# これが無いと .env / sa-key.json までビルドコンテキストに送られる（機密漏えい）。
+
+# 機密
+.env
+.env.*
+sa-key.json
+*.pem
+*.key
+
+# 依存・生成物（Dockerfile内で npm ci するため不要）
+node_modules/
+data/
+backups/
+output/
+
+# 開発用スクリプト・残骸
+test-*.js
+test_*.js
+debug-*.js
+debug_*.js
+verify_*.js
+check_models.js
+list-gemini-models.js
+register_local_files.js
+init-cors.js
+seed.js
+scripts/
+tests/
+bootstrap-yorisoi-env.sh
+stt-diag*.js
+*.zip
+*.log
+
+# VCS
+.git/
+.gitignore

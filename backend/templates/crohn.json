@@ -1,0 +1,125 @@
+{
+  "id": "crohn",
+  "name": "クローン病",
+  "shortName": "CD",
+  "description": "クローン病（Crohn's Disease）の治療歴・薬・症状を管理",
+  "color": "#f97316",
+  "icon": "gastroenterology",
+
+  "modules": [
+    { "id": "timeline", "label": "治療タイムライン", "description": "治療経歴を時系列で管理", "icon": "timeline", "page": "timeline.html", "enabled": true, "core": true },
+    { "id": "medications", "label": "おくすり管理", "description": "処方薬と変更履歴", "icon": "medication", "page": "medications.html", "enabled": true, "core": true },
+    { "id": "symptom-log", "label": "症状きろく", "description": "毎日の体調をかんたん記録", "icon": "edit_note", "page": "symptom-log.html", "enabled": true },
+    { "id": "restroom", "label": "トイレさがし", "description": "近くのトイレをマップで表示", "icon": "wc", "page": "restroom.html", "enabled": true },
+    { "id": "emergency-card", "label": "緊急カード", "description": "救急時に見せる情報カード", "icon": "emergency", "page": "emergency-card.html", "enabled": true, "core": true },
+    { "id": "lab-tracker", "label": "検査値きろく", "description": "血液検査の推移をグラフ表示", "icon": "science", "page": "lab-tracker.html", "enabled": true, "core": true },
+    { "id": "summary", "label": "診察用サマリー", "description": "診察時に医師に見せる画面", "icon": "description", "page": "summary.html", "enabled": true, "core": true, "fullWidth": true },
+    { "id": "resources", "label": "患者会・支援情報", "description": "患者会・医療費助成・診療拠点情報", "icon": "groups", "page": "resources.html", "enabled": true, "core": true, "fullWidth": true }
+  ],
+
+  "medicationMaster": "crohn-medications.json",
+
+  "resourcesConfig": {
+    "title": "患者会・支援情報",
+    "intro": "クローン病（指定難病96）は若年発症が多い慢性炎症性腸疾患で、国内患者数は約7万人と推計されます。同じ経験を持つ仲間と繋がる、公的支援を使う、診療拠点を知る ── そんな時に役立つ情報をまとめました。",
+    "sections": [
+      {
+        "heading": "患者会・ピアサポート",
+        "icon": "groups",
+        "items": [
+          { "name": "NPO法人 IBDネットワーク", "url": "https://ibdnetwork.org/", "note": "全国のIBD患者会ネットワーク。地域の交流会・食事や就労の悩みを共有できる仲間が見つかる。" },
+          { "name": "NPO法人 日本炎症性腸疾患協会（CCFJ）", "url": "https://ccfj.jp/", "note": "医師・研究者と協働する団体。市民公開講座・Web講演会で最新治療を平易に学べる。" }
+        ]
+      },
+      {
+        "heading": "公的支援・医療費助成",
+        "icon": "account_balance",
+        "items": [
+          { "name": "難病情報センター：クローン病（指定難病96）", "url": "https://www.nanbyou.or.jp/entry/219", "note": "疾患解説・重症度分類・医療費助成の要件・申請手続きを網羅した公式ページ。" },
+          { "name": "日本難病・疾病団体協議会（JPA）", "url": "https://nanbyo.jp/", "note": "難病相談支援センター・就労支援・制度情報の入口。地域の難病連とも繋がる。" }
+        ]
+      },
+      {
+        "heading": "医療情報・診療拠点",
+        "icon": "local_hospital",
+        "items": [
+          { "name": "日本消化器病学会：炎症性腸疾患（IBD）診療ガイドライン", "url": "https://www.jsge.or.jp/committees/guideline/guideline/ibd.html", "note": "クローン病の栄養療法・生物学的製剤・外科治療の標準指針を確認できる。" },
+          { "name": "一般社団法人 日本炎症性腸疾患学会", "url": "https://www.jsibd.jp/guideline/", "note": "IBD専門医の学会。ガイドライン・研究成果・専門施設の情報を公開。" }
+        ]
+      }
+    ],
+    "footer": "掲載情報は執筆時点のものです。手続き・治療方針の最新情報は各公式サイト・主治医にご確認ください。"
+  },
+
+  "symptomConfig": {
+    "title": "症状きろく",
+    "metrics": [
+      { "id": "bowelCount", "label": "排便回数", "type": "counter", "min": 0, "max": 30, "default": 0, "unit": "回" },
+      { "id": "bristolScale", "label": "便の状態（ブリストルスケール）", "type": "scale", "min": 1, "max": 7, "labels": ["硬", "塊", "ひび", "普通", "柔", "泥", "水"], "description": "1=硬い ← → 7=水様" },
+      { "id": "abdominalPain", "label": "腹痛", "type": "scale", "min": 0, "max": 5, "description": "0=なし ← → 5=激痛" },
+      { "id": "bleeding", "label": "血便あり", "type": "toggle", "dangerColor": true },
+      { "id": "stenosisSymptoms", "label": "狭窄症状（腹満・嘔気）", "type": "toggle", "dangerColor": true, "description": "腸閉塞の疑いで緊急受診検討" },
+      { "id": "fatigue", "label": "疲労感", "type": "scale", "min": 0, "max": 5 },
+      { "id": "weight", "label": "体重変動", "type": "scale", "min": 0, "max": 4, "labels": ["減少", "やや減", "維持", "やや増", "増加"] }
+    ],
+    "summaryMetrics": [
+      { "id": "bowelCount", "label": "平均回数/日", "aggregate": "avg" },
+      { "id": "abdominalPain", "label": "平均腹痛", "aggregate": "avg" },
+      { "id": "bleeding", "label": "血便日数", "aggregate": "countTrue" },
+      { "id": "stenosisSymptoms", "label": "狭窄症状日数", "aggregate": "countTrue" },
+      { "id": "fatigue", "label": "平均疲労", "aggregate": "avg" }
+    ]
+  },
+
+  "labConfig": {
+    "items": [
+      { "id": "crp", "label": "CRP", "unit": "mg/dL", "normalRange": [0, 0.3], "warnHigh": 1.0 },
+      { "id": "hb", "label": "Hb（ヘモグロビン）", "unit": "g/dL", "normalRange": [12, 17], "warnLow": 10 },
+      { "id": "wbc", "label": "白血球数", "unit": "/μL", "normalRange": [3500, 9000] },
+      { "id": "alb", "label": "アルブミン", "unit": "g/dL", "normalRange": [3.8, 5.2], "warnLow": 3.0 },
+      { "id": "esr", "label": "赤沈（ESR）", "unit": "mm/h", "normalRange": [0, 15], "warnHigh": 30 },
+      { "id": "plt", "label": "血小板数", "unit": "万/μL", "normalRange": [15, 35] },
+      { "id": "ferritin", "label": "フェリチン", "unit": "ng/mL", "normalRange": [20, 250] },
+      { "id": "ca", "label": "Ca（カルシウム）", "unit": "mg/dL", "normalRange": [8.6, 10.2] },
+      { "id": "fcal", "label": "便中カルプロテクチン", "unit": "μg/g", "normalRange": [0, 50], "warnHigh": 250, "note": "2022年CD保険適用" },
+      { "id": "lrg", "label": "LRG", "unit": "μg/mL", "normalRange": [0, 16], "warnHigh": 16 },
+      { "id": "vitB12", "label": "ビタミンB12", "unit": "pg/mL", "normalRange": [200, 900], "warnLow": 200, "note": "回腸病変での吸収不良" },
+      { "id": "folate", "label": "葉酸", "unit": "ng/mL", "normalRange": [3, 17], "warnLow": 3 },
+      { "id": "vitD", "label": "25-OHビタミンD", "unit": "ng/mL", "normalRange": [30, 100], "warnLow": 20 },
+      { "id": "mg", "label": "マグネシウム", "unit": "mg/dL", "normalRange": [1.8, 2.4] },
+      { "id": "zn", "label": "亜鉛", "unit": "μg/dL", "normalRange": [80, 130], "warnLow": 60 },
+      { "id": "hbv_dna", "label": "HBV-DNA", "unit": "LogIU/mL", "normalRange": [0, 1.3], "note": "生物学的製剤導入時必須" }
+    ]
+  },
+
+  "scoringTools": [
+    { "id": "cdai", "label": "CDAI（Crohn's Disease Activity Index）", "range": "0-600+", "note": "標準的活動性評価指標。<150=寛解" },
+    { "id": "hbi", "label": "HBI（Harvey-Bradshaw Index）", "range": "0-20+", "note": "簡易版CDAI。<5=寛解" }
+  ],
+
+  "emergencyConfig": {
+    "title": "緊急情報カード",
+    "subtitle": "クローン病",
+    "fields": [
+      { "id": "lesion", "label": "病変部位", "placeholder": "例: 小腸型・大腸型" },
+      { "id": "severity", "label": "活動性", "placeholder": "例: 寛解期" }
+    ],
+    "warnings": [
+      "免疫抑制剤使用中の場合、感染症リスクに注意",
+      "生物学的製剤使用中は日和見感染・結核再燃のリスクあり",
+      "激しい腹痛・発熱は腸閉塞/穿孔の疑いで緊急受診",
+      "ステロイド服用中の急な中断は副腎不全のリスク"
+    ]
+  },
+
+  "timelineCategories": [
+    { "id": "diagnosis", "label": "診断", "color": "#dbeafe" },
+    { "id": "hospitalization", "label": "入院", "color": "#fde68a" },
+    { "id": "medication_change", "label": "薬変更", "color": "#d1fae5" },
+    { "id": "exam", "label": "検査", "color": "#e9d5ff" },
+    { "id": "surgery", "label": "手術", "color": "#fecaca" },
+    { "id": "flare", "label": "再燃", "color": "#fca5a5" },
+    { "id": "self-log", "label": "じぶんメモ", "color": "#e0f2fe" },
+    { "id": "other", "label": "その他", "color": "#e5e5e5" }
+  ]
+}

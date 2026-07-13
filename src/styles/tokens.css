@@ -1,0 +1,24 @@
+:root {
+  --alagille-ink: #49372f;
+  --alagille-ink-soft: #66554c;
+  --alagille-muted: #82766d;
+  --alagille-paper: #fffdf6;
+  --alagille-paper-warm: #fff8ea;
+  --alagille-paper-mint: #f2fbf7;
+  --alagille-line: #e7d9c8;
+  --alagille-mint: #228c68;
+  --alagille-mint-soft: #e6f5ec;
+  --alagille-coral: #ee705f;
+  --alagille-coral-soft: #fff0ec;
+  --alagille-sky: #4d91bd;
+  --alagille-sky-soft: #edf7fc;
+  --alagille-honey: #d99b25;
+  --alagille-honey-soft: #fff6d9;
+  --alagille-sage: #6f9554;
+  --alagille-sage-soft: #edf6e8;
+  --alagille-radius-sm: 14px;
+  --alagille-radius-md: 18px;
+  --alagille-radius-lg: 26px;
+  --alagille-shadow-soft: 0 10px 24px rgba(89, 70, 56, .08);
+  --alagille-font-body: "Zen Maru Gothic", "Hiragino Maru Gothic ProN", "Yu Gothic", "Meiryo", system-ui, sans-serif;
+}

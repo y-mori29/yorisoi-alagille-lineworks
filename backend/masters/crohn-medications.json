@@ -1,0 +1,30 @@
+{
+  "categories": [
+    { "id": "5-ASA", "name": "5-ASA製剤", "description": "軽症の炎症抑制", "step": 1 },
+    { "id": "steroid", "name": "ステロイド", "description": "中等症〜重症・活動期", "step": 2 },
+    { "id": "immunomodulator", "name": "免疫調節薬", "description": "ステロイド依存・難治例", "step": 3 },
+    { "id": "biologic", "name": "生物学的製剤", "description": "中等症〜重症・難治例", "step": 4 },
+    { "id": "jak_inhibitor", "name": "JAK阻害薬", "description": "中等症〜重症・難治例", "step": 4 },
+    { "id": "nutritional", "name": "栄養療法", "description": "成分栄養・半消化態栄養", "step": 1 },
+    { "id": "other", "name": "その他", "description": "抗菌薬など", "step": 5 }
+  ],
+  "medications": [
+    { "genericName": "メサラジン", "brandNames": ["ペンタサ", "アサコール", "リアルダ"], "category": "5-ASA", "dosageForms": ["経口"] },
+    { "genericName": "プレドニゾロン", "brandNames": ["プレドニン"], "category": "steroid", "dosageForms": ["経口", "点滴"] },
+    { "genericName": "ブデソニド", "brandNames": ["ゼンタコート"], "category": "steroid", "dosageForms": ["経口"], "notes": "回盲部の局所作用型" },
+    { "genericName": "アザチオプリン", "brandNames": ["イムラン", "アザニン"], "category": "immunomodulator", "dosageForms": ["経口"], "notes": "効果発現まで3〜6ヶ月" },
+    { "genericName": "6-メルカプトプリン", "brandNames": ["ロイケリン"], "category": "immunomodulator", "dosageForms": ["経口"] },
+    { "genericName": "メトトレキサート", "brandNames": ["リウマトレックス"], "category": "immunomodulator", "dosageForms": ["経口"] },
+    { "genericName": "インフリキシマブ", "brandNames": ["レミケード"], "category": "biologic", "dosageForms": ["点滴"], "mechanism": "抗TNFα抗体" },
+    { "genericName": "アダリムマブ", "brandNames": ["ヒュミラ"], "category": "biologic", "dosageForms": ["皮下注射"], "mechanism": "抗TNFα抗体", "notes": "自己注射可" },
+    { "genericName": "ウステキヌマブ", "brandNames": ["ステラーラ"], "category": "biologic", "dosageForms": ["点滴", "皮下注射"], "mechanism": "抗IL-12/23抗体" },
+    { "genericName": "ベドリズマブ", "brandNames": ["エンタイビオ"], "category": "biologic", "dosageForms": ["点滴"], "mechanism": "抗α4β7インテグリン抗体" },
+    { "genericName": "リサンキズマブ", "brandNames": ["スキリージ"], "category": "biologic", "dosageForms": ["点滴", "皮下注射"], "mechanism": "抗IL-23p19抗体" },
+    { "genericName": "グセルクマブ", "brandNames": ["トレムフィア"], "category": "biologic", "dosageForms": ["点滴", "皮下注射"], "mechanism": "抗IL-23p19抗体", "notes": "2025年6月CD適応追加" },
+    { "genericName": "ミリキズマブ", "brandNames": ["オンボー"], "category": "biologic", "dosageForms": ["点滴", "皮下注射"], "mechanism": "抗IL-23p19抗体", "notes": "2025年3月CD適応追加" },
+    { "genericName": "ウパダシチニブ", "brandNames": ["リンヴォック"], "category": "jak_inhibitor", "dosageForms": ["経口"], "notes": "選択的JAK1阻害" },
+    { "genericName": "成分栄養剤", "brandNames": ["エレンタール"], "category": "nutritional", "dosageForms": ["経口", "経管"], "notes": "消化器に負担をかけない" },
+    { "genericName": "半消化態栄養剤", "brandNames": ["ラコール"], "category": "nutritional", "dosageForms": ["経口"] },
+    { "genericName": "メトロニダゾール", "brandNames": ["フラジール"], "category": "other", "dosageForms": ["経口"], "notes": "瘻孔・膿瘍合併時" }
+  ]
+}

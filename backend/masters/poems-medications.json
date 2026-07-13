@@ -1,0 +1,218 @@
+{
+  "categories": [
+    {
+      "id": "imid",
+      "name": "免疫調節薬（IMiDs）",
+      "description": "VEGF抑制の中心的な治療薬。催奇形性・血栓症リスクあり",
+      "step": 1
+    },
+    {
+      "id": "proteasome",
+      "name": "プロテアソーム阻害薬",
+      "description": "形質細胞抑制。末梢神経障害悪化に注意",
+      "step": 2
+    },
+    {
+      "id": "chemo",
+      "name": "化学療法・ステロイド（MP療法等）",
+      "description": "高齢・移植非適応例での基本治療",
+      "step": 2
+    },
+    {
+      "id": "asct",
+      "name": "自家造血幹細胞移植（ASCT）関連薬",
+      "description": "大量化学療法前処置",
+      "step": 3
+    },
+    {
+      "id": "anticoagulant",
+      "name": "抗凝固薬（血栓予防）",
+      "description": "IMiDs併用時・血栓リスク低減",
+      "step": 2
+    },
+    {
+      "id": "endocrine",
+      "name": "内分泌補充療法",
+      "description": "糖尿病・甲状腺・性腺機能低下への対応",
+      "step": 2
+    },
+    {
+      "id": "support",
+      "name": "支持療法・対症療法",
+      "description": "疼痛・しびれ・浮腫・その他合併症",
+      "step": 2
+    }
+  ],
+  "medications": [
+    {
+      "genericName": "サリドマイド",
+      "brandNames": ["サレド"],
+      "category": "imid",
+      "dosageForms": ["経口"],
+      "mechanism": "VEGF産生抑制・抗血管新生",
+      "notes": "★国内でPOEMSに承認済の唯一のIMiD（2021年2月）。催奇形性のためTERMS登録必須。血栓症・末梢神経障害悪化に注意"
+    },
+    {
+      "genericName": "レナリドミド",
+      "brandNames": ["レブラミド"],
+      "category": "imid",
+      "dosageForms": ["経口"],
+      "mechanism": "VEGF抑制・抗腫瘍免疫",
+      "notes": "POEMSには適応外だが臨床で使用。催奇形性のためRevMate登録必須。血栓症予防に抗凝固薬併用"
+    },
+    {
+      "genericName": "ポマリドミド",
+      "brandNames": ["ポマリスト"],
+      "category": "imid",
+      "dosageForms": ["経口"],
+      "notes": "難治・再発例に検討される第3世代IMiD。催奇形性あり"
+    },
+    {
+      "genericName": "ボルテゾミブ",
+      "brandNames": ["ベルケイド"],
+      "category": "proteasome",
+      "dosageForms": ["皮下注射", "点滴"],
+      "notes": "POEMSには適応外。末梢神経障害悪化のリスクがあるため慎重投与"
+    },
+    {
+      "genericName": "カルフィルゾミブ",
+      "brandNames": ["カイプロリス"],
+      "category": "proteasome",
+      "dosageForms": ["点滴"],
+      "notes": "POEMSには適応外。神経毒性がボルテゾミブより少ないとされる"
+    },
+    {
+      "genericName": "ダラツムマブ",
+      "brandNames": ["ダラザレックス"],
+      "category": "proteasome",
+      "dosageForms": ["皮下注射", "点滴"],
+      "notes": "抗CD38抗体。POEMSには適応外、難治例で検討"
+    },
+    {
+      "genericName": "メルファラン",
+      "brandNames": ["アルケラン"],
+      "category": "chemo",
+      "dosageForms": ["経口", "点滴"],
+      "notes": "MP療法（メルファラン＋プレドニゾロン）の主軸。ASCT前処置では大量投与"
+    },
+    {
+      "genericName": "シクロホスファミド",
+      "brandNames": ["エンドキサン"],
+      "category": "chemo",
+      "dosageForms": ["経口", "点滴"],
+      "notes": "ASCT前の幹細胞動員に使用"
+    },
+    {
+      "genericName": "プレドニゾロン",
+      "brandNames": ["プレドニン"],
+      "category": "chemo",
+      "dosageForms": ["経口"],
+      "notes": "MP療法・単独使用・減量プロトコルで維持"
+    },
+    {
+      "genericName": "デキサメタゾン",
+      "brandNames": ["デカドロン"],
+      "category": "chemo",
+      "dosageForms": ["経口", "点滴"],
+      "notes": "IMiDs併用時の標準パートナー"
+    },
+    {
+      "genericName": "G-CSF（フィルグラスチム）",
+      "brandNames": ["グラン", "ノイトロジン"],
+      "category": "asct",
+      "dosageForms": ["皮下注射"],
+      "notes": "ASCT時の幹細胞動員・好中球減少対策"
+    },
+    {
+      "genericName": "エドキサバン",
+      "brandNames": ["リクシアナ"],
+      "category": "anticoagulant",
+      "dosageForms": ["経口"],
+      "notes": "DOAC。IMiDs併用時の血栓予防"
+    },
+    {
+      "genericName": "アピキサバン",
+      "brandNames": ["エリキュース"],
+      "category": "anticoagulant",
+      "dosageForms": ["経口"],
+      "notes": "DOAC。血栓予防"
+    },
+    {
+      "genericName": "ワルファリン",
+      "brandNames": ["ワーファリン"],
+      "category": "anticoagulant",
+      "dosageForms": ["経口"],
+      "notes": "INRモニタリング必須"
+    },
+    {
+      "genericName": "アスピリン",
+      "brandNames": ["バイアスピリン"],
+      "category": "anticoagulant",
+      "dosageForms": ["経口"],
+      "notes": "低用量での血栓予防（100mg/日）"
+    },
+    {
+      "genericName": "インスリン グラルギン",
+      "brandNames": ["ランタス", "トレシーバ"],
+      "category": "endocrine",
+      "dosageForms": ["皮下注射"],
+      "notes": "糖尿病合併時の基礎インスリン"
+    },
+    {
+      "genericName": "グリメピリド",
+      "brandNames": ["アマリール"],
+      "category": "endocrine",
+      "dosageForms": ["経口"],
+      "notes": "SU薬。内分泌合併症で血糖コントロール用"
+    },
+    {
+      "genericName": "レボチロキシン",
+      "brandNames": ["チラーヂンS"],
+      "category": "endocrine",
+      "dosageForms": ["経口"],
+      "notes": "甲状腺機能低下の補充療法"
+    },
+    {
+      "genericName": "テストステロン",
+      "brandNames": ["エナルモンデポー", "グロウミン"],
+      "category": "endocrine",
+      "dosageForms": ["筋注", "塗布"],
+      "notes": "性腺機能低下症の補充療法（男性）"
+    },
+    {
+      "genericName": "プレガバリン",
+      "brandNames": ["リリカ"],
+      "category": "support",
+      "dosageForms": ["経口"],
+      "notes": "末梢神経障害性疼痛の第一選択"
+    },
+    {
+      "genericName": "ミロガバリン",
+      "brandNames": ["タリージェ"],
+      "category": "support",
+      "dosageForms": ["経口"],
+      "notes": "神経障害性疼痛。プレガバリンより眠気少ない"
+    },
+    {
+      "genericName": "デュロキセチン",
+      "brandNames": ["サインバルタ"],
+      "category": "support",
+      "dosageForms": ["経口"],
+      "notes": "神経障害性疼痛・うつ症状併発時に有用"
+    },
+    {
+      "genericName": "フロセミド",
+      "brandNames": ["ラシックス"],
+      "category": "support",
+      "dosageForms": ["経口", "点滴"],
+      "notes": "浮腫・胸腹水への利尿薬（POEMSでは効果限定的）"
+    },
+    {
+      "genericName": "スピロノラクトン",
+      "brandNames": ["アルダクトンA"],
+      "category": "support",
+      "dosageForms": ["経口"],
+      "notes": "K保持性利尿薬。体液貯留対策"
+    }
+  ]
+}

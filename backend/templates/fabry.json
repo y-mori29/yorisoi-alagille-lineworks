@@ -1,0 +1,123 @@
+{
+  "id": "fabry",
+  "name": "ファブリー病",
+  "shortName": "Fabry",
+  "description": "ファブリー病（Fabry disease）の治療歴・薬・症状を管理",
+  "color": "#db2777",
+  "icon": "biotech",
+
+  "modules": [
+    { "id": "timeline", "label": "治療タイムライン", "description": "治療経歴を時系列で管理", "icon": "timeline", "page": "timeline.html", "enabled": true, "core": true },
+    { "id": "medications", "label": "おくすり管理", "description": "処方薬と変更履歴", "icon": "medication", "page": "medications.html", "enabled": true, "core": true },
+    { "id": "symptom-log", "label": "症状きろく", "description": "全身症状をかんたん記録", "icon": "edit_note", "page": "symptom-log.html", "enabled": true },
+    { "id": "restroom", "label": "トイレさがし", "description": "近くのトイレをマップで表示", "icon": "wc", "page": "restroom.html", "enabled": false },
+    { "id": "emergency-card", "label": "緊急カード", "description": "救急時に見せる情報カード", "icon": "emergency", "page": "emergency-card.html", "enabled": true, "core": true },
+    { "id": "lab-tracker", "label": "検査値きろく", "description": "血液検査の推移をグラフ表示", "icon": "science", "page": "lab-tracker.html", "enabled": true, "core": true },
+    { "id": "summary", "label": "診察用サマリー", "description": "診察時に医師に見せる画面", "icon": "description", "page": "summary.html", "enabled": true, "core": true, "fullWidth": true },
+    { "id": "resources", "label": "患者会・支援情報", "description": "患者会・医療費助成・診療拠点情報", "icon": "groups", "page": "resources.html", "enabled": true, "core": true, "fullWidth": true }
+  ],
+
+  "medicationMaster": "fabry-medications.json",
+
+  "resourcesConfig": {
+    "title": "患者会・支援情報",
+    "intro": "ファブリー病はライソゾームのα-ガラクトシダーゼ活性低下によって全身に症状が広がる遺伝性希少疾患（指定難病19「ライソゾーム病」に含まれる）です。同じ病気の仲間とつながりたい、医療費助成や診療拠点を知りたい ── そんな時に役立つ情報をまとめました。",
+    "sections": [
+      {
+        "heading": "患者会・ピアサポート",
+        "icon": "groups",
+        "items": [
+          { "name": "全国ファブリー病患者と家族の会（ふくろうの会）", "url": "https://www.fabrynet.jp/", "note": "2002年から活動する日本のファブリー病患者会。セミナー・交流会・相談窓口を提供しています。" },
+          { "name": "日本ライソゾーム病患者家族会協議会", "url": "https://j-lsd.com/", "note": "ファブリー病を含むライソゾーム病全般の患者・家族をつなぐ協議会。各疾患の患者会一覧も掲載。" },
+          { "name": "日本ファブリー病フォーラム（JFDF）", "url": "https://www.jfdf.jp/", "note": "医療者と患者・家族が情報共有するフォーラム。最新の研究・治療動向を学べます。" }
+        ]
+      },
+      {
+        "heading": "公的支援・医療費助成",
+        "icon": "account_balance",
+        "items": [
+          { "name": "難病情報センター ライソゾーム病（指定難病19）", "url": "https://www.nanbyou.or.jp/entry/4063", "note": "ファブリー病はライソゾーム病の枠で指定難病19として医療費助成の対象になります。制度概要・申請窓口を確認できます。" },
+          { "name": "小児慢性特定疾病情報センター ファブリー（Fabry）病", "url": "https://www.shouman.jp/disease/details/08_06_091/", "note": "18歳未満で発症した方向けの公的助成制度。疾病概要と申請の手引きを掲載。" },
+          { "name": "日本難病・疾病団体協議会（JPA）", "url": "https://nanbyo.jp/", "note": "難病・長期慢性疾病の患者団体の全国組織。制度改善の働きかけや相談窓口情報を発信しています。" }
+        ]
+      },
+      {
+        "heading": "医療情報・診療拠点",
+        "icon": "local_hospital",
+        "items": [
+          { "name": "日本ライソゾーム病研究会", "url": "http://lysosomal-sd.jp/", "note": "ライソゾーム病の専門医療者が集う学術団体。学術集会の情報や研究動向を確認できます。" },
+          { "name": "ファブリーコネクト（疾患情報サイト）", "url": "https://www.fabryconnect.jp/", "note": "症状チェック、診断・治療の解説、社会保障制度のガイドなど患者向け情報が網羅されています。" },
+          { "name": "慶應義塾大学病院 KOMPAS ファブリー（Fabry）病", "url": "https://kompas.hosp.keio.ac.jp/disease/000647/", "note": "大学病院による信頼性の高い疾患解説。症状・診断・治療を平易にまとめています。" }
+        ]
+      }
+    ],
+    "footer": "掲載情報は執筆時点のものです。手続き・治療方針の最新情報は各公式サイト・主治医にご確認ください。"
+  },
+
+  "symptomConfig": {
+    "title": "症状きろく",
+    "metrics": [
+      { "id": "extremityPain", "label": "四肢の痛み・しびれ", "type": "scale", "min": 0, "max": 5, "description": "アクロパレステジア" },
+      { "id": "gastrointestinal", "label": "消化器症状（腹痛・下痢）", "type": "toggle" },
+      { "id": "fatigue", "label": "疲労感", "type": "scale", "min": 0, "max": 5 },
+      { "id": "sweatIssue", "label": "発汗異常（無汗・低汗）", "type": "toggle" },
+      { "id": "tinnitus", "label": "耳鳴り・難聴", "type": "toggle" },
+      { "id": "dizziness", "label": "めまい", "type": "toggle" },
+      { "id": "orthostaticHypotension", "label": "立ちくらみ・失神", "type": "toggle", "description": "自律神経障害の評価" },
+      { "id": "infusionReaction", "label": "輸注関連反応（IRR）", "type": "toggle", "dangerColor": true, "description": "ERT投与中〜直後の発熱・悪寒・発疹" },
+      { "id": "ertSideEffect", "label": "ERT投与後の体調不良", "type": "toggle", "description": "投与翌日以降の遅延反応" }
+    ],
+    "summaryMetrics": [
+      { "id": "extremityPain", "label": "平均疼痛", "aggregate": "avg" },
+      { "id": "fatigue", "label": "平均疲労", "aggregate": "avg" },
+      { "id": "gastrointestinal", "label": "消化器症状日数", "aggregate": "countTrue" },
+      { "id": "orthostaticHypotension", "label": "立ちくらみ日数", "aggregate": "countTrue" },
+      { "id": "infusionReaction", "label": "IRR日数", "aggregate": "countTrue" },
+      { "id": "ertSideEffect", "label": "ERT副反応日数", "aggregate": "countTrue" }
+    ]
+  },
+
+  "labConfig": {
+    "items": [
+      { "id": "lysogb3", "label": "Lyso-Gb3（血漿）", "unit": "ng/mL", "normalRange": [0, 2.0], "warnHigh": 2.7, "note": "LC-MS/MS測定。正常<2.0、2.0以上で疾患疑い、>2.7で臓器障害リスク高（新潟大学/武田基準）" },
+      { "id": "galA", "label": "α-ガラクトシダーゼA活性", "unit": "nmol/h/mg", "normalRange": [25, 100], "warnLow": 4, "note": "男性で<4.0 nmol/h/mLは診断上の重要指標" },
+      { "id": "mulberry", "label": "尿中マルベリー小体", "unit": "/HPF", "normalRange": [0, 0], "note": "尿蛋白より早期に出現。ERT効果判定に有用（感度>82%・特異度>94%）" },
+      { "id": "uGb3", "label": "尿中Gb3", "unit": "μg/mmolCr", "normalRange": [0, 50], "note": "尿中に排泄される糖脂質" },
+      { "id": "egfr", "label": "eGFR", "unit": "mL/min", "normalRange": [60, 150], "warnLow": 45 },
+      { "id": "uprot", "label": "尿蛋白（UPCR）", "unit": "g/gCr", "normalRange": [0, 0.15], "warnHigh": 0.5 },
+      { "id": "cre", "label": "クレアチニン", "unit": "mg/dL", "normalRange": [0.5, 1.0], "warnHigh": 1.3 },
+      { "id": "bnp", "label": "BNP", "unit": "pg/mL", "normalRange": [0, 18.4], "warnHigh": 100 },
+      { "id": "lvef", "label": "心エコー LVEF", "unit": "%", "normalRange": [55, 80], "warnLow": 40 },
+      { "id": "troponin", "label": "高感度トロポニン", "unit": "ng/L", "normalRange": [0, 14], "warnHigh": 50 },
+      { "id": "ada_igg", "label": "抗薬物抗体（IgG）", "unit": "結果", "note": "ERTの継続判断に影響。リプレガルでIgG陽性率39%" }
+    ]
+  },
+
+  "emergencyConfig": {
+    "title": "緊急情報カード",
+    "subtitle": "ファブリー病",
+    "fields": [
+      { "id": "geneType", "label": "遺伝子型", "placeholder": "例: GLA遺伝子変異" },
+      { "id": "treatment", "label": "治療内容", "placeholder": "例: 2週ごとERT" }
+    ],
+    "warnings": [
+      "隔週の酵素補充療法（ERT）実施中",
+      "心肥大・腎機能低下・脳血管障害のリスクあり",
+      "ERT副反応（発熱・悪寒・発疹）の既往あり",
+      "疼痛発作時はカルバマゼピン使用歴を確認",
+      "手術・麻酔時は心機能・腎機能の評価が必要"
+    ]
+  },
+
+  "timelineCategories": [
+    { "id": "diagnosis", "label": "診断", "color": "#dbeafe" },
+    { "id": "genetic_test", "label": "遺伝子検査", "color": "#c7d2fe" },
+    { "id": "ert_start", "label": "ERT開始", "color": "#fbcfe8" },
+    { "id": "medication_change", "label": "薬変更", "color": "#d1fae5" },
+    { "id": "exam", "label": "検査", "color": "#e9d5ff" },
+    { "id": "hospitalization", "label": "入院", "color": "#fde68a" },
+    { "id": "complication", "label": "合併症", "color": "#fca5a5" },
+    { "id": "self-log", "label": "じぶんメモ", "color": "#e0f2fe" },
+    { "id": "other", "label": "その他", "color": "#e5e5e5" }
+  ]
+}

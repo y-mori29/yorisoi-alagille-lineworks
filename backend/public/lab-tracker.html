@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>検査値を記録 - よりそい アラジール</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined">
+  <link rel="stylesheet" href="/css/alagille-family.css">
+  <link rel="stylesheet" href="/css/alagille-labs.css">
+  <script src="/js/account-guard.js"></script>
+</head>
+<body class="lab-page">
+  <main class="app lab-shell">
+    <header class="lab-header">
+      <a class="round" href="/?disease=alagille" aria-label="ホームへ戻る"><span class="material-symbols-outlined">arrow_back</span></a>
+      <img class="lab-wordmark" src="/assets/alagille-brand/ui-extracted/wordmark-alagille-v1.png" alt="よりそい アラジール">
+      <a class="round" href="/?disease=alagille" aria-label="ホーム"><span class="material-symbols-outlined">home</span></a>
+    </header>
+
+    <section class="lab-patient" aria-label="記録する人">
+      <img id="patient-avatar" src="/assets/alagille-brand/avatars/avatar-child-boy-v1.png" alt="">
+      <span><small>記録する人</small><strong id="patient-name">読み込み中</strong></span>
+      <a href="/?patient=change" aria-label="記録する人を切り替える">切り替え</a>
+    </section>
+
+    <div class="lab-title-row">
+      <img src="/assets/alagille-brand/ui-extracted/tile-test-tubes-v1.png" alt="">
+      <div><h1>検査値を記録</h1><p>写真から読み取り、確認して保存します</p></div>
+    </div>
+
+    <nav class="lab-tabs" aria-label="検査値画面の表示">
+      <button type="button" class="active" data-view="capture" aria-selected="true"><span class="material-symbols-outlined">add_photo_alternate</span>新しく記録</button>
+      <button type="button" data-view="history" aria-selected="false"><span class="material-symbols-outlined">monitoring</span>一覧・グラフ</button>
+    </nav>
+    <aside id="tutorial-banner" class="tutorial-banner" hidden>
+      <span class="material-symbols-outlined">school</span>
+      <p><strong>使い方のお試し中</strong><br>この内容は実際の記録には保存されません。</p>
+      <button id="exit-tutorial" type="button">終了</button>
+    </aside>
+
+    <section id="capture-view" class="lab-view">
+      <ol class="lab-steps" aria-label="登録の手順">
+        <li class="current" data-step="photo"><span>1</span>写真</li>
+        <li data-step="read"><span>2</span>読み取り</li>
+        <li data-step="confirm"><span>3</span>確認</li>
+        <li data-step="saved"><span>4</span>保存</li>
+      </ol>
+
+      <div id="capture-state" class="lab-state">
+        <section class="lab-card capture-card">
+          <img class="document-art report-sample-art" src="/assets/alagille-brand/generated/lab-report-tutorial-sample-v3.png" alt="採血検査結果報告書の例">
+          <h2>検査結果を撮影・選択</h2>
+          <p>用紙全体が明るく、まっすぐ写るようにすると読み取りやすくなります。</p>
+          <label class="lab-primary-button" for="lab-photo"><span class="material-symbols-outlined">photo_camera</span>写真を選ぶ</label>
+          <input class="visually-hidden" id="lab-photo" type="file" accept="image/jpeg,image/png,image/webp" capture="environment">
+          <button id="sample-button" class="lab-secondary-button" type="button"><span class="material-symbols-outlined">school</span>使い方をお試しする</button>
+        </section>
+        <p class="lab-safety-note"><span class="material-symbols-outlined">lightbulb</span>保存前に、元の写真と読み取った数字を必ず確認できます。</p>
+      </div>
+
+      <div id="preview-state" class="lab-state" hidden>
+        <section class="lab-card preview-card">
+          <div class="lab-card-heading"><h2>この写真を読み取ります</h2><button id="choose-again" type="button">選び直す</button></div>
+          <button class="photo-zoom-button" type="button" data-photo-source="photo-preview" aria-label="選択した検査結果の写真を大きく見る">
+            <img id="photo-preview" src="" alt="選択した検査結果の写真">
+            <span><span class="material-symbols-outlined">zoom_in</span>大きく見る</span>
+          </button>
+          <label class="lab-field">検査日（分かる場合）<input id="test-date" type="date"></label>
+          <button id="read-button" class="lab-primary-button" type="button"><span class="material-symbols-outlined">document_scanner</span>数値を読み取る</button>
+        </section>
+      </div>
+
+      <div id="loading-state" class="lab-state" hidden>
+        <section class="lab-card loading-card" aria-live="polite">
+          <img src="/assets/alagille-brand/ui-extracted/tile-test-tubes-v1.png" alt="">
+          <span class="lab-spinner" aria-hidden="true"></span>
+          <h2>数値を読み取っています</h2>
+          <p>写真を閉じずに、そのままお待ちください。</p>
+        </section>
+      </div>
+
+      <div id="review-state" class="lab-state" hidden>
+        <section id="review-source-card" class="lab-card review-source-card">
+          <div class="lab-card-heading"><h2>元の検査結果</h2><span>タップして拡大</span></div>
+          <button class="photo-zoom-button review-photo-button" type="button" data-photo-source="review-photo" aria-label="元の検査結果を大きく見る">
+            <img id="review-photo" src="" alt="読み取り元の検査結果">
+            <span><span class="material-symbols-outlined">zoom_in</span>大きく見る</span>
+          </button>
+        </section>
+        <section class="lab-review-guide"><span class="material-symbols-outlined">compare</span><p><strong>元の写真と見比べてください</strong><br>気になる数字はタップして直せます。</p></section>
+        <form id="review-form" class="lab-card review-card">
+          <div class="lab-card-heading"><h2 id="review-title">読み取った内容</h2><span id="review-date"></span></div>
+          <div class="lab-metadata-fields">
+            <label class="lab-field required-field">検査日<span>必須</span><input id="review-test-date" type="date" required></label>
+            <label class="lab-field">病院名<span>任意</span><input id="hospital-name" type="text" placeholder="読み取れない場合は空欄で構いません"></label>
+            <label class="lab-field">診療科<span>任意</span><input id="department" type="text" placeholder="例：小児科"></label>
+          </div>
+          <div class="lab-value-head" aria-hidden="true"><span>項目</span><span>結果</span><span>単位</span><span>判定</span></div>
+          <div id="value-rows" class="lab-value-rows"></div>
+          <label class="lab-confirm-check"><input id="review-confirmed" type="checkbox" required><span>元の写真と見比べて、内容を確認しました</span></label>
+          <button class="lab-primary-button" type="submit"><span class="material-symbols-outlined">check_circle</span>確認して保存</button>
+        </form>
+      </div>
+
+      <div id="failed-state" class="lab-state" hidden>
+        <section class="lab-card failed-card">
+          <img src="/assets/alagille-brand/trimmed/08-checkup-document.png" alt="">
+          <h2>数値を読み取れませんでした</h2>
+          <p>撮り直すか、写真だけ保存してあとから数値を追加できます。</p>
+          <button id="retry-button" class="lab-secondary-button" type="button"><span class="material-symbols-outlined">refresh</span>撮り直す</button>
+          <button id="photo-only-button" class="lab-primary-button coral" type="button"><span class="material-symbols-outlined">save</span>写真として保存</button>
+        </section>
+      </div>
+
+      <div id="saved-state" class="lab-state" hidden>
+        <section class="lab-card saved-card" aria-live="polite">
+          <img src="/assets/alagille-brand/trimmed/09-heart-line.png" alt="">
+          <h2 id="saved-title">検査値を保存しました</h2>
+          <p id="saved-copy">家族で共有され、一覧とグラフから見返せます。</p>
+          <button id="view-history-button" class="lab-primary-button" type="button"><span class="material-symbols-outlined">monitoring</span>一覧・グラフを見る</button>
+          <button id="add-another-button" class="lab-text-button" type="button">続けて記録する</button>
+        </section>
+      </div>
+    </section>
+
+    <section id="history-view" class="lab-view" hidden>
+      <section class="lab-card trend-card">
+        <div class="lab-card-heading"><div><small>推移を見返す</small><h2 id="chart-title">総ビリルビン</h2></div><label class="visually-hidden" for="metric-select">検査項目</label><select id="metric-select"></select></div>
+        <div class="chart-wrap"><canvas id="trend-chart" width="700" height="310" aria-label="選択した検査項目の推移グラフ"></canvas></div>
+        <p class="chart-empty" id="chart-empty" hidden>この項目は、グラフにできる記録がまだありません。</p>
+      </section>
+
+      <section class="lab-history-section">
+        <div class="lab-section-heading"><h2>保存した記録</h2><span id="record-count"></span></div>
+        <div id="history-list" class="lab-history-list" aria-live="polite"></div>
+      </section>
+      <p class="lab-disclaimer">この画面は診断や判定ではなく、診察で伝えるための記録補助です。</p>
+    </section>
+  </main>
+
+  <dialog id="photo-dialog" class="photo-dialog" aria-label="検査結果の拡大表示">
+    <div class="photo-dialog-panel">
+      <button id="close-photo-dialog" class="photo-dialog-close" type="button" aria-label="拡大表示を閉じる"><span class="material-symbols-outlined">close</span></button>
+      <img id="photo-dialog-image" src="" alt="拡大した検査結果">
+    </div>
+  </dialog>
+
+  <script>
+    const avatarArtwork = {
+      "adult-man": "/assets/alagille-brand/avatars/avatar-adult-man-v1.png",
+      "adult-woman": "/assets/alagille-brand/avatars/avatar-adult-woman-v1.png",
+      "child-boy": "/assets/alagille-brand/avatars/avatar-child-boy-v1.png",
+      "child-girl": "/assets/alagille-brand/avatars/avatar-child-girl-v1.png"
+    };
+    const state = { patientId: "", photoDataUrl: null, photoSourceUrl: "", photoName: "", records: [], realRecords: [], tutorialRecords: [], values: [], tutorial: false, editingId: null };
+    const $ = (id) => document.getElementById(id);
+    const stateIds = ["capture-state", "preview-state", "loading-state", "review-state", "failed-state", "saved-state"];
+    document.addEventListener("DOMContentLoaded", async () => {
+      $("test-date").value = "";
+      bindEvents();
+      await loadPatient();
+      await loadRecords();
+    });
+
+    function bindEvents() {
+      document.querySelectorAll("[data-view]").forEach((button) => button.addEventListener("click", () => {
+        if (button.dataset.view === "capture" && state.tutorial) exitTutorial();
+        else setView(button.dataset.view);
+      }));
+      $("lab-photo").addEventListener("change", handlePhoto);
+      $("sample-button").addEventListener("click", useSample);
+      $("choose-again").addEventListener("click", resetCapture);
+      $("read-button").addEventListener("click", readPhoto);
+      $("review-form").addEventListener("submit", saveReviewedValues);
+      $("retry-button").addEventListener("click", resetCapture);
+      $("photo-only-button").addEventListener("click", savePhotoOnly);
+      $("view-history-button").addEventListener("click", () => setView("history"));
+      $("add-another-button").addEventListener("click", resetCapture);
+      $("metric-select").addEventListener("change", renderChart);
+      $("exit-tutorial").addEventListener("click", exitTutorial);
+      $("history-list").addEventListener("click", handleHistoryAction);
+      document.querySelectorAll("[data-photo-source]").forEach((button) => button.addEventListener("click", () => openPhotoDialog(button.dataset.photoSource)));
+      $("close-photo-dialog").addEventListener("click", () => $("photo-dialog").close());
+      $("photo-dialog").addEventListener("click", (event) => { if (event.target === $("photo-dialog")) $("photo-dialog").close(); });
+    }
+
+    async function loadPatient() {
+      try {
+        const response = await fetch("/api/family/patients");
+        const result = await response.json();
+        const savedId = localStorage.getItem("alagille-current-patient-id");
+        const patient = result.patients.find((item) => item.id === savedId) || result.patients[0];
+        if (!patient) return;
+        state.patientId = patient.id;
+        $("patient-name").textContent = patient.displayName;
+        $("patient-avatar").src = avatarArtwork[patient.avatarKey] || avatarArtwork["child-boy"];
+      } catch {
+        $("patient-name").textContent = "読み込めませんでした";
+      }
+    }
+
+    async function loadRecords() {
+      try {
+        const response = await fetch(`/api/labs?patientId=${encodeURIComponent(state.patientId)}`);
+        if (!response.ok) throw new Error();
+        const result = await response.json();
+        state.realRecords = result.records || [];
+      } catch {
+        state.realRecords = [];
+      }
+      state.records = state.tutorial ? state.records : state.realRecords;
+      renderHistory();
+    }
+
+    function setView(view) {
+      $("capture-view").hidden = view !== "capture";
+      $("history-view").hidden = view !== "history";
+      document.querySelectorAll("[data-view]").forEach((button) => {
+        const active = button.dataset.view === view;
+        button.classList.toggle("active", active);
+        button.setAttribute("aria-selected", String(active));
+      });
+      if (view === "history") renderHistory();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function showState(id, step) {
+      stateIds.forEach((stateId) => { $(stateId).hidden = stateId !== id; });
+      const order = ["photo", "read", "confirm", "saved"];
+      const currentIndex = order.indexOf(step);
+      document.querySelectorAll(".lab-steps li").forEach((item, index) => {
+        item.classList.toggle("current", index === currentIndex);
+        item.classList.toggle("done", index < currentIndex);
+      });
+    }
+
+    async function handlePhoto(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      if (!/^image\/(jpeg|png|webp)$/.test(file.type)) {
+        alert("JPEG、PNG、WebPの写真を選んでください。");
+        return;
+      }
+      try {
+        state.photoDataUrl = await resizeImage(file, 1800, 0.9);
+        state.photoSourceUrl = state.photoDataUrl;
+        state.photoName = file.name;
+        $("photo-preview").src = state.photoDataUrl;
+        showState("preview-state", "photo");
+      } catch {
+        alert("写真を読み込めませんでした。別の写真をお試しください。");
+      }
+    }
+
+    async function useSample() {
+      state.tutorial = true;
+      state.editingId = null;
+      state.photoDataUrl = null;
+      state.photoSourceUrl = "/assets/alagille-brand/generated/lab-report-tutorial-sample-v3.png";
+      state.photoName = "lab-report-tutorial-sample-v3.png";
+      try {
+        const response = await fetch("/api/labs/tutorial");
+        const result = await response.json();
+        state.tutorialRecords = result.records || [];
+        state.records = state.tutorialRecords;
+        state.photoSourceUrl = result.sampleImageUrl;
+        $("photo-preview").src = result.sampleImageUrl;
+        const sampleResponse = await fetch(result.sampleImageUrl);
+        if (!sampleResponse.ok) throw new Error("sample image unavailable");
+        const sampleBlob = await sampleResponse.blob();
+        state.photoDataUrl = await resizeImage(new File([sampleBlob], state.photoName, { type: sampleBlob.type }), 1800, 0.9);
+      } catch {
+        state.tutorialRecords = [];
+        state.records = [];
+        $("photo-preview").src = state.photoSourceUrl;
+        alert("お試し画像を読み込めませんでした。時間をおいて、もう一度お試しください。");
+        return;
+      }
+      $("test-date").value = "2026-07-12";
+      $("tutorial-banner").hidden = false;
+      showState("preview-state", "photo");
+    }
+
+    function resizeImage(file, maxSize, quality) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onerror = reject;
+        reader.onload = () => {
+          const image = new Image();
+          image.onerror = reject;
+          image.onload = () => {
+            const scale = Math.min(1, maxSize / Math.max(image.width, image.height));
+            const canvas = document.createElement("canvas");
+            canvas.width = Math.max(1, Math.round(image.width * scale));
+            canvas.height = Math.max(1, Math.round(image.height * scale));
+            canvas.getContext("2d").drawImage(image, 0, 0, canvas.width, canvas.height);
+            resolve(canvas.toDataURL("image/jpeg", quality));
+          };
+          image.src = reader.result;
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+
+    async function readPhoto() {
+      showState("loading-state", "read");
+      try {
+        const response = await fetch("/api/labs/ocr", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ patientId: state.patientId, photoDataUrl: state.photoDataUrl, testDate: $("test-date").value })
+        });
+        const result = await response.json();
+        if (!response.ok) throw new Error(result.error || "OCR failed");
+        state.values = result.values || [];
+        $("review-test-date").value = result.testDate || $("test-date").value;
+        $("hospital-name").value = result.hospitalName || "";
+        $("department").value = result.department || "";
+        $("review-confirmed").checked = false;
+        $("review-title").textContent = "読み取った内容";
+        updateReviewPhoto();
+        renderReviewRows();
+        showState("review-state", "confirm");
+      } catch (error) {
+        if (error.message) alert(error.message);
+        showState("failed-state", "read");
+      }
+    }
+
+    function renderReviewRows() {
+      $("review-date").textContent = formatDate($("review-test-date").value || $("test-date").value);
+      $("value-rows").replaceChildren(...state.values.map((item, index) => {
+        const row = document.createElement("div");
+        row.className = "lab-value-row";
+        row.innerHTML = `<div class="lab-value-main"><label><span class="visually-hidden">項目</span><input data-field="name" data-index="${index}" value="${escapeAttribute(item.name)}"></label><label><span class="visually-hidden">結果</span><input data-field="value" data-index="${index}" value="${escapeAttribute(item.value)}" inputmode="decimal"></label><label><span class="visually-hidden">単位</span><input data-field="unit" data-index="${index}" value="${escapeAttribute(item.unit)}"></label><label><span class="visually-hidden">判定</span><select data-field="flag" data-index="${index}" class="flag-${escapeAttribute((item.flag || "").toLowerCase())}"><option value=""${item.flag ? "" : " selected"}>-</option><option value="H"${item.flag === "H" ? " selected" : ""}>H</option><option value="L"${item.flag === "L" ? " selected" : ""}>L</option></select></label></div><label class="lab-reference-field"><span>当院基準範囲</span><input data-field="referenceRange" data-index="${index}" value="${escapeAttribute(item.referenceRange || "")}"></label>`;
+        row.querySelector('[data-field="flag"]').addEventListener("change", (event) => { event.target.className = `flag-${event.target.value.toLowerCase()}`; });
+        return row;
+      }));
+    }
+
+    async function saveReviewedValues(event) {
+      event.preventDefault();
+      state.values = [...document.querySelectorAll(".lab-value-row")].map((row) => ({
+        name: row.querySelector('[data-field="name"]').value.trim(),
+        value: row.querySelector('[data-field="value"]').value.trim(),
+        unit: row.querySelector('[data-field="unit"]').value.trim(),
+        referenceRange: row.querySelector('[data-field="referenceRange"]').value.trim(),
+        flag: row.querySelector('[data-field="flag"]').value
+      })).filter((item) => item.name || item.value);
+      await saveRecord(state.values);
+    }
+
+    async function savePhotoOnly() {
+      await saveRecord([]);
+    }
+
+    async function saveRecord(values) {
+      const testDate = $("review-test-date").value || $("test-date").value;
+      if (!testDate) { alert("検査日を入力してください。"); return; }
+      const payload = { patientId: state.patientId, testDate, category: "blood", photoDataUrl: state.photoDataUrl, photoName: state.photoName, values, hospitalName: $("hospital-name").value.trim(), department: $("department").value.trim() };
+      if (state.tutorial) {
+        const tutorialRecord = { id: "tutorial-current", ...payload, ocrStatus: values.length ? "confirmed" : "photo_only" };
+        state.records = [tutorialRecord, ...state.tutorialRecords];
+        $("saved-title").textContent = "お試しが完了しました";
+        $("saved-copy").textContent = "一覧とグラフの見え方を確認できます。実際の記録には保存されていません。";
+        renderHistory();
+        showState("saved-state", "saved");
+        return;
+      }
+      try {
+        const response = await fetch(state.editingId ? `/api/labs/${encodeURIComponent(state.editingId)}` : "/api/labs", {
+          method: state.editingId ? "PATCH" : "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+        if (!response.ok) throw new Error();
+        await loadRecords();
+        $("saved-title").textContent = state.editingId ? "記録を更新しました" : "検査値を保存しました";
+        $("saved-copy").textContent = "家族で共有され、一覧とグラフから見返せます。";
+        state.editingId = null;
+        showState("saved-state", "saved");
+      } catch {
+        alert("保存できませんでした。通信を確認して、もう一度お試しください。");
+      }
+    }
+
+    function resetCapture() {
+      if (state.tutorial) return exitTutorial();
+      state.photoDataUrl = null;
+      state.photoSourceUrl = "";
+      state.photoName = "";
+      state.values = [];
+      state.editingId = null;
+      $("lab-photo").value = "";
+      $("test-date").value = "";
+      showState("capture-state", "photo");
+      setView("capture");
+    }
+
+    function exitTutorial() {
+      state.tutorial = false;
+      state.tutorialRecords = [];
+      state.records = state.realRecords;
+      $("tutorial-banner").hidden = true;
+      state.photoDataUrl = null;
+      state.photoSourceUrl = "";
+      state.photoName = "";
+      state.values = [];
+      state.editingId = null;
+      $("lab-photo").value = "";
+      $("test-date").value = "";
+      renderHistory();
+      showState("capture-state", "photo");
+      setView("capture");
+    }
+
+    function renderHistory() {
+      const records = state.records;
+      $("record-count").textContent = `${records.length}件`;
+      if (!records.length) {
+        $("history-list").innerHTML = `<div class="lab-card lab-empty"><img src="/assets/alagille-brand/trimmed/08-checkup-document.png" alt=""><p>まだ保存した検査値はありません。</p></div>`;
+      } else {
+        $("history-list").replaceChildren(...records.map(createHistoryCard));
+      }
+      const names = [...new Set(records.flatMap((record) => (record.values || []).map((item) => item.name)).filter(Boolean))];
+      const previous = $("metric-select").value;
+      $("metric-select").replaceChildren(...names.map((name) => {
+        const option = document.createElement("option"); option.value = name; option.textContent = name; return option;
+      }));
+      if (names.includes(previous)) $("metric-select").value = previous;
+      renderChart();
+    }
+
+    function createHistoryCard(record) {
+      const card = document.createElement("article");
+      card.className = "lab-card history-card";
+      const values = (record.values || []).slice(0, 5);
+      const metadata = [record.hospitalName, record.department].filter(Boolean).map(escapeHtml).join("・");
+      const actions = state.tutorial ? "" : `<div class="history-actions"><button type="button" data-action="edit" data-record-id="${escapeAttribute(record.id)}"><span class="material-symbols-outlined">edit</span>編集</button><button type="button" class="delete" data-action="delete" data-record-id="${escapeAttribute(record.id)}"><span class="material-symbols-outlined">delete</span>削除</button></div>`;
+      card.innerHTML = `<div class="history-card-head"><span><small>検査日</small><strong>${escapeHtml(formatDate(record.testDate))}</strong>${metadata ? `<em>${metadata}</em>` : ""}</span><span class="history-status">${record.ocrStatus === "photo_only" ? "写真のみ" : `${values.length}項目`}</span></div>${values.length ? `<div class="history-values">${values.map((item) => `<span class="history-flag-${escapeAttribute((item.flag || "").toLowerCase())}"><small>${escapeHtml(item.name)}</small><strong>${escapeHtml(item.value)} <i>${escapeHtml(item.unit)}</i>${item.flag ? `<b>${escapeHtml(item.flag)}</b>` : ""}</strong></span>`).join("")}</div>` : `<p class="photo-only-copy"><span class="material-symbols-outlined">image</span>数値を読み取れなかった写真を保存しています。</p>`}${actions}`;
+      return card;
+    }
+
+    function handleHistoryAction(event) {
+      const button = event.target.closest("[data-action]");
+      if (!button) return;
+      const record = state.realRecords.find((item) => item.id === button.dataset.recordId);
+      if (!record) return;
+      if (button.dataset.action === "edit") return editRecord(record);
+      if (button.dataset.action === "delete") deleteRecord(record);
+    }
+
+    function editRecord(record) {
+      state.editingId = record.id;
+      state.values = (record.values || []).map((item) => ({ ...item }));
+      state.photoDataUrl = null;
+      state.photoSourceUrl = record.photoDataUrl || (record.photoObject ? `/api/labs/${encodeURIComponent(record.id)}/photo?patientId=${encodeURIComponent(state.patientId)}` : "");
+      state.photoName = record.photoName || "";
+      $("review-test-date").value = record.testDate || "";
+      $("hospital-name").value = record.hospitalName || "";
+      $("department").value = record.department || "";
+      $("review-confirmed").checked = false;
+      $("review-title").textContent = "保存した内容を編集";
+      updateReviewPhoto();
+      renderReviewRows();
+      setView("capture");
+      showState("review-state", "confirm");
+    }
+
+    async function deleteRecord(record) {
+      if (!window.confirm(`${formatDate(record.testDate)}の検査記録を削除しますか？`)) return;
+      try {
+        const response = await fetch(`/api/labs/${encodeURIComponent(record.id)}?patientId=${encodeURIComponent(state.patientId)}`, { method: "DELETE" });
+        if (!response.ok) throw new Error();
+        await loadRecords();
+      } catch {
+        alert("削除できませんでした。通信を確認して、もう一度お試しください。");
+      }
+    }
+
+    function updateReviewPhoto() {
+      const source = state.photoSourceUrl || state.photoDataUrl || "";
+      $("review-source-card").hidden = !source;
+      $("review-photo").src = source;
+    }
+
+    function openPhotoDialog(sourceId) {
+      const source = $(sourceId)?.src;
+      if (!source) return;
+      $("photo-dialog-image").src = source;
+      $("photo-dialog").showModal();
+    }
+
+    function renderChart() {
+      const name = $("metric-select").value;
+      $("chart-title").textContent = name || "検査値の推移";
+      const points = state.records.map((record) => {
+        const item = (record.values || []).find((value) => value.name === name);
+        const numeric = Number(String(item?.value || "").replace(/,/g, ""));
+        return item && Number.isFinite(numeric) ? { date: record.testDate, value: numeric, unit: item.unit || "" } : null;
+      }).filter(Boolean).sort((a, b) => a.date.localeCompare(b.date));
+      $("chart-empty").hidden = points.length > 0;
+      const canvas = $("trend-chart");
+      canvas.hidden = points.length === 0;
+      if (!points.length) return;
+      drawChart(canvas, points);
+    }
+
+    function drawChart(canvas, points) {
+      const dpr = window.devicePixelRatio || 1;
+      const cssWidth = canvas.clientWidth || 350;
+      const cssHeight = 170;
+      canvas.width = Math.round(cssWidth * dpr); canvas.height = Math.round(cssHeight * dpr);
+      const ctx = canvas.getContext("2d"); ctx.scale(dpr, dpr);
+      const pad = { left: 34, right: 14, top: 18, bottom: 34 };
+      const width = cssWidth - pad.left - pad.right; const height = cssHeight - pad.top - pad.bottom;
+      const values = points.map((point) => point.value); let min = Math.min(...values); let max = Math.max(...values);
+      if (min === max) { min -= 1; max += 1; } else { const margin = (max - min) * 0.25; min -= margin; max += margin; }
+      ctx.clearRect(0, 0, cssWidth, cssHeight); ctx.font = '11px "Zen Maru Gothic", sans-serif'; ctx.fillStyle = "#82766d";
+      ctx.strokeStyle = "#e8ded1"; ctx.lineWidth = 1;
+      for (let i = 0; i <= 3; i++) { const y = pad.top + height * i / 3; ctx.beginPath(); ctx.moveTo(pad.left, y); ctx.lineTo(pad.left + width, y); ctx.stroke(); const label = (max - (max - min) * i / 3).toFixed(1); ctx.fillText(label, 2, y + 4); }
+      const xFor = (index) => points.length === 1 ? pad.left + width / 2 : pad.left + width * index / (points.length - 1);
+      const yFor = (value) => pad.top + (max - value) / (max - min) * height;
+      ctx.strokeStyle = "#337ca6"; ctx.lineWidth = 2.5; ctx.lineJoin = "round"; ctx.beginPath();
+      points.forEach((point, index) => { const x = xFor(index); const y = yFor(point.value); if (index === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y); }); ctx.stroke();
+      points.forEach((point, index) => { const x = xFor(index); const y = yFor(point.value); ctx.fillStyle = "#fffdf6"; ctx.strokeStyle = "#337ca6"; ctx.lineWidth = 2.5; ctx.beginPath(); ctx.arc(x, y, 4.5, 0, Math.PI * 2); ctx.fill(); ctx.stroke(); ctx.fillStyle = "#66554c"; ctx.textAlign = "center"; ctx.fillText(point.date.slice(5).replace("-", "/"), x, cssHeight - 10); });
+      ctx.textAlign = "start";
+    }
+
+    function formatDate(value) {
+      if (!value) return "日付なし";
+      const parts = value.split("-"); return `${Number(parts[1])}月${Number(parts[2])}日`;
+    }
+    function escapeHtml(value) { const div = document.createElement("div"); div.textContent = value || ""; return div.innerHTML; }
+    function escapeAttribute(value) { return escapeHtml(value).replaceAll('"', "&quot;"); }
+  </script>
+</body>
+</html>

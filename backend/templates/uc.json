@@ -1,0 +1,201 @@
+{
+  "id": "uc",
+  "name": "潰瘍性大腸炎",
+  "shortName": "UC",
+  "description": "潰瘍性大腸炎（Ulcerative Colitis）の治療歴・薬・症状を管理",
+  "color": "#ee8b97",
+  "icon": "gastroenterology",
+
+  "modules": [
+    {
+      "id": "timeline",
+      "label": "治療タイムライン",
+      "description": "治療経歴を時系列で管理",
+      "icon": "timeline",
+      "page": "timeline.html",
+      "enabled": true,
+      "core": true
+    },
+    {
+      "id": "medications",
+      "label": "おくすり管理",
+      "description": "処方薬と変更履歴",
+      "icon": "medication",
+      "page": "medications.html",
+      "enabled": true,
+      "core": true
+    },
+    {
+      "id": "symptom-log",
+      "label": "症状きろく",
+      "description": "毎日の体調をかんたん記録",
+      "icon": "edit_note",
+      "page": "symptom-log.html",
+      "enabled": true
+    },
+    {
+      "id": "restroom",
+      "label": "トイレさがし",
+      "description": "近くのトイレをマップで表示",
+      "icon": "wc",
+      "page": "restroom.html",
+      "enabled": true
+    },
+    {
+      "id": "emergency-card",
+      "label": "緊急カード",
+      "description": "救急時に見せる情報カード",
+      "icon": "emergency",
+      "page": "emergency-card.html",
+      "enabled": true,
+      "core": true
+    },
+    {
+      "id": "lab-tracker",
+      "label": "検査値きろく",
+      "description": "血液検査の推移をグラフ表示",
+      "icon": "science",
+      "page": "lab-tracker.html",
+      "enabled": true,
+      "core": true
+    },
+    {
+      "id": "summary",
+      "label": "診察用サマリー",
+      "description": "診察時に医師に見せる画面",
+      "icon": "description",
+      "page": "summary.html",
+      "enabled": true,
+      "core": true,
+      "fullWidth": true
+    },
+    {
+      "id": "resources",
+      "label": "患者会・支援情報",
+      "description": "患者会・医療費助成・診療拠点情報",
+      "icon": "groups",
+      "page": "resources.html",
+      "enabled": true,
+      "core": true,
+      "fullWidth": true
+    }
+  ],
+
+  "medicationMaster": "uc-medications.json",
+
+  "resourcesConfig": {
+    "title": "患者会・支援情報",
+    "intro": "潰瘍性大腸炎（指定難病97）は国内で約22万人超が医療費助成を受ける代表的なIBDです。同じ経験を持つ仲間と繋がる、公的支援を使う、診療拠点を知る ── そんな時に役立つ情報をまとめました。",
+    "sections": [
+      {
+        "heading": "患者会・ピアサポート",
+        "icon": "groups",
+        "items": [
+          { "name": "NPO法人 IBDネットワーク", "url": "https://ibdnetwork.org/", "note": "全国のIBD患者会を束ねるネットワーク組織。地域の患者会情報・交流会・療養生活のQ&Aを集約。" },
+          { "name": "NPO法人 日本炎症性腸疾患協会（CCFJ）", "url": "https://ccfj.jp/", "note": "2003年設立。医師と連携した市民公開講座・Web講演会・出版物を通じて社会啓発を行う。" }
+        ]
+      },
+      {
+        "heading": "公的支援・医療費助成",
+        "icon": "account_balance",
+        "items": [
+          { "name": "難病情報センター：潰瘍性大腸炎（指定難病97）", "url": "https://www.nanbyou.or.jp/entry/218", "note": "疾患解説・重症度分類・医療費助成の要件・申請手続きをまとめた公式ページ。" },
+          { "name": "日本難病・疾病団体協議会（JPA）", "url": "https://nanbyo.jp/", "note": "難病患者の全国組織。相談支援センター案内・就労サポーター制度・政策提言情報。" }
+        ]
+      },
+      {
+        "heading": "医療情報・診療拠点",
+        "icon": "local_hospital",
+        "items": [
+          { "name": "日本消化器病学会：炎症性腸疾患（IBD）診療ガイドライン", "url": "https://www.jsge.or.jp/committees/guideline/guideline/ibd.html", "note": "医療者向け最新ガイドライン。治療方針の根拠を主治医と確認したい時に。" },
+          { "name": "一般社団法人 日本炎症性腸疾患学会", "url": "https://www.jsibd.jp/guideline/", "note": "IBDを専門とする学会。診療ガイドライン・学術情報を掲載。" }
+        ]
+      }
+    ],
+    "footer": "掲載情報は執筆時点のものです。手続き・治療方針の最新情報は各公式サイト・主治医にご確認ください。"
+  },
+
+  "symptomConfig": {
+    "title": "症状きろく",
+    "metrics": [
+      {
+        "id": "bowelCount",
+        "label": "排便回数",
+        "type": "counter",
+        "min": 0,
+        "max": 30,
+        "default": 0,
+        "unit": "回"
+      },
+      {
+        "id": "bristolScale",
+        "label": "便の状態（ブリストルスケール）",
+        "type": "scale",
+        "min": 1,
+        "max": 7,
+        "labels": ["硬", "塊", "ひび", "普通", "柔", "泥", "水"],
+        "description": "1=硬い ← → 7=水様"
+      },
+      {
+        "id": "bleeding",
+        "label": "血便あり",
+        "type": "toggle",
+        "dangerColor": true
+      },
+      {
+        "id": "painScore",
+        "label": "おなかの痛み",
+        "type": "scale",
+        "min": 0,
+        "max": 5,
+        "description": "0=なし ← → 5=とても痛い"
+      }
+    ],
+    "summaryMetrics": [
+      { "id": "bowelCount", "label": "平均回数/日", "aggregate": "avg" },
+      { "id": "bleeding", "label": "血便日数", "aggregate": "countTrue" },
+      { "id": "painScore", "label": "平均痛み", "aggregate": "avg" }
+    ]
+  },
+
+  "labConfig": {
+    "items": [
+      { "id": "crp", "label": "CRP", "unit": "mg/dL", "normalRange": [0, 0.3], "warnHigh": 1.0 },
+      { "id": "hb", "label": "Hb（ヘモグロビン）", "unit": "g/dL", "normalRange": [12, 17], "warnLow": 10 },
+      { "id": "wbc", "label": "白血球数", "unit": "/μL", "normalRange": [3500, 9000] },
+      { "id": "alb", "label": "アルブミン", "unit": "g/dL", "normalRange": [3.8, 5.2], "warnLow": 3.0 },
+      { "id": "esr", "label": "赤沈（ESR）", "unit": "mm/h", "normalRange": [0, 15], "warnHigh": 30 },
+      { "id": "plt", "label": "血小板数", "unit": "万/μL", "normalRange": [15, 35] },
+      { "id": "fcal", "label": "便中カルプロテクチン", "unit": "μg/g", "normalRange": [0, 50], "warnHigh": 250, "note": "活動性評価の標準指標。粘膜治癒目安<250" },
+      { "id": "lrg", "label": "LRG（ロイシンリッチα2糖蛋白）", "unit": "μg/mL", "normalRange": [0, 16], "warnHigh": 16, "note": "生物学的製剤使用時CRP正常でも活動性評価可能" },
+      { "id": "hbv_dna", "label": "HBV-DNA", "unit": "LogIU/mL", "normalRange": [0, 1.3], "note": "免疫抑制/生物学的製剤導入時必須" }
+    ]
+  },
+
+  "scoringTools": [
+    { "id": "pmayo", "label": "部分Mayoスコア（pMayo）", "range": "0-9", "note": "日常診療のUC活動性評価の標準" }
+  ],
+
+  "emergencyConfig": {
+    "title": "緊急情報カード",
+    "subtitle": "潰瘍性大腸炎",
+    "fields": [
+      { "id": "diagnosisType", "label": "病型", "placeholder": "例: 全大腸炎型" },
+      { "id": "severity", "label": "重症度", "placeholder": "例: 中等症・寛解期" }
+    ],
+    "warnings": [
+      "免疫抑制剤使用中の場合、感染症リスクに注意",
+      "ステロイド服用中の場合、急な中断は副腎不全のリスク"
+    ]
+  },
+
+  "timelineCategories": [
+    { "id": "diagnosis", "label": "診断", "color": "#dbeafe" },
+    { "id": "hospitalization", "label": "入院", "color": "#fde68a" },
+    { "id": "medication_change", "label": "薬変更", "color": "#d1fae5" },
+    { "id": "exam", "label": "検査", "color": "#e9d5ff" },
+    { "id": "treatment_change", "label": "治療方針変更", "color": "#ffedd5" },
+    { "id": "self-log", "label": "じぶんメモ", "color": "#e0f2fe" },
+    { "id": "other", "label": "その他", "color": "#e5e5e5" }
+  ]
+}

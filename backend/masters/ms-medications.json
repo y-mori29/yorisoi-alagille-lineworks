@@ -1,0 +1,28 @@
+{
+  "categories": [
+    { "id": "dmt_injection", "name": "注射型DMT（疾患修飾薬）", "description": "インターフェロン・グラチラマー", "step": 1 },
+    { "id": "dmt_oral", "name": "経口DMT", "description": "フマル酸・フィンゴリモドなど", "step": 2 },
+    { "id": "dmt_infusion", "name": "点滴型DMT", "description": "ナタリズマブ・オクレリズマブなど", "step": 3 },
+    { "id": "steroid", "name": "ステロイド", "description": "再発時パルス療法", "step": 4 },
+    { "id": "symptomatic", "name": "対症療法薬", "description": "歩行改善・痙縮対策", "step": 5 },
+    { "id": "other", "name": "その他", "description": "従来型免疫抑制薬", "step": 5 }
+  ],
+  "medications": [
+    { "genericName": "インターフェロンβ-1a", "brandNames": ["アボネックス"], "category": "dmt_injection", "dosageForms": ["筋注"], "notes": "週1回" },
+    { "genericName": "インターフェロンβ-1b", "brandNames": ["ベタフェロン"], "category": "dmt_injection", "dosageForms": ["皮下注射"], "notes": "隔日" },
+    { "genericName": "グラチラマー", "brandNames": ["コパキソン"], "category": "dmt_injection", "dosageForms": ["皮下注射"] },
+    { "genericName": "ペグインターフェロンβ-1a", "brandNames": ["プレグリディ"], "category": "dmt_injection", "dosageForms": ["皮下注射"], "notes": "2週ごと" },
+    { "genericName": "フマル酸ジメチル", "brandNames": ["テクフィデラ"], "category": "dmt_oral", "dosageForms": ["経口"] },
+    { "genericName": "フィンゴリモド", "brandNames": ["イムセラ", "ジレニア"], "category": "dmt_oral", "dosageForms": ["経口"], "notes": "S1P受容体調整薬" },
+    { "genericName": "シポニモド", "brandNames": ["メーゼント"], "category": "dmt_oral", "dosageForms": ["経口"], "notes": "S1P受容体調整薬" },
+    { "genericName": "ナタリズマブ", "brandNames": ["タイサブリ"], "category": "dmt_infusion", "dosageForms": ["点滴"], "mechanism": "抗α4インテグリン抗体", "notes": "PMLリスク・JCV抗体測定必須" },
+    { "genericName": "オクレリズマブ", "brandNames": ["オクレバス"], "category": "dmt_infusion", "dosageForms": ["点滴"], "mechanism": "抗CD20抗体" },
+    { "genericName": "アレムツズマブ", "brandNames": ["レムトラーダ"], "category": "dmt_infusion", "dosageForms": ["点滴"], "mechanism": "抗CD52抗体" },
+    { "genericName": "オファツムマブ", "brandNames": ["ケシンプタ"], "category": "dmt_injection", "dosageForms": ["皮下注射"], "mechanism": "抗CD20抗体", "notes": "2021年3月日本承認・月1回自己注射可・在宅自己注射適用" },
+    { "genericName": "メチルプレドニゾロン", "brandNames": ["ソル・メドロール"], "category": "steroid", "dosageForms": ["点滴"], "notes": "再発時パルス療法" },
+    { "genericName": "プレドニゾロン", "brandNames": ["プレドニン"], "category": "steroid", "dosageForms": ["経口"] },
+    { "genericName": "ファンピリジン", "brandNames": ["ファンピラ"], "category": "symptomatic", "dosageForms": ["経口"], "notes": "歩行改善" },
+    { "genericName": "バクロフェン", "brandNames": ["リオレサール"], "category": "symptomatic", "dosageForms": ["経口"], "notes": "痙縮" },
+    { "genericName": "ミトキサントロン", "brandNames": ["ノバントロン"], "category": "other", "dosageForms": ["点滴"], "notes": "心毒性注意" }
+  ]
+}

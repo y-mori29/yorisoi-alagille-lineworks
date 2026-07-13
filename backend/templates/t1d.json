@@ -1,0 +1,293 @@
+{
+  "id": "t1d",
+  "name": "1型糖尿病",
+  "shortName": "T1D",
+  "description": "1型糖尿病（Type 1 Diabetes）のインスリン治療・血糖管理・症状を管理",
+  "color": "#0ea5e9",
+  "icon": "bloodtype",
+
+  "modules": [
+    {
+      "id": "timeline",
+      "label": "治療タイムライン",
+      "description": "治療経歴を時系列で管理",
+      "icon": "timeline",
+      "page": "timeline.html",
+      "enabled": true,
+      "core": true
+    },
+    {
+      "id": "medications",
+      "label": "おくすり管理",
+      "description": "インスリン・デバイスの処方と変更履歴",
+      "icon": "medication",
+      "page": "medications.html",
+      "enabled": true,
+      "core": true
+    },
+    {
+      "id": "symptom-log",
+      "label": "症状きろく",
+      "description": "毎日の血糖コントロール状況をかんたん記録",
+      "icon": "edit_note",
+      "page": "symptom-log.html",
+      "enabled": true
+    },
+    {
+      "id": "restroom",
+      "label": "トイレさがし",
+      "description": "近くのトイレをマップで表示",
+      "icon": "wc",
+      "page": "restroom.html",
+      "enabled": false
+    },
+    {
+      "id": "emergency-card",
+      "label": "緊急カード",
+      "description": "救急時に見せる情報カード",
+      "icon": "emergency",
+      "page": "emergency-card.html",
+      "enabled": true,
+      "core": true
+    },
+    {
+      "id": "lab-tracker",
+      "label": "検査値きろく",
+      "description": "血液検査の推移をグラフ表示",
+      "icon": "science",
+      "page": "lab-tracker.html",
+      "enabled": true,
+      "core": true
+    },
+    {
+      "id": "summary",
+      "label": "診察用サマリー",
+      "description": "診察時に医師に見せる画面",
+      "icon": "description",
+      "page": "summary.html",
+      "enabled": true,
+      "core": true,
+      "fullWidth": true
+    },
+    {
+      "id": "resources",
+      "label": "患者会・支援情報",
+      "description": "患者会・医療費助成・診療拠点情報",
+      "icon": "groups",
+      "page": "resources.html",
+      "enabled": true,
+      "core": true,
+      "fullWidth": true
+    }
+  ],
+
+  "medicationMaster": "t1d-medications.json",
+
+  "resourcesConfig": {
+    "title": "患者会・支援情報",
+    "intro": "1型糖尿病は自己免疫により膵臓のインスリン分泌が失われる疾患で、国内推定患者数は10〜14万人とされます。生涯にわたるインスリン治療と血糖管理が必要な中で、同じ立場の仲間と出会い、制度を知ることは大きな支えになります ── そんな時に役立つ情報をまとめました。",
+    "sections": [
+      {
+        "heading": "患者会・ピアサポート",
+        "icon": "groups",
+        "items": [
+          { "name": "日本IDDMネットワーク", "url": "https://japan-iddm.net/", "note": "1型糖尿病の根絶を目指す全国組織。患者・家族の交流イベントや療養費助成、最新研究情報を発信しています。" },
+          { "name": "日本糖尿病協会", "url": "https://www.nittokyo.or.jp/", "note": "全国に支部を持ち、患者・家族・医療者が一体となって活動。療養指導や交流の場が豊富です。" }
+        ]
+      },
+      {
+        "heading": "公的支援・医療費助成",
+        "icon": "account_balance",
+        "items": [
+          { "name": "小児慢性特定疾病情報センター", "url": "https://www.shouman.jp/disease/", "note": "18歳未満で発症した1型糖尿病は小児慢性特定疾病として医療費助成の対象になります。申請窓口や疾病一覧を確認できます。" },
+          { "name": "日本糖尿病協会 患者向け情報", "url": "https://www.nittokyo.or.jp/modules/patient/index.php?content_id=1", "note": "療養手帳や糖尿病連携手帳など、日々の管理に役立つ協会の支援ツールを紹介しています。" }
+        ]
+      },
+      {
+        "heading": "医療情報・診療拠点",
+        "icon": "local_hospital",
+        "items": [
+          { "name": "日本糖尿病学会", "url": "https://www.jds.or.jp/", "note": "診療ガイドライン、専門医・認定教育施設の検索など、信頼できる医療情報の総本山です。" }
+        ]
+      }
+    ],
+    "footer": "掲載情報は執筆時点のものです。手続き・治療方針の最新情報は各公式サイト・主治医にご確認ください。"
+  },
+
+  "symptomConfig": {
+    "title": "症状きろく",
+    "metrics": [
+      {
+        "id": "tir",
+        "label": "TIR（Time in Range）",
+        "type": "counter",
+        "min": 0,
+        "max": 100,
+        "default": 70,
+        "unit": "%",
+        "description": "70-180mg/dL範囲内の時間割合。目標≥70%（18-65歳）"
+      },
+      {
+        "id": "tbr_l2",
+        "label": "TBR Lv2（<54mg/dL）",
+        "type": "counter",
+        "min": 0,
+        "max": 100,
+        "default": 0,
+        "unit": "%",
+        "description": "臨床的に重要な低血糖。目標<1%",
+        "dangerColor": true
+      },
+      {
+        "id": "tar_l1",
+        "label": "TAR（>180mg/dL）",
+        "type": "counter",
+        "min": 0,
+        "max": 100,
+        "default": 0,
+        "unit": "%",
+        "description": "目標<25%"
+      },
+      {
+        "id": "cv",
+        "label": "CV（変動係数）",
+        "type": "counter",
+        "min": 0,
+        "max": 100,
+        "default": 30,
+        "unit": "%",
+        "description": "血糖変動の振れ幅。目標<36%"
+      },
+      {
+        "id": "tdd",
+        "label": "インスリン総投与量（TDD）",
+        "type": "counter",
+        "min": 0,
+        "max": 200,
+        "default": 0,
+        "unit": "単位/日"
+      },
+      {
+        "id": "hypoLv2Count",
+        "label": "Lv2低血糖（<54mg/dL）",
+        "type": "counter",
+        "min": 0,
+        "max": 10,
+        "default": 0,
+        "unit": "回",
+        "dangerColor": true
+      },
+      {
+        "id": "hypoLv3Count",
+        "label": "Lv3重症低血糖（要介助）",
+        "type": "counter",
+        "min": 0,
+        "max": 10,
+        "default": 0,
+        "unit": "回",
+        "dangerColor": true,
+        "description": "意識障害・他者介助を要する"
+      },
+      {
+        "id": "hypoUnawareness",
+        "label": "低血糖への無自覚",
+        "type": "toggle",
+        "dangerColor": true,
+        "description": "重症低血糖リスク判定に必須"
+      },
+      {
+        "id": "carbIntake",
+        "label": "炭水化物摂取量",
+        "type": "counter",
+        "min": 0,
+        "max": 500,
+        "default": 0,
+        "unit": "g"
+      },
+      {
+        "id": "exercise",
+        "label": "運動",
+        "type": "scale",
+        "min": 0,
+        "max": 3,
+        "labels": ["なし", "軽い", "中程度", "激しい"],
+        "description": "0=なし ← → 3=激しい"
+      },
+      {
+        "id": "siteRotation",
+        "label": "注射/ポンプ部位変更",
+        "type": "toggle"
+      },
+      {
+        "id": "fatigue",
+        "label": "疲労感",
+        "type": "scale",
+        "min": 0,
+        "max": 5,
+        "description": "0=なし ← → 5=とても強い"
+      }
+    ],
+    "summaryMetrics": [
+      { "id": "tir", "label": "平均TIR(%)", "aggregate": "avg" },
+      { "id": "cv", "label": "平均CV(%)", "aggregate": "avg" },
+      { "id": "tbr_l2", "label": "平均TBR Lv2(%)", "aggregate": "avg" },
+      { "id": "tar_l1", "label": "平均TAR(%)", "aggregate": "avg" },
+      { "id": "tdd", "label": "平均TDD", "aggregate": "avg" },
+      { "id": "hypoLv2Count", "label": "Lv2低血糖日数", "aggregate": "sum" },
+      { "id": "hypoLv3Count", "label": "Lv3低血糖日数", "aggregate": "sum" }
+    ]
+  },
+
+  "labConfig": {
+    "items": [
+      { "id": "hba1c", "label": "HbA1c", "unit": "%", "normalRange": [4.6, 6.2], "warnHigh": 7.0 },
+      { "id": "gmi", "label": "GMI（Glucose Management Indicator）", "unit": "%", "normalRange": [5.5, 7.0], "warnHigh": 7.0, "note": "CGMから算出される推定HbA1c" },
+      { "id": "cpr", "label": "C-ペプチド（CPR）", "unit": "ng/mL", "normalRange": [0.6, 2.8], "warnLow": 0.5, "note": "残存β細胞機能の評価" },
+      { "id": "anti_gad", "label": "抗GAD抗体", "unit": "U/mL", "normalRange": [0, 5], "note": "1型糖尿病の診断・緩徐進行1型の判定" },
+      { "id": "anti_ia2", "label": "抗IA-2抗体", "unit": "U/mL", "normalRange": [0, 0.4], "note": "1型糖尿病の自己抗体" },
+      { "id": "egfr", "label": "eGFR", "unit": "mL/min/1.73m²", "normalRange": [60, 120], "warnLow": 45 },
+      { "id": "urine_alb", "label": "尿中アルブミン", "unit": "mg/gCr", "normalRange": [0, 30], "warnHigh": 300 },
+      { "id": "tc", "label": "総コレステロール", "unit": "mg/dL", "normalRange": [130, 219] },
+      { "id": "ldl", "label": "LDLコレステロール", "unit": "mg/dL", "normalRange": [60, 139], "warnHigh": 140 },
+      { "id": "tg", "label": "中性脂肪", "unit": "mg/dL", "normalRange": [30, 149], "warnHigh": 150 },
+      { "id": "tsh", "label": "TSH", "unit": "μIU/mL", "normalRange": [0.5, 5.0], "warnLow": 0.3, "warnHigh": 10.0 },
+      { "id": "cre", "label": "クレアチニン（Cre）", "unit": "mg/dL", "normalRange": [0.6, 1.1], "warnHigh": 1.5 }
+    ]
+  },
+
+  "scoringTools": [
+    { "id": "tir_target", "label": "TIR国際コンセンサス目標", "note": "TIR≥70%, TBR(<70)<4%, TBR(<54)<1%, TAR(>180)<25%, TAR(>250)<5%, CV<36%" },
+    { "id": "hypo_levels", "label": "低血糖レベル定義", "note": "Lv1=54-69mg/dL（警告）, Lv2=<54mg/dL（臨床的に重要）, Lv3=重症（意識障害/他者介助）" }
+  ],
+
+  "emergencyConfig": {
+    "title": "緊急情報カード",
+    "subtitle": "1型糖尿病",
+    "fields": [
+      { "id": "onsetAge", "label": "発症年齢", "placeholder": "例: 12歳" },
+      { "id": "insulinRegimen", "label": "インスリン療法", "placeholder": "例: MDI（頻回注射）/ CSII（ポンプ療法）" },
+      { "id": "pumpModel", "label": "インスリンポンプ機種", "placeholder": "例: Medtronic 780G（装着中の場合）" },
+      { "id": "cgmDevice", "label": "CGM/FGM機器", "placeholder": "例: Dexcom G7 / FreeStyleリブレ3" }
+    ],
+    "warnings": [
+      "意識障害・けいれん時はグルカゴン投与を検討（低血糖の可能性）",
+      "グルカゴン注射キットまたは経鼻グルカゴン（バクスミー）の所持を確認",
+      "意識がある場合はブドウ糖10〜20gを経口摂取させる",
+      "糖尿病性ケトアシドーシス（DKA）のリスクあり — 嘔吐・腹痛・過呼吸・フルーツ臭に注意",
+      "インスリンポンプ装着中の場合、ポンプの動作確認・回路閉塞の有無を確認",
+      "インスリンの中断は絶対禁止 — ポンプ離脱時は速やかにペン注射へ切替",
+      "自己判断でインスリンを中止しないよう本人・家族に確認"
+    ]
+  },
+
+  "timelineCategories": [
+    { "id": "diagnosis", "label": "診断", "color": "#dbeafe" },
+    { "id": "medication_change", "label": "薬変更", "color": "#d1fae5" },
+    { "id": "device_change", "label": "機器変更", "color": "#bae6fd" },
+    { "id": "exam", "label": "検査", "color": "#e9d5ff" },
+    { "id": "hospitalization", "label": "入院", "color": "#fde68a" },
+    { "id": "complication", "label": "合併症", "color": "#fecaca" },
+    { "id": "self-log", "label": "じぶんメモ", "color": "#e0f2fe" },
+    { "id": "other", "label": "その他", "color": "#e5e5e5" }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "diseaseId": "alagille",
+  "name": "アラジール症候群 薬剤メモ",
+  "description": "薬剤名は診察内容に出たものだけを記録します。このマスタは入力補助であり、治療提案ではありません。",
+  "categories": [
+    {
+      "id": "itch",
+      "label": "かゆみ・胆汁うっ滞に関する薬",
+      "medications": []
+    },
+    {
+      "id": "nutrition",
+      "label": "栄養・ビタミンに関する薬",
+      "medications": []
+    },
+    {
+      "id": "liver",
+      "label": "肝臓に関する薬",
+      "medications": []
+    },
+    {
+      "id": "heart",
+      "label": "心臓に関する薬",
+      "medications": []
+    },
+    {
+      "id": "kidney",
+      "label": "腎臓に関する薬",
+      "medications": []
+    },
+    {
+      "id": "other",
+      "label": "その他",
+      "medications": []
+    }
+  ],
+  "freeTextFirst": true,
+  "notes": [
+    "薬剤名・用量・変更内容は、診察会話や保護者メモに出た内容だけを記録する。",
+    "一般的な治療薬リストをAIが補完して表示しない。",
+    "服薬変更は必ず主治医・薬剤師の指示として確認する。"
+  ]
+}

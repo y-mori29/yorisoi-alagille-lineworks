@@ -1,0 +1,278 @@
+{
+  "id": "general",
+  "name": "その他の病気（一般疾患）",
+  "shortName": "一般",
+  "description": "リストに病名がない方・特定の病名がない方はこちら",
+  "color": "#94a3b8",
+  "icon": "health_and_safety",
+  "sortOrder": 99,
+  "modules": [
+    {
+      "id": "timeline",
+      "label": "治療タイムライン",
+      "description": "治療経歴を時系列で管理",
+      "icon": "timeline",
+      "page": "timeline.html",
+      "enabled": true,
+      "core": true
+    },
+    {
+      "id": "medications",
+      "label": "おくすり管理",
+      "description": "処方薬と変更履歴",
+      "icon": "medication",
+      "page": "medications.html",
+      "enabled": true,
+      "core": true
+    },
+    {
+      "id": "symptom-log",
+      "label": "症状きろく",
+      "description": "毎日の体調をかんたん記録",
+      "icon": "edit_note",
+      "page": "symptom-log.html",
+      "enabled": true
+    },
+    {
+      "id": "emergency-card",
+      "label": "緊急カード",
+      "description": "救急時に見せる情報カード",
+      "icon": "emergency",
+      "page": "emergency-card.html",
+      "enabled": true,
+      "core": true
+    },
+    {
+      "id": "lab-tracker",
+      "label": "検査値きろく",
+      "description": "血液検査の推移をグラフ表示",
+      "icon": "science",
+      "page": "lab-tracker.html",
+      "enabled": true,
+      "core": true
+    },
+    {
+      "id": "summary",
+      "label": "診察用サマリー",
+      "description": "診察時に医師に見せる画面",
+      "icon": "description",
+      "page": "summary.html",
+      "enabled": true,
+      "core": true,
+      "fullWidth": true
+    },
+    {
+      "id": "resources",
+      "label": "支援情報",
+      "description": "医療費助成・相談先の情報",
+      "icon": "groups",
+      "page": "resources.html",
+      "enabled": true,
+      "core": true,
+      "fullWidth": true
+    }
+  ],
+  "medicationMaster": "general-medications.json",
+  "resourcesConfig": {
+    "title": "支援情報",
+    "intro": "病気とともに過ごす中で使える、公的な支援や相談先の入口をまとめました。病名が決まっている方は、疾患ごとの患者会や支援制度も合わせて探してみてください。",
+    "sections": [
+      {
+        "heading": "医療費の支援",
+        "icon": "account_balance",
+        "items": [
+          {
+            "name": "高額療養費制度（厚生労働省）",
+            "url": "https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/kenkou_iryou/iryouhoken/juuyou/kougakuiryou/index.html",
+            "note": "1か月の医療費の自己負担が上限額を超えた分が払い戻される制度。加入している健康保険の窓口で申請できます。"
+          },
+          {
+            "name": "医療費控除（国税庁）",
+            "url": "https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1120.htm",
+            "note": "1年間の医療費が一定額を超えた場合、確定申告で所得控除を受けられます。通院の交通費も対象になることがあります。"
+          }
+        ]
+      },
+      {
+        "heading": "相談先",
+        "icon": "support_agent",
+        "items": [
+          {
+            "name": "医療機能情報提供制度（医療情報ネット）",
+            "url": "https://www.iryou.teikyouseido.mhlw.go.jp/",
+            "note": "全国の病院・診療所・薬局を検索できる公的サイト。専門の医療機関を探すときに。"
+          },
+          {
+            "name": "難病情報センター",
+            "url": "https://www.nanbyou.or.jp/",
+            "note": "病名が指定難病にあてはまる場合は、医療費助成や疾患ごとの解説がこちらにまとまっています。"
+          }
+        ]
+      }
+    ],
+    "footer": "掲載情報は執筆時点のものです。手続きの最新情報は各公式サイト・お住まいの自治体・主治医にご確認ください。"
+  },
+  "symptomConfig": {
+    "title": "症状きろく",
+    "metrics": [
+      {
+        "id": "overallCondition",
+        "label": "からだ全体の調子",
+        "type": "scale",
+        "min": 0,
+        "max": 5,
+        "description": "0=とてもつらい ← → 5=とても良い"
+      },
+      {
+        "id": "painScore",
+        "label": "痛み・つらさ",
+        "type": "scale",
+        "min": 0,
+        "max": 5,
+        "description": "0=なし ← → 5=とても強い"
+      },
+      {
+        "id": "fever",
+        "label": "発熱あり",
+        "type": "toggle",
+        "dangerColor": true
+      },
+      {
+        "id": "appetite",
+        "label": "食欲",
+        "type": "scale",
+        "min": 0,
+        "max": 5,
+        "description": "0=まったくない ← → 5=ふだん通り"
+      }
+    ],
+    "summaryMetrics": [
+      {
+        "id": "overallCondition",
+        "label": "平均の調子",
+        "aggregate": "avg"
+      },
+      {
+        "id": "fever",
+        "label": "発熱日数",
+        "aggregate": "countTrue"
+      },
+      {
+        "id": "painScore",
+        "label": "平均の痛み",
+        "aggregate": "avg"
+      }
+    ]
+  },
+  "labConfig": {
+    "items": [
+      {
+        "id": "crp",
+        "label": "CRP",
+        "unit": "mg/dL",
+        "normalRange": [0, 0.3],
+        "warnHigh": 1
+      },
+      {
+        "id": "wbc",
+        "label": "白血球数",
+        "unit": "/μL",
+        "normalRange": [3500, 9000]
+      },
+      {
+        "id": "hb",
+        "label": "Hb（ヘモグロビン）",
+        "unit": "g/dL",
+        "normalRange": [12, 17],
+        "warnLow": 10
+      },
+      {
+        "id": "plt",
+        "label": "血小板数",
+        "unit": "万/μL",
+        "normalRange": [15, 35]
+      },
+      {
+        "id": "ast",
+        "label": "AST（GOT）",
+        "unit": "U/L",
+        "normalRange": [10, 30]
+      },
+      {
+        "id": "alt",
+        "label": "ALT（GPT）",
+        "unit": "U/L",
+        "normalRange": [10, 30]
+      },
+      {
+        "id": "cre",
+        "label": "クレアチニン",
+        "unit": "mg/dL",
+        "normalRange": [0.4, 1.1]
+      },
+      {
+        "id": "hba1c",
+        "label": "HbA1c",
+        "unit": "%",
+        "normalRange": [4.6, 6.2]
+      }
+    ]
+  },
+  "scoringTools": [],
+  "emergencyConfig": {
+    "title": "緊急情報カード",
+    "subtitle": "",
+    "fields": [
+      {
+        "id": "diagnosisType",
+        "label": "病名",
+        "placeholder": "例: 高血圧症"
+      },
+      {
+        "id": "severity",
+        "label": "いまの状態",
+        "placeholder": "例: 通院治療中"
+      }
+    ],
+    "warnings": [
+      "アレルギー・服用中の薬を救急隊・医療者に伝えてください"
+    ]
+  },
+  "timelineCategories": [
+    {
+      "id": "diagnosis",
+      "label": "診断",
+      "color": "#dbeafe"
+    },
+    {
+      "id": "hospitalization",
+      "label": "入院",
+      "color": "#fde68a"
+    },
+    {
+      "id": "medication_change",
+      "label": "薬変更",
+      "color": "#d1fae5"
+    },
+    {
+      "id": "exam",
+      "label": "検査",
+      "color": "#e9d5ff"
+    },
+    {
+      "id": "treatment_change",
+      "label": "治療方針変更",
+      "color": "#ffedd5"
+    },
+    {
+      "id": "self-log",
+      "label": "じぶんメモ",
+      "color": "#e0f2fe"
+    },
+    {
+      "id": "other",
+      "label": "その他",
+      "color": "#e5e5e5"
+    }
+  ]
+}

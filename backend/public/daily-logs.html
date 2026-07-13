@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>日々の様子 - よりそい アラジール</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined">
+  <link rel="stylesheet" href="/css/alagille-family.css">
+  <link rel="stylesheet" href="/css/alagille-daily-logs.css">
+  <script src="/js/account-guard.js"></script>
+</head>
+<body>
+  <main class="app no-tabbar daily-page" id="daily-page">
+    <header class="screen-head">
+      <a class="round" href="/?disease=alagille" aria-label="ホームへ戻る"><span class="material-symbols-outlined">arrow_back</span></a>
+      <h1 class="screen-title">日々の様子</h1>
+      <a class="round" href="/?disease=alagille" aria-label="ホーム"><span class="material-symbols-outlined">home</span></a>
+    </header>
+
+    <section class="daily-patient" aria-label="健康記録の対象">
+      <img id="patient-avatar" src="/assets/alagille-brand/avatars/avatar-child-boy-v1.png" alt="">
+      <span><small>健康記録の対象</small><strong id="patient-name">読み込み中</strong></span>
+    </section>
+
+    <section class="panel daily-intro">
+      <div><h2>今日の様子を残す</h2><p>皮膚、便の色、かゆみ、食事、動きなどを、写真・動画・短いメモで残せます。</p></div>
+      <img src="/assets/alagille-brand/ui-extracted/tile-daily-camera-v2.png" alt="カメラの水彩イラスト">
+    </section>
+
+    <button class="tutorial-button" id="start-tutorial" type="button"><span class="material-symbols-outlined">play_circle</span>使い方をお試しする</button>
+    <p class="tutorial-note" id="tutorial-note">お試し中です。ここで保存しても、本当の記録には追加されません。</p>
+
+    <section class="panel daily-form" aria-label="日々の様子を追加">
+      <h2 id="form-title"><span class="material-symbols-outlined">edit_square</span><span>今日の様子を記録する</span></h2>
+      <label class="daily-field">日時<input id="occurred-at" type="datetime-local"></label>
+      <p class="category-label">どのような様子ですか</p>
+      <div class="category-grid" id="category-grid">
+        <label class="category-option"><input type="radio" name="category" value="skin"><span>皮膚</span></label>
+        <label class="category-option"><input type="radio" name="category" value="stool"><span>便の色</span></label>
+        <label class="category-option"><input type="radio" name="category" value="itch" checked><span>かゆみ</span></label>
+        <label class="category-option"><input type="radio" name="category" value="meal"><span>食事</span></label>
+        <label class="category-option"><input type="radio" name="category" value="movement"><span>動き</span></label>
+        <label class="category-option"><input type="radio" name="category" value="other"><span>その他</span></label>
+      </div>
+      <label class="daily-field">ひとことで（任意）<input id="daily-title" type="text" maxlength="100" placeholder="例：夜のかゆみ"></label>
+      <label class="daily-field">様子や気づいたこと<textarea id="daily-memo" maxlength="2000" placeholder="例：寝る前に少し強く、冷やすと落ち着きました"></textarea></label>
+
+      <div class="media-picker">
+        <button class="media-pick" id="pick-photo" type="button"><span class="material-symbols-outlined">add_a_photo</span>写真を追加</button>
+        <button class="media-pick" id="pick-video" type="button"><span class="material-symbols-outlined">video_camera_back</span>動画を追加</button>
+      </div>
+      <input id="photo-input" type="file" accept="image/jpeg,image/png,image/webp" multiple hidden>
+      <input id="video-input" type="file" accept="video/mp4,video/webm,video/quicktime" multiple hidden>
+      <p class="media-help">写真・短い動画を合計3件まで。1件15MB、合計30MBまで保存できます。</p>
+      <div class="media-preview" id="media-preview" aria-live="polite"></div>
+
+      <p class="form-status" id="form-status" role="status"></p>
+      <div class="daily-actions">
+        <button class="cancel-daily" id="cancel-edit" type="button" hidden>編集をやめる</button>
+        <button class="save-daily" id="save-daily" type="button"><span class="material-symbols-outlined">save</span><span id="save-label">記録する</span></button>
+      </div>
+    </section>
+
+    <button class="finish-tutorial" id="finish-tutorial" type="button" hidden>お試しを終える</button>
+
+    <div class="timeline-head"><h2>これまでの様子</h2><small>新しい順</small></div>
+    <section class="daily-timeline" id="daily-timeline" aria-live="polite"></section>
+    <section class="panel daily-disclaimer">この記録は診断や判定ではなく、診察で様子を伝えるための補助です。気になる変化は主治医へご相談ください。</section>
+  </main>
+
+  <script>
+    const categoryLabels = { skin: "皮膚", stool: "便の色", itch: "かゆみ", meal: "食事", movement: "動き", other: "その他" };
+    const avatarArtwork = {
+      "adult-man": "/assets/alagille-brand/avatars/avatar-adult-man-v1.png",
+      "adult-woman": "/assets/alagille-brand/avatars/avatar-adult-woman-v1.png",
+      "child-boy": "/assets/alagille-brand/avatars/avatar-child-boy-v1.png",
+      "child-girl": "/assets/alagille-brand/avatars/avatar-child-girl-v1.png"
+    };
+    const state = { patientId: "", logs: [], editingId: null, keptMedia: [], files: [], tutorial: false, objectUrls: [] };
+    const $ = (id) => document.getElementById(id);
+
+    document.addEventListener("DOMContentLoaded", async () => {
+      $("occurred-at").value = localDateTimeValue(new Date());
+      $("pick-photo").addEventListener("click", () => $("photo-input").click());
+      $("pick-video").addEventListener("click", () => $("video-input").click());
+      $("photo-input").addEventListener("change", addSelectedFiles);
+      $("video-input").addEventListener("change", addSelectedFiles);
+      $("media-preview").addEventListener("click", removeMedia);
+      $("save-daily").addEventListener("click", saveDailyLog);
+      $("cancel-edit").addEventListener("click", resetForm);
+      $("daily-timeline").addEventListener("click", handleTimelineAction);
+      $("start-tutorial").addEventListener("click", startTutorial);
+      $("finish-tutorial").addEventListener("click", finishTutorial);
+      await loadPatient();
+      await loadDailyLogs();
+    });
+
+    async function loadPatient() {
+      const response = await fetch("/api/family/patients");
+      if (!response.ok) throw new Error("patient load failed");
+      const result = await response.json();
+      const savedId = localStorage.getItem("alagille-current-patient-id");
+      const patient = result.patients.find((item) => item.id === savedId) || result.patients[0];
+      if (!patient) throw new Error("patient missing");
+      state.patientId = patient.id;
+      $("patient-name").textContent = patient.displayName;
+      $("patient-avatar").src = avatarArtwork[patient.avatarKey] || avatarArtwork["child-boy"];
+    }
+
+    async function loadDailyLogs() {
+      if (state.tutorial) return;
+      $("form-status").textContent = "記録を読み込んでいます…";
+      try {
+        const response = await fetch(`/api/daily-logs?patientId=${encodeURIComponent(state.patientId)}`);
+        const result = await response.json();
+        if (!response.ok) throw new Error(result.error || "load failed");
+        state.logs = result.logs || [];
+        $("form-status").textContent = "";
+        renderTimeline();
+      } catch {
+        $("form-status").textContent = "記録を読み込めませんでした。時間をおいてお試しください。";
+      }
+    }
+
+    function addSelectedFiles(event) {
+      const selected = Array.from(event.target.files || []);
+      const next = [...state.files, ...selected];
+      const totalCount = state.keptMedia.length + next.length;
+      const totalBytes = next.reduce((sum, file) => sum + file.size, 0);
+      if (totalCount > 3) {
+        $("form-status").textContent = "写真・動画は合計3件まで選べます。";
+        event.target.value = "";
+        return;
+      }
+      if (selected.some((file) => file.size > 15 * 1024 * 1024) || totalBytes > 30 * 1024 * 1024) {
+        $("form-status").textContent = "1件15MB、合計30MB以内の写真・動画を選んでください。";
+        event.target.value = "";
+        return;
+      }
+      state.files = next;
+      event.target.value = "";
+      $("form-status").textContent = "";
+      renderMediaPreview();
+    }
+
+    function renderMediaPreview() {
+      revokeObjectUrls();
+      const root = $("media-preview");
+      root.replaceChildren();
+      state.keptMedia.forEach((media) => root.append(mediaTile(media, "kept")));
+      state.files.forEach((file, index) => {
+        const url = URL.createObjectURL(file);
+        state.objectUrls.push(url);
+        root.append(mediaTile({ id: String(index), mediaType: file.type.startsWith("video/") ? "video" : "photo", url, originalName: file.name }, "file"));
+      });
+    }
+
+    function mediaTile(media, source, removable = true) {
+      const tile = document.createElement("div");
+      tile.className = "media-tile";
+      if (media.mediaType === "video") {
+        const video = document.createElement("video");
+        video.src = media.url; video.controls = true; video.preload = "metadata"; video.playsInline = true; video.setAttribute("aria-label", media.originalName || "記録した動画");
+        tile.append(video);
+      } else {
+        const image = document.createElement("img");
+        image.src = media.url; image.alt = media.originalName || "記録した写真";
+        tile.append(image);
+      }
+      if (removable) {
+        const button = document.createElement("button");
+        button.type = "button"; button.className = "media-remove"; button.dataset.source = source; button.dataset.id = media.id; button.setAttribute("aria-label", "取り外す");
+        const icon = document.createElement("span"); icon.className = "material-symbols-outlined"; icon.textContent = "close"; button.append(icon); tile.append(button);
+      }
+      return tile;
+    }
+
+    function removeMedia(event) {
+      const button = event.target.closest("button[data-source]");
+      if (!button) return;
+      if (button.dataset.source === "kept") state.keptMedia = state.keptMedia.filter((item) => item.id !== button.dataset.id);
+      else state.files.splice(Number(button.dataset.id), 1);
+      renderMediaPreview();
+    }
+
+    async function saveDailyLog() {
+      const title = $("daily-title").value.trim();
+      const memo = $("daily-memo").value.trim();
+      if (!title && !memo && state.keptMedia.length + state.files.length === 0) {
+        $("form-status").textContent = "短いメモか、写真・動画のどれかを追加してください。";
+        return;
+      }
+      if (state.tutorial) {
+        state.logs = [{
+          id: "tutorial", occurredAt: new Date($("occurred-at").value).toISOString(), category: selectedCategory(),
+          title, memo, media: [{ id: "sample", mediaType: "photo", url: "/assets/alagille-brand/ui-extracted/tile-daily-camera-v2.png", originalName: "お試し写真" }], isTutorial: true
+        }];
+        renderTimeline();
+        $("form-status").textContent = "保存の練習ができました。本当の記録には追加されていません。";
+        $("finish-tutorial").hidden = false;
+        return;
+      }
+      const data = new FormData();
+      data.append("patientId", state.patientId);
+      data.append("occurredAt", new Date($("occurred-at").value).toISOString());
+      data.append("category", selectedCategory());
+      data.append("title", title);
+      data.append("memo", memo);
+      data.append("keepMediaIds", JSON.stringify(state.keptMedia.map((item) => item.id)));
+      state.files.forEach((file) => data.append("media", file, file.name));
+      const button = $("save-daily");
+      button.disabled = true;
+      $("form-status").textContent = "保存しています…";
+      try {
+        const editing = Boolean(state.editingId);
+        const response = await fetch(editing ? `/api/daily-logs/${encodeURIComponent(state.editingId)}` : "/api/daily-logs", { method: editing ? "PATCH" : "POST", body: data });
+        const result = await response.json();
+        if (!response.ok) throw new Error(result.error || "save failed");
+        resetForm();
+        await loadDailyLogs();
+        $("form-status").textContent = editing ? "変更を保存しました。" : "日々の様子を保存しました。";
+      } catch (error) {
+        $("form-status").textContent = error.message === "Failed to fetch" ? "通信できませんでした。時間をおいてお試しください。" : "保存できませんでした。写真・動画の容量と入力内容を確認してください。";
+      } finally { button.disabled = false; }
+    }
+
+    function renderTimeline() {
+      const root = $("daily-timeline");
+      root.replaceChildren();
+      if (!state.logs.length) {
+        const empty = document.createElement("div"); empty.className = "panel daily-empty"; empty.textContent = "まだ記録はありません。短いメモだけでも残せます。"; root.append(empty); return;
+      }
+      state.logs.forEach((log) => root.append(logCard(log)));
+    }
+
+    function logCard(log) {
+      const card = document.createElement("article"); card.className = "panel daily-card"; card.dataset.category = log.category;
+      const head = document.createElement("div"); head.className = "daily-card-head";
+      const badge = document.createElement("span"); badge.className = "category-badge"; badge.textContent = categoryLabels[log.category] || categoryLabels.other;
+      const time = document.createElement("time"); time.dateTime = log.occurredAt; time.textContent = formatDateTime(log.occurredAt);
+      const actions = document.createElement("span"); actions.className = "card-actions";
+      if (!log.isTutorial) actions.append(actionButton("edit", "編集", log.id), actionButton("delete", "削除", log.id));
+      head.append(badge, time, actions); card.append(head);
+      if (log.title) { const title = document.createElement("h3"); title.textContent = log.title; card.append(title); }
+      if (log.memo) { const memo = document.createElement("p"); memo.textContent = log.memo; card.append(memo); }
+      if (log.media?.length) {
+        const mediaRoot = document.createElement("div"); mediaRoot.className = "media-preview";
+        log.media.forEach((media) => mediaRoot.append(mediaTile(media, "timeline", false)));
+        card.append(mediaRoot);
+      }
+      return card;
+    }
+
+    function actionButton(action, label, id) {
+      const button = document.createElement("button"); button.type = "button"; button.dataset.action = action; button.dataset.id = id; button.setAttribute("aria-label", label);
+      const icon = document.createElement("span"); icon.className = "material-symbols-outlined"; icon.textContent = action; button.append(icon); return button;
+    }
+
+    async function handleTimelineAction(event) {
+      const button = event.target.closest("button[data-action]");
+      if (!button) return;
+      const log = state.logs.find((item) => item.id === button.dataset.id);
+      if (!log) return;
+      if (button.dataset.action === "edit") startEdit(log);
+      if (button.dataset.action === "delete") await deleteLog(log);
+    }
+
+    function startEdit(log) {
+      finishTutorial(false);
+      state.editingId = log.id; state.keptMedia = [...(log.media || [])]; state.files = [];
+      $("occurred-at").value = localDateTimeValue(new Date(log.occurredAt));
+      document.querySelector(`input[name="category"][value="${log.category}"]`).checked = true;
+      $("daily-title").value = log.title || ""; $("daily-memo").value = log.memo || "";
+      $("form-title").lastElementChild.textContent = "記録を編集する"; $("save-label").textContent = "変更を保存"; $("cancel-edit").hidden = false;
+      renderMediaPreview(); window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    async function deleteLog(log) {
+      if (!window.confirm(`${formatDateTime(log.occurredAt)}の記録を削除しますか？`)) return;
+      try {
+        const response = await fetch(`/api/daily-logs/${encodeURIComponent(log.id)}?patientId=${encodeURIComponent(state.patientId)}`, { method: "DELETE" });
+        const result = await response.json(); if (!response.ok) throw new Error(result.error || "delete failed");
+        await loadDailyLogs(); $("form-status").textContent = "記録を削除しました。";
+      } catch { $("form-status").textContent = "削除できませんでした。時間をおいてお試しください。"; }
+    }
+
+    function resetForm() {
+      revokeObjectUrls(); state.editingId = null; state.keptMedia = []; state.files = [];
+      $("occurred-at").value = localDateTimeValue(new Date()); $("daily-title").value = ""; $("daily-memo").value = "";
+      document.querySelector('input[name="category"][value="itch"]').checked = true;
+      $("form-title").lastElementChild.textContent = "今日の様子を記録する"; $("save-label").textContent = "記録する"; $("cancel-edit").hidden = true; $("media-preview").replaceChildren();
+    }
+
+    function startTutorial() {
+      resetForm(); state.tutorial = true; $("daily-page").classList.add("is-tutorial"); $("start-tutorial").hidden = true; $("finish-tutorial").hidden = false;
+      $("daily-title").value = "夜のかゆみ"; $("daily-memo").value = "寝る前に少し強く、冷やすと落ち着きました。";
+      state.logs = []; renderTimeline(); $("form-status").textContent = "入力例を用意しました。「記録する」を押してみてください。";
+    }
+
+    async function finishTutorial(reload = true) {
+      if (!state.tutorial) return;
+      state.tutorial = false; $("daily-page").classList.remove("is-tutorial"); $("start-tutorial").hidden = false; $("finish-tutorial").hidden = true; resetForm();
+      if (reload) await loadDailyLogs();
+    }
+
+    function selectedCategory() { return document.querySelector('input[name="category"]:checked')?.value || "other"; }
+    function revokeObjectUrls() { state.objectUrls.forEach((url) => URL.revokeObjectURL(url)); state.objectUrls = []; }
+    function localDateTimeValue(date) { const local = new Date(date.getTime() - date.getTimezoneOffset() * 60000); return local.toISOString().slice(0, 16); }
+    function formatDateTime(value) { return new Intl.DateTimeFormat("ja-JP", { month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit" }).format(new Date(value)); }
+  </script>
+</body>
+</html>

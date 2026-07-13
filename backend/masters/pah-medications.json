@@ -1,0 +1,37 @@
+{
+  "categories": [
+    { "id": "activin_inhibitor", "name": "アクチビンシグナル阻害薬（第4経路）", "description": "血管リモデリング改善・2025年登場の新機序", "step": 1 },
+    { "id": "pde5_inhibitor", "name": "PDE5阻害薬", "description": "肺血管拡張", "step": 1 },
+    { "id": "combination", "name": "配合剤", "description": "併用療法のアドヒアランス向上", "step": 1 },
+    { "id": "prostacyclin_inhalation", "name": "プロスタサイクリン吸入", "description": "吸入型プロスタサイクリン", "step": 2 },
+    { "id": "sgc_stimulator", "name": "sGC刺激薬", "description": "可溶性グアニル酸シクラーゼ刺激", "step": 1 },
+    { "id": "era", "name": "エンドセリン受容体拮抗薬（ERA）", "description": "肺血管拡張", "step": 1 },
+    { "id": "prostacyclin_oral", "name": "プロスタサイクリン経口・皮下", "description": "経口/吸入タイプ", "step": 2 },
+    { "id": "prostacyclin_infusion", "name": "プロスタサイクリン持続静注", "description": "重症例の生命維持治療", "step": 3 },
+    { "id": "ccb", "name": "カルシウム拮抗薬", "description": "急性反応例のみ", "step": 1 },
+    { "id": "anticoagulant", "name": "抗凝固薬", "description": "血栓予防", "step": 2 },
+    { "id": "other", "name": "その他", "description": "利尿薬・酸素療法", "step": 2 }
+  ],
+  "medications": [
+    { "genericName": "ソタテルセプト", "brandNames": ["エアウィン"], "category": "activin_inhibitor", "dosageForms": ["皮下注射"], "mechanism": "アクチビンシグナル阻害", "notes": "★2025年6月承認・8月発売。3週毎。WINREVAIRは米国名" },
+    { "genericName": "マシテンタン/タダラフィル配合剤", "brandNames": ["ユバンシ配合錠"], "category": "combination", "dosageForms": ["経口"], "notes": "2024年9月承認・11月発売。1日1回" },
+    { "genericName": "イロプロスト", "brandNames": ["ベンテイビス"], "category": "prostacyclin_inhalation", "dosageForms": ["吸入"], "notes": "携帯ネブライザ吸入" },
+    { "genericName": "トレプロスチニル吸入液", "brandNames": ["トレプロスト吸入液"], "category": "prostacyclin_inhalation", "dosageForms": ["吸入"], "notes": "2022年12月承認・2023年3月薬価収載" },
+    { "genericName": "シルデナフィル", "brandNames": ["レバチオ"], "category": "pde5_inhibitor", "dosageForms": ["経口"] },
+    { "genericName": "タダラフィル", "brandNames": ["アドシルカ"], "category": "pde5_inhibitor", "dosageForms": ["経口"] },
+    { "genericName": "リオシグアト", "brandNames": ["アデムパス"], "category": "sgc_stimulator", "dosageForms": ["経口"], "notes": "PDE5阻害薬併用禁忌" },
+    { "genericName": "ボセンタン", "brandNames": ["トラクリア"], "category": "era", "dosageForms": ["経口"], "notes": "肝機能月1回確認" },
+    { "genericName": "アンブリセンタン", "brandNames": ["ヴォリブリス"], "category": "era", "dosageForms": ["経口"] },
+    { "genericName": "マシテンタン", "brandNames": ["オプスミット"], "category": "era", "dosageForms": ["経口"] },
+    { "genericName": "ベラプロスト", "brandNames": ["ドルナー", "ケアロードLA", "ベラサスLA"], "category": "prostacyclin_oral", "dosageForms": ["経口"] },
+    { "genericName": "セレキシパグ", "brandNames": ["ウプトラビ"], "category": "prostacyclin_oral", "dosageForms": ["経口"], "mechanism": "プロスタサイクリン受容体作動薬" },
+    { "genericName": "エポプロステノール", "brandNames": ["フローラン", "エポプロステノール"], "category": "prostacyclin_infusion", "dosageForms": ["持続静注"], "notes": "★ポンプ停止は生命の危険" },
+    { "genericName": "トレプロスチニル", "brandNames": ["トレプロスト"], "category": "prostacyclin_infusion", "dosageForms": ["持続静注", "皮下注射"] },
+    { "genericName": "ニフェジピン", "brandNames": ["アダラート"], "category": "ccb", "dosageForms": ["経口"], "notes": "急性反応例のみ" },
+    { "genericName": "アムロジピン", "brandNames": ["ノルバスク"], "category": "ccb", "dosageForms": ["経口"] },
+    { "genericName": "ワルファリン", "brandNames": ["ワーファリン"], "category": "anticoagulant", "dosageForms": ["経口"], "notes": "INRモニタリング必須" },
+    { "genericName": "フロセミド", "brandNames": ["ラシックス"], "category": "other", "dosageForms": ["経口", "点滴"], "notes": "利尿薬" },
+    { "genericName": "スピロノラクトン", "brandNames": ["アルダクトンA"], "category": "other", "dosageForms": ["経口"], "notes": "K保持性利尿薬" },
+    { "genericName": "在宅酸素療法", "brandNames": ["HOT"], "category": "other", "dosageForms": ["吸入"], "notes": "SpO2<90%時に導入" }
+  ]
+}

@@ -1,0 +1,143 @@
+{
+  "categories": [
+    {
+      "id": "steroid",
+      "name": "ステロイド",
+      "description": "炎症抑制・免疫抑制の基本薬。活動期の寛解導入〜維持療法",
+      "step": 1
+    },
+    {
+      "id": "antimalarial",
+      "name": "抗マラリア薬",
+      "description": "SLE治療の基盤薬。全例に推奨",
+      "step": 1
+    },
+    {
+      "id": "immunosuppressant",
+      "name": "免疫抑制薬",
+      "description": "ステロイド減量・臓器障害の寛解維持",
+      "step": 2
+    },
+    {
+      "id": "biologic",
+      "name": "生物学的製剤",
+      "description": "既存治療で効果不十分な場合の追加治療",
+      "step": 3
+    },
+    {
+      "id": "nsaid",
+      "name": "NSAIDs（非ステロイド性抗炎症薬）",
+      "description": "関節痛・筋肉痛などの対症療法",
+      "step": 1
+    },
+    {
+      "id": "other",
+      "name": "その他",
+      "description": "補助的治療薬・合併症対策",
+      "step": 4
+    }
+  ],
+  "medications": [
+    {
+      "genericName": "プレドニゾロン",
+      "brandNames": ["プレドニン"],
+      "category": "steroid",
+      "dosageForms": ["経口", "点滴"],
+      "notes": "最も汎用されるステロイド。維持量5mg/日以下を目標"
+    },
+    {
+      "genericName": "メチルプレドニゾロン",
+      "brandNames": ["メドロール", "ソル・メドロール"],
+      "category": "steroid",
+      "dosageForms": ["経口", "点滴"],
+      "notes": "パルス療法（500-1000mg×3日）で重症例に使用"
+    },
+    {
+      "genericName": "ヒドロキシクロロキン",
+      "brandNames": ["プラケニル"],
+      "category": "antimalarial",
+      "dosageForms": ["経口"],
+      "notes": "SLE全例に推奨。再燃予防・生命予後改善。眼科定期検診が必要"
+    },
+    {
+      "genericName": "アザチオプリン",
+      "brandNames": ["イムラン", "アザニン"],
+      "category": "immunosuppressant",
+      "dosageForms": ["経口"],
+      "notes": "維持療法の標準薬。NUDT15遺伝子多型の確認推奨"
+    },
+    {
+      "genericName": "ミコフェノール酸モフェチル",
+      "brandNames": ["セルセプト"],
+      "category": "immunosuppressant",
+      "dosageForms": ["経口"],
+      "notes": "ループス腎炎の寛解導入・維持療法。妊娠禁忌"
+    },
+    {
+      "genericName": "タクロリムス",
+      "brandNames": ["プログラフ"],
+      "category": "immunosuppressant",
+      "dosageForms": ["経口"],
+      "notes": "ループス腎炎に使用。血中濃度モニタリング必要"
+    },
+    {
+      "genericName": "シクロホスファミド",
+      "brandNames": ["エンドキサン"],
+      "category": "immunosuppressant",
+      "dosageForms": ["点滴", "経口"],
+      "notes": "重症ループス腎炎・CNSループスの寛解導入。卵巣毒性に注意"
+    },
+    {
+      "genericName": "ベリムマブ",
+      "brandNames": ["ベンリスタ"],
+      "category": "biologic",
+      "dosageForms": ["点滴", "皮下注射"],
+      "mechanism": "抗BLyS（BAFF）抗体",
+      "notes": "既存治療に追加。再燃抑制・ステロイド減量効果"
+    },
+    {
+      "genericName": "アニフロルマブ",
+      "brandNames": ["サフネロー"],
+      "category": "biologic",
+      "dosageForms": ["点滴"],
+      "mechanism": "抗I型インターフェロン受容体抗体",
+      "notes": "皮膚・関節症状に有効。帯状疱疹リスクに注意"
+    },
+    {
+      "genericName": "リツキシマブ",
+      "brandNames": ["リツキサン"],
+      "category": "biologic",
+      "dosageForms": ["点滴"],
+      "mechanism": "抗CD20抗体",
+      "notes": "2022年日本リウマチ学会ループス腎炎使用ステートメント"
+    },
+    {
+      "genericName": "ボクロスポリン",
+      "brandNames": ["ルプキネス"],
+      "category": "immunosuppressant",
+      "dosageForms": ["経口"],
+      "notes": "ループス腎炎に特化したカルシニューリン阻害薬。血中濃度モニタリング不要"
+    },
+    {
+      "genericName": "ロキソプロフェン",
+      "brandNames": ["ロキソニン"],
+      "category": "nsaid",
+      "dosageForms": ["経口"],
+      "notes": "関節痛・筋肉痛の対症療法。腎機能低下例は慎重投与"
+    },
+    {
+      "genericName": "セレコキシブ",
+      "brandNames": ["セレコックス"],
+      "category": "nsaid",
+      "dosageForms": ["経口"],
+      "notes": "COX-2選択的阻害。消化管リスクが低い"
+    },
+    {
+      "genericName": "デノスマブ",
+      "brandNames": ["プラリア"],
+      "category": "other",
+      "dosageForms": ["皮下注射"],
+      "notes": "ステロイド性骨粗鬆症対策。6ヶ月ごと"
+    }
+  ]
+}

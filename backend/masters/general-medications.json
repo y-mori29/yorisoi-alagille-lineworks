@@ -1,0 +1,35 @@
+{
+  "categories": [
+    {
+      "id": "oral",
+      "name": "のみ薬（内服薬）",
+      "description": "毎日・定期的にのむ処方薬"
+    },
+    {
+      "id": "prn",
+      "name": "頓服薬",
+      "description": "症状があるときだけ使う薬"
+    },
+    {
+      "id": "injection",
+      "name": "注射・点滴",
+      "description": "自己注射・通院での注射や点滴"
+    },
+    {
+      "id": "topical",
+      "name": "外用薬",
+      "description": "塗り薬・貼り薬・点眼・吸入など"
+    },
+    {
+      "id": "otc",
+      "name": "市販薬・サプリメント",
+      "description": "自分で購入している薬・サプリ"
+    },
+    {
+      "id": "other",
+      "name": "その他",
+      "description": "上記にあてはまらないもの"
+    }
+  ],
+  "medications": []
+}

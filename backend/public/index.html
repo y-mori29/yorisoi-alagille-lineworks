@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>よりそい アラジール</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700;900&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined">
+  <link rel="stylesheet" href="/css/alagille-family.css">
+  <script src="/js/account-guard.js"></script>
+</head>
+<body class="home-page">
+  <main class="app home-shell" aria-label="よりそい アラジール ホーム">
+    <header class="home-header" aria-label="ホームヘッダー">
+      <div class="brand-lockup" aria-label="よりそい アラジール">
+        <img src="/assets/alagille-brand/ui-extracted/wordmark-alagille-v1.png" alt="よりそい アラジール" class="brand-wordmark">
+      </div>
+
+      <button class="menu-button" type="button" data-sheet="menu" aria-label="メニューを開く">
+        <span class="material-symbols-outlined">menu</span>
+      </button>
+    </header>
+
+    <button class="patient-selector-card" type="button" data-sheet="patient" aria-label="健康記録の対象を切り替える">
+      <span class="patient-avatar-frame">
+        <img src="/assets/alagille-brand/avatars/avatar-child-boy-v1.png" alt="" class="patient-avatar">
+      </span>
+      <span class="patient-copy">
+        <strong>読み込み中</strong>
+        <small>健康記録の対象を確認しています</small>
+      </span>
+      <span class="patient-switch">切り替え</span>
+    </button>
+
+    <button class="family-share-banner" type="button" data-sheet="family-share" aria-label="家族共有を確認する">
+      <span class="share-mark"><span class="material-symbols-outlined">groups</span></span>
+      <div>
+        <p>家族と共有中</p>
+        <small>家族で同じ記録を見られます</small>
+      </div>
+      <img src="/assets/alagille-brand/trimmed/12-family-group.png" alt="" class="share-family">
+    </button>
+
+    <section class="home-intro" aria-labelledby="home-title">
+      <img src="/assets/alagille-brand/trimmed/10-leaf-sprout.png" alt="" class="intro-leaf">
+      <h1 id="home-title">今日は何をしますか？</h1>
+      <img src="/assets/alagille-brand/trimmed/11-bird-outline.png" alt="" class="intro-bird">
+    </section>
+
+    <section class="home-main-areas" aria-label="今日使う入口">
+      <article class="home-action-zone note-zone" aria-labelledby="today-actions">
+        <div class="zone-head">
+          <h2 id="today-actions">今日のことを残す</h2>
+          <img src="/assets/alagille-brand/trimmed/06-visit-notebook.png" alt="" class="zone-art">
+        </div>
+        <div class="tile-grid">
+          <button class="home-action-tile" type="button" data-sheet="visit-note">
+            <img src="/assets/alagille-brand/ui-extracted/tile-mic-v1.png" alt="" class="tile-art">
+            <span class="tile-text"><strong>録音で診察メモ</strong><small>診察の会話を残す</small></span>
+            <span class="tile-arrow material-symbols-outlined">chevron_right</span>
+          </button>
+          <button class="home-action-tile" type="button" data-sheet="daily-log">
+            <img src="/assets/alagille-brand/ui-extracted/tile-daily-camera-v2.png" alt="" class="tile-art">
+            <span class="tile-text"><strong>日々の様子</strong><small>写真・動画を残す</small></span>
+            <span class="tile-arrow material-symbols-outlined">chevron_right</span>
+          </button>
+        </div>
+      </article>
+
+      <article class="home-action-zone lab-zone" aria-labelledby="check-actions">
+        <div class="zone-head">
+          <h2 id="check-actions">検査・お薬を確認</h2>
+          <img src="/assets/alagille-brand/trimmed/07-medicine-bottle.png" alt="" class="zone-art">
+        </div>
+        <div class="tile-grid">
+          <button class="home-action-tile" type="button" data-sheet="lab">
+            <img src="/assets/alagille-brand/ui-extracted/tile-test-tubes-v1.png" alt="" class="tile-art">
+            <span class="tile-text"><strong>検査値</strong><small>写真で記録・確認</small></span>
+            <span class="tile-arrow material-symbols-outlined">chevron_right</span>
+          </button>
+          <button class="home-action-tile" type="button" data-sheet="medicine">
+            <img src="/assets/alagille-brand/trimmed/07-medicine-bottle.png" alt="" class="tile-art">
+            <span class="tile-text"><strong>お薬メモ</strong><small>飲み方・変更を残す</small></span>
+            <span class="tile-arrow material-symbols-outlined">chevron_right</span>
+          </button>
+        </div>
+      </article>
+
+      <article class="home-action-zone doctor-zone" aria-labelledby="visit-actions">
+        <div class="zone-head">
+          <h2 id="visit-actions">診察に持っていく</h2>
+          <img src="/assets/alagille-brand/trimmed/03-medical-document.png" alt="" class="zone-art">
+        </div>
+        <div class="tile-grid">
+          <button class="home-action-tile" type="button" data-sheet="doctor">
+            <img src="/assets/alagille-brand/trimmed/03-medical-document.png" alt="" class="tile-art">
+            <span class="tile-text"><strong>先生に見せる</strong><small>必要な記録をまとめる</small></span>
+            <span class="tile-arrow material-symbols-outlined">chevron_right</span>
+          </button>
+          <button class="home-action-tile" type="button" data-sheet="question">
+            <img src="/assets/alagille-brand/ui-extracted/tile-question-bubble-v1.png" alt="" class="tile-art">
+            <span class="tile-text"><strong>次に聞くこと</strong><small>受診前にメモ</small></span>
+            <span class="tile-arrow material-symbols-outlined">chevron_right</span>
+          </button>
+        </div>
+      </article>
+    </section>
+
+    <section class="recent-changes-card" aria-labelledby="recent-title">
+      <div class="summary-head">
+        <h2 id="recent-title">最近の変化</h2>
+        <button type="button" data-sheet="recent">もっと見る</button>
+      </div>
+      <ul class="change-list" id="home-recent-changes">
+        <li><span class="change-icon skin">記</span><strong>最近の記録</strong><span>読み込み中</span></li>
+      </ul>
+    </section>
+
+    <section class="home-summary-grid" aria-label="成長と次回受診">
+      <button class="summary-panel growth-panel" type="button" data-sheet="growth">
+        <span class="panel-title"><img src="/assets/alagille-brand/trimmed/05-growth-child-ruler.png" alt="">成長の記録</span>
+        <span class="growth-values"><strong>107.2<small>cm</small></strong><strong>17.6<small>kg</small></strong></span>
+        <small>5/25 記録</small>
+      </button>
+      <button class="summary-panel appointment-panel" type="button" data-sheet="appointment">
+        <span class="panel-title"><span class="material-symbols-outlined">calendar_month</span>次回の受診</span>
+        <strong id="home-next-appointment-date">読み込み中</strong>
+        <small id="home-next-appointment-detail">受診予定を確認しています</small>
+      </button>
+    </section>
+
+    <p class="home-note">この画面は診断や判定ではなく、診察で伝えるための記録補助です。</p>
+  </main>
+
+  <nav class="bottom-nav" aria-label="下部メニュー">
+    <button class="active" type="button" data-sheet="home"><span class="material-symbols-outlined">home</span><span>ホーム</span></button>
+    <button type="button" data-sheet="calendar"><span class="material-symbols-outlined">calendar_month</span><span>カレンダー</span></button>
+    <button type="button" data-sheet="photo"><span class="material-symbols-outlined">photo_library</span><span>写真</span></button>
+    <button type="button" data-sheet="family-note"><span class="material-symbols-outlined">clinical_notes</span><span>家族ノート</span></button>
+  </nav>
+
+  <div class="sheet-backdrop" data-close-sheet hidden></div>
+  <aside class="feature-sheet" aria-live="polite" aria-label="選択した機能" hidden>
+    <button class="sheet-close" type="button" data-close-sheet aria-label="閉じる">
+      <span class="material-symbols-outlined">close</span>
+    </button>
+    <p class="sheet-kicker">UIデザインから次に作る画面</p>
+    <h2 id="sheet-title">ホーム</h2>
+    <p id="sheet-body">このホーム画面を正本として、各機能画面を順番に作ります。</p>
+    <div id="sheet-content" class="sheet-content"></div>
+    <div id="sheet-tags" class="sheet-tags"></div>
+  </aside>
+
+  <script>
+    const sheetContent = {
+      "patient": ["患者切り替え", "兄弟・家族内の複数患者を切り替えます。記録が混ざらないことを最優先にします。", ["家族共有", "複数患者", "記録混在防止"]],
+      "menu": ["家族ノートメニュー", "設定だけを先に出さず、家族共有、Q&A、LINE WORKS案内、保存の説明をまとめます。", ["家族共有", "Q&A", "LINE WORKS"]],
+      "family-share": ["家族共有", "お母さん・お父さんなど、家族で同じ記録を見られる状態を確認します。次の画面では招待と共有範囲を分かりやすくします。", ["共有中", "招待", "共有範囲"]],
+      "visit-note": ["録音で診察メモ", "診察で話した内容を録音し、あとで家族が見返せる形に整理します。", ["録音", "AI整理", "次に聞くこと"]],
+      "daily-log": ["日々の様子", "かゆみ、食事、睡眠、写真、動画を短く残します。症状の判定ではなく、診察で伝える材料にします。", ["写真", "動画", "短いメモ"]],
+      "lab": ["検査値", "検査結果を写真で撮り、読み取り結果を家族が確認・修正して保存します。", ["OCR", "確認", "表・グラフ"]],
+      "medicine": ["お薬メモ", "薬の名前、写真、飲み方、変更履歴を家族で見返せるようにします。", ["薬写真", "変更履歴", "継続確認"]],
+      "doctor": ["先生に見せる", "診察メモ、検査値、薬、成長、日々の様子から必要な記録だけまとめます。", ["診察準備", "見せる範囲", "印刷候補"]],
+      "question": ["次に聞くこと", "受診前に家族で質問を残し、診察時に見落としにくくします。", ["質問メモ", "受診前", "家族共有"]],
+      "recent": ["最近の変化", "前回からの変化を短く見返します。正常・異常の判定はしません。", ["かゆみ", "検査", "お薬"]],
+      "growth": ["成長の記録", "身長・体重の入力と推移確認を、診察の補助として扱います。", ["身長", "体重", "推移"]],
+      "appointment": ["次回の受診", "次回受診日と場所を家族で確認します。LINE WORKS通知は仕様確認後の次段階です。", ["受診予定", "家族確認", "通知は次段階"]],
+      "home": ["ホーム", "今日使う入口だけに絞り、家族で残す・見返す・先生に伝える流れを見せます。", ["今日の入口", "家族共有", "正本UI"]],
+      "calendar": ["カレンダー", "受診予定、お薬、検査予定を家族で見返す画面として作ります。", ["予定", "受診", "リマインド候補"]],
+      "photo": ["写真", "日々の様子、検査結果、お薬写真を用途ごとに整理します。", ["写真", "動画", "用途別"]],
+      "family-note": ["家族ノート", "設定画面ではなく、共有・患者切り替え・Q&Aを含む家族ノートの入口にします。", ["共有", "患者切り替え", "Q&A"]]
+    };
+
+    const sheet = document.querySelector(".feature-sheet");
+    const backdrop = document.querySelector(".sheet-backdrop");
+    const title = document.getElementById("sheet-title");
+    const body = document.getElementById("sheet-body");
+    const tags = document.getElementById("sheet-tags");
+    const kicker = document.querySelector(".sheet-kicker");
+    const contentRoot = document.getElementById("sheet-content");
+    const patientName = document.querySelector(".patient-copy strong");
+    const patientDetails = document.querySelector(".patient-copy small");
+    const patientAvatar = document.querySelector(".patient-avatar");
+
+    const avatarArtwork = {
+      "adult-man": "/assets/alagille-brand/avatars/avatar-adult-man-v1.png",
+      "adult-woman": "/assets/alagille-brand/avatars/avatar-adult-woman-v1.png",
+      "child-boy": "/assets/alagille-brand/avatars/avatar-child-boy-v1.png",
+      "child-girl": "/assets/alagille-brand/avatars/avatar-child-girl-v1.png"
+    };
+
+    function showSheet() {
+      sheet.hidden = false;
+      backdrop.hidden = false;
+      requestAnimationFrame(() => {
+        sheet.classList.add("open");
+        backdrop.classList.add("open");
+      });
+    }
+
+    function resetSheet() {
+      kicker.textContent = "よりそい アラジール";
+      body.hidden = false;
+      tags.hidden = false;
+      contentRoot.replaceChildren();
+    }
+
+    function setCurrentPatient(patient) {
+      patientName.textContent = patient.displayName;
+      patientDetails.textContent = `${patient.ageLabel || "年齢未登録"}・アラジール症候群`;
+      patientAvatar.src = avatarArtwork[patient.avatarKey] || avatarArtwork["child-boy"];
+      window.localStorage.setItem("alagille-current-patient-id", patient.id);
+      hydrateHomeAppointment(patient.id);
+      hydrateHomeRecent(patient.id);
+    }
+
+    async function hydrateHomeAppointment(patientId) {
+      const dateRoot = document.getElementById("home-next-appointment-date");
+      const detailRoot = document.getElementById("home-next-appointment-detail");
+      try {
+        const response = await fetch(`/api/appointments?patientId=${encodeURIComponent(patientId)}&upcoming=1`);
+        const result = await response.json();
+        if (!response.ok) throw new Error("appointment load failed");
+        const appointment = (result.appointments || []).find((item) => item.status === "scheduled");
+        if (!appointment) {
+          dateRoot.textContent = "予定を登録する";
+          detailRoot.textContent = "次回受診はまだ登録されていません";
+          return;
+        }
+        dateRoot.textContent = new Intl.DateTimeFormat("ja-JP", { year:"numeric", month:"numeric", day:"numeric", weekday:"short", hour:"2-digit", minute:"2-digit" }).format(new Date(appointment.scheduledAt));
+        detailRoot.textContent = [appointment.clinicName, appointment.department].filter(Boolean).join("・") || "病院・診療科は未入力です";
+      } catch {
+        dateRoot.textContent = "受診予定を見る";
+        detailRoot.textContent = "タップして予定を確認できます";
+      }
+    }
+
+    async function hydrateHomeRecent(patientId) {
+      const root = document.getElementById("home-recent-changes");
+      const iconClass = { visit:"skin", daily:"skin", lab:"lab", medication:"med", growth:"lab" };
+      const iconText = { visit:"診", daily:"日", lab:"検", medication:"薬", growth:"育" };
+      try {
+        const response = await fetch(`/api/recent-changes?patientId=${encodeURIComponent(patientId)}`);
+        const result = await response.json();
+        if (!response.ok) throw new Error("recent load failed");
+        root.replaceChildren();
+        const items = (result.items || []).slice(0, 3);
+        if (!items.length) {
+          const empty = document.createElement("li");
+          empty.innerHTML = '<span class="change-icon skin">記</span><strong>最近の記録</strong><span>まだ記録はありません</span>';
+          root.append(empty);
+          return;
+        }
+        items.forEach((item) => {
+          const row = document.createElement("li");
+          row.tabIndex = 0; row.setAttribute("role", "link"); row.addEventListener("click", () => location.href = item.href); row.addEventListener("keydown", (event) => { if (event.key === "Enter") location.href = item.href; });
+          const icon = document.createElement("span"); icon.className = `change-icon ${iconClass[item.type] || "skin"}`; icon.textContent = iconText[item.type] || "記";
+          const title = document.createElement("strong"); title.textContent = item.label;
+          const detail = document.createElement("span"); detail.textContent = item.title;
+          row.append(icon, title, detail); root.append(row);
+        });
+      } catch {
+        root.innerHTML = '<li><span class="change-icon skin">記</span><strong>最近の記録</strong><span>タップして確認できます</span></li>';
+      }
+    }
+
+    function createPatientOption(patient, currentPatientId) {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "patient-option";
+      button.dataset.patientId = patient.id;
+      button.setAttribute("aria-pressed", String(patient.id === currentPatientId));
+
+      const image = document.createElement("img");
+      image.src = avatarArtwork[patient.avatarKey] || avatarArtwork["child-boy"];
+      image.alt = "";
+
+      const copy = document.createElement("span");
+      const name = document.createElement("strong");
+      name.textContent = patient.displayName;
+      const age = document.createElement("small");
+      age.textContent = patient.ageLabel || "年齢未登録";
+      copy.append(name, age);
+
+      const check = document.createElement("span");
+      check.className = "material-symbols-outlined patient-option-check";
+      check.textContent = patient.id === currentPatientId ? "check_circle" : "chevron_right";
+
+      button.append(image, copy, check);
+      button.addEventListener("click", () => {
+        setCurrentPatient(patient);
+        closeSheet();
+      });
+      return button;
+    }
+
+    function renderAddPatientForm() {
+      kicker.textContent = "家族ノート";
+      title.textContent = "健康記録の対象を追加";
+      body.textContent = "診察・検査・薬・成長などの記録を分けて管理する方を追加します。";
+      tags.hidden = true;
+      contentRoot.replaceChildren();
+
+      const form = document.createElement("form");
+      form.className = "patient-add-form";
+      form.innerHTML = `
+        <label>お名前・ニックネーム<input name="displayName" autocomplete="off" required maxlength="24"></label>
+        <label>生年月日<input name="birthDate" type="date"></label>
+        <fieldset class="avatar-choice-fieldset">
+          <legend>アバターを選ぶ</legend>
+          <div class="avatar-choice-grid">
+            <label><input type="radio" name="avatarKey" value="adult-man"><img src="${avatarArtwork["adult-man"]}" alt=""><span>大人・男性</span></label>
+            <label><input type="radio" name="avatarKey" value="adult-woman"><img src="${avatarArtwork["adult-woman"]}" alt=""><span>大人・女性</span></label>
+            <label><input type="radio" name="avatarKey" value="child-boy" checked><img src="${avatarArtwork["child-boy"]}" alt=""><span>男の子</span></label>
+            <label><input type="radio" name="avatarKey" value="child-girl"><img src="${avatarArtwork["child-girl"]}" alt=""><span>女の子</span></label>
+          </div>
+        </fieldset>
+        <button type="submit" class="sheet-primary-action">健康記録の対象に追加</button>
+        <p class="form-status" aria-live="polite"></p>
+      `;
+
+      form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        const submitButton = form.querySelector("button[type='submit']");
+        const status = form.querySelector(".form-status");
+        const formData = new FormData(form);
+        submitButton.disabled = true;
+        status.textContent = "追加しています…";
+        try {
+          const response = await fetch("/api/family/patients", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              displayName: formData.get("displayName"),
+              birthDate: formData.get("birthDate") || null,
+              avatarKey: formData.get("avatarKey")
+            })
+          });
+          if (!response.ok) throw new Error("追加できませんでした");
+          const result = await response.json();
+          setCurrentPatient(result.patient);
+          closeSheet();
+        } catch (error) {
+          status.textContent = "追加できませんでした。もう一度お試しください。";
+          submitButton.disabled = false;
+        }
+      });
+
+      contentRoot.append(form);
+    }
+
+    function renderAccountMenu() {
+      resetSheet();
+      kicker.textContent = "アカウント";
+      title.textContent = window.yorisoiAccount?.account?.displayName || "家族ノートメニュー";
+      body.textContent = window.yorisoiAccount?.user?.email || "";
+      tags.hidden = true;
+      const menu = document.createElement("div");
+      menu.className = "sheet-menu-actions";
+      menu.innerHTML = `
+        <button type="button" class="sheet-primary-action" data-account-action="family"><span class="material-symbols-outlined">group</span>家族共有</button>
+        <button type="button" class="sheet-secondary-action" data-account-action="patient"><span class="material-symbols-outlined">switch_account</span>健康記録の対象を切り替える</button>
+        <button type="button" class="sheet-secondary-action" data-account-action="help"><span class="material-symbols-outlined">help</span>よくある質問</button>
+        <button type="button" class="sheet-secondary-action" data-account-action="logout"><span class="material-symbols-outlined">logout</span>ログアウト</button>
+      `;
+      menu.addEventListener("click", async (event) => {
+        const action = event.target.closest("[data-account-action]")?.dataset.accountAction;
+        if (action === "family") return renderFamilyShare();
+        if (action === "patient") return renderPatientSelector();
+        if (action === "help") window.location.href = "/simple/help.html?disease=alagille";
+        if (action === "logout") await window.yorisoiLogout?.();
+      });
+      contentRoot.replaceChildren(menu);
+      showSheet();
+    }
+
+    async function renderPatientSelector() {
+      resetSheet();
+      kicker.textContent = "健康記録の対象";
+      title.textContent = "どなたの記録を開きますか？";
+      body.textContent = "選んだ方の診察・検査・薬・成長の記録に切り替わります。";
+      tags.hidden = true;
+
+      const loading = document.createElement("p");
+      loading.className = "sheet-loading";
+      loading.textContent = "家族ノートを読み込んでいます…";
+      contentRoot.append(loading);
+      showSheet();
+
+      try {
+        const response = await fetch("/api/family/patients");
+        if (!response.ok) throw new Error("患者一覧を取得できませんでした");
+        const result = await response.json();
+        const currentPatientId = window.localStorage.getItem("alagille-current-patient-id") || result.patients[0]?.id;
+        const list = document.createElement("div");
+        list.className = "patient-option-list";
+        result.patients.forEach((patient) => list.append(createPatientOption(patient, currentPatientId)));
+
+        const addButton = document.createElement("button");
+        addButton.type = "button";
+        addButton.className = "patient-add-button";
+        addButton.innerHTML = `<span class="material-symbols-outlined">add</span><span>健康記録の対象を追加する</span>`;
+        addButton.addEventListener("click", renderAddPatientForm);
+        contentRoot.replaceChildren(list, addButton);
+      } catch (error) {
+        loading.textContent = "家族ノートを読み込めませんでした。時間をおいてお試しください。";
+      }
+    }
+
+    async function hydrateCurrentPatient() {
+      const currentPatientId = window.localStorage.getItem("alagille-current-patient-id");
+      try {
+        const response = await fetch("/api/family/patients");
+        if (!response.ok) return;
+        const result = await response.json();
+        const currentPatient = result.patients.find((patient) => patient.id === currentPatientId) || result.patients[0];
+        if (currentPatient) setCurrentPatient(currentPatient);
+      } catch (error) {
+        document.querySelector(".patient-copy strong").textContent = "読み込めませんでした";
+        document.querySelector(".patient-copy small").textContent = "時間をおいて画面を開き直してください";
+      }
+    }
+
+    function createMemberRow(member) {
+      const row = document.createElement("div");
+      row.className = "family-member-row";
+
+      const image = document.createElement("img");
+      image.src = avatarArtwork[member.avatarKey] || avatarArtwork["adult-woman"];
+      image.alt = "";
+
+      const copy = document.createElement("span");
+      const name = document.createElement("strong");
+      name.textContent = member.displayName;
+      const permission = document.createElement("small");
+      permission.textContent = member.role === "viewer" ? "記録を見ることができます" : "記録の追加・編集ができます";
+      copy.append(name, permission);
+
+      const role = document.createElement("span");
+      role.className = "member-role-badge";
+      role.textContent = member.role === "owner" ? "管理者" : member.role === "editor" ? "記録できる" : "見るだけ";
+
+      row.append(image, copy, role);
+      return row;
+    }
+
+    function renderFamilyInvitation() {
+      kicker.textContent = "家族ノート";
+      title.textContent = "家族を招待する";
+      body.textContent = "記録を一緒に見たい家族へ、招待リンクを送ります。";
+      tags.hidden = true;
+      contentRoot.replaceChildren();
+
+      const form = document.createElement("form");
+      form.className = "family-invite-form";
+      form.innerHTML = `
+        <fieldset class="permission-fieldset">
+          <legend>招待する家族の権限</legend>
+          <label class="permission-option"><input type="radio" name="role" value="viewer" checked><span class="material-symbols-outlined">visibility</span><span><strong>見るだけ</strong><small>記録を見ることができます</small></span></label>
+          <label class="permission-option"><input type="radio" name="role" value="editor"><span class="material-symbols-outlined">edit</span><span><strong>記録できる</strong><small>記録の追加・編集ができます</small></span></label>
+        </fieldset>
+        <p class="invite-form-hint">リンクを作ったあと、LINEやメールで家族へ送れます。</p>
+        <button type="submit" class="sheet-primary-action">招待リンクを作る</button>
+        <div class="invite-result" aria-live="polite"></div>
+        <button type="button" class="sheet-secondary-action" data-back-family>家族一覧に戻る</button>
+      `;
+
+      form.querySelector("[data-back-family]").addEventListener("click", renderFamilyShare);
+      form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        const formData = new FormData(form);
+        const submitButton = form.querySelector("button[type='submit']");
+        const resultRoot = form.querySelector(".invite-result");
+        submitButton.disabled = true;
+        resultRoot.textContent = "招待リンクを作っています…";
+        try {
+          const response = await fetch("/api/family/invitations", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ role: formData.get("role") })
+          });
+          if (!response.ok) throw new Error("招待を作成できませんでした");
+          const result = await response.json();
+          resultRoot.replaceChildren();
+          form.classList.add("is-created");
+
+          const nextStep = document.createElement("strong");
+          nextStep.className = "invite-result-title";
+          nextStep.textContent = "招待リンクができました";
+          const message = document.createElement("p");
+          message.textContent = "下のボタンでリンクをコピーして、記録を共有したい家族へLINEやメールで送ってください。";
+          const copyButton = document.createElement("button");
+          copyButton.type = "button";
+          copyButton.className = "invite-copy-button";
+          copyButton.innerHTML = `<span class="material-symbols-outlined">content_copy</span><span>招待リンクをコピー</span>`;
+          copyButton.addEventListener("click", async () => {
+            try {
+              await navigator.clipboard.writeText(result.invitation.shareUrl);
+              copyButton.innerHTML = `<span class="material-symbols-outlined">check_circle</span><span>コピーしました</span>`;
+              copyButton.classList.add("is-copied");
+              message.textContent = "コピーしました。LINEやメールのメッセージ欄に貼り付けて、共有したい家族へ送ってください。";
+            } catch (error) {
+              message.textContent = "リンクをコピーできませんでした。ブラウザのクリップボード権限を確認して、もう一度お試しください。";
+            }
+          });
+          resultRoot.append(nextStep, message, copyButton);
+        } catch (error) {
+          resultRoot.textContent = "招待リンクを作れませんでした。もう一度お試しください。";
+          submitButton.disabled = false;
+        }
+      });
+      contentRoot.append(form);
+    }
+
+    function createInvitationRow(invitation) {
+      const row = document.createElement("div");
+      row.className = "family-invitation-row";
+      const copy = document.createElement("span");
+      const title = document.createElement("strong");
+      title.textContent = invitation.role === "editor" ? "記録できる招待" : "見るだけの招待";
+      const detail = document.createElement("small");
+      const status = invitation.status === "active" ? "未使用" : invitation.status === "accepted" ? "使用済み" : invitation.status === "revoked" ? "取消済み" : "期限切れ";
+      detail.textContent = `${status}${invitation.expiresAt ? `・期限 ${new Intl.DateTimeFormat("ja-JP", { year: "numeric", month: "numeric", day: "numeric" }).format(new Date(invitation.expiresAt))}` : ""}`;
+      copy.append(title, detail);
+      row.append(copy);
+      if (invitation.status === "active") {
+        const revoke = document.createElement("button");
+        revoke.type = "button";
+        revoke.textContent = "取り消す";
+        revoke.addEventListener("click", async () => {
+          if (!window.confirm("この招待リンクを無効にしますか？")) return;
+          revoke.disabled = true;
+          const response = await fetch(`/api/family/invitations/${encodeURIComponent(invitation.token)}`, { method: "DELETE" });
+          if (response.ok) renderFamilyShare();
+          else { revoke.disabled = false; revoke.textContent = "取消できませんでした"; }
+        });
+        row.append(revoke);
+      }
+      return row;
+    }
+
+    async function renderFamilyShare() {
+      resetSheet();
+      kicker.textContent = "家族ノート";
+      title.textContent = "共有している家族";
+      body.textContent = "この記録は、参加している家族だけで共有します。";
+      tags.hidden = true;
+
+      const loading = document.createElement("p");
+      loading.className = "sheet-loading";
+      loading.textContent = "家族を読み込んでいます…";
+      contentRoot.append(loading);
+      showSheet();
+
+      try {
+        const response = await fetch("/api/family/members");
+        if (!response.ok) throw new Error("家族一覧を取得できませんでした");
+        const result = await response.json();
+        const list = document.createElement("div");
+        list.className = "family-member-list";
+        result.members.forEach((member) => list.append(createMemberRow(member)));
+        const currentMember = result.members.find((member) => member.id === window.yorisoiAccount?.user?.uid);
+        contentRoot.replaceChildren(list);
+        if (currentMember?.role === "owner") {
+          const invitationResponse = await fetch("/api/family/invitations");
+          if (invitationResponse.ok) {
+            const invitationResult = await invitationResponse.json();
+            if (invitationResult.invitations.length) {
+              const heading = document.createElement("h3"); heading.className = "family-invitation-heading"; heading.textContent = "発行した招待";
+              const invitationList = document.createElement("div"); invitationList.className = "family-invitation-list";
+              invitationResult.invitations.forEach((invitation) => invitationList.append(createInvitationRow(invitation)));
+              contentRoot.append(heading, invitationList);
+            }
+          }
+          const inviteButton = document.createElement("button");
+          inviteButton.type = "button";
+          inviteButton.className = "patient-add-button";
+          inviteButton.innerHTML = `<span class="material-symbols-outlined">person_add</span><span>家族を招待する</span>`;
+          inviteButton.addEventListener("click", renderFamilyInvitation);
+          contentRoot.append(inviteButton);
+        }
+      } catch (error) {
+        loading.textContent = "家族ノートを読み込めませんでした。時間をおいてお試しください。";
+      }
+    }
+
+    function openSheet(key) {
+      if (key === "home") {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+        return;
+      }
+      if (key === "visit-note") {
+        window.location.href = "/simple/record.html?disease=alagille";
+        return;
+      }
+      if (key === "lab") {
+        window.location.href = "/lab-tracker.html?disease=alagille";
+        return;
+      }
+      if (key === "medicine") {
+        window.location.href = "/medications.html?disease=alagille";
+        return;
+      }
+      if (key === "growth") {
+        window.location.href = "/simple/growth.html?disease=alagille";
+        return;
+      }
+      if (key === "daily-log") {
+        window.location.href = "/daily-logs.html?disease=alagille";
+        return;
+      }
+      if (key === "question") {
+        window.location.href = "/questions.html?disease=alagille";
+        return;
+      }
+      if (key === "appointment" || key === "calendar") {
+        window.location.href = "/simple/calendar.html?disease=alagille";
+        return;
+      }
+      if (key === "doctor") {
+        window.location.href = "/simple/show.html?disease=alagille";
+        return;
+      }
+      if (key === "recent") {
+        window.location.href = "/recent-changes.html?disease=alagille";
+        return;
+      }
+      if (key === "photo") {
+        window.location.href = "/simple/album.html?disease=alagille";
+        return;
+      }
+      if (key === "patient") {
+        renderPatientSelector();
+        return;
+      }
+      if (key === "menu" || key === "family-note") {
+        renderAccountMenu();
+        return;
+      }
+      if (key === "family-share") {
+        renderFamilyShare();
+        return;
+      }
+      resetSheet();
+      const content = sheetContent[key] || sheetContent.home;
+      title.textContent = content[0];
+      body.textContent = content[1];
+      tags.innerHTML = content[2].map((tag) => `<span>${tag}</span>`).join("");
+      showSheet();
+    }
+
+    function closeSheet() {
+      sheet.classList.remove("open");
+      backdrop.classList.remove("open");
+      window.setTimeout(() => {
+        sheet.hidden = true;
+        backdrop.hidden = true;
+      }, 180);
+    }
+
+    document.querySelectorAll("[data-sheet]").forEach((item) => {
+      item.addEventListener("click", () => openSheet(item.dataset.sheet));
+    });
+    document.querySelectorAll("[data-close-sheet]").forEach((item) => {
+      item.addEventListener("click", closeSheet);
+    });
+    hydrateCurrentPatient().then(() => {
+      if (window.location.hash === "#family-share") renderFamilyShare();
+    });
+  </script>
+</body>
+</html>

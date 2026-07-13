@@ -1,0 +1,127 @@
+{
+  "id": "ra",
+  "name": "関節リウマチ",
+  "shortName": "RA",
+  "description": "関節リウマチ（Rheumatoid Arthritis）の治療歴・薬・症状を管理",
+  "color": "#059669",
+  "icon": "orthopedics",
+
+  "modules": [
+    { "id": "timeline", "label": "治療タイムライン", "description": "治療経歴を時系列で管理", "icon": "timeline", "page": "timeline.html", "enabled": true, "core": true },
+    { "id": "medications", "label": "おくすり管理", "description": "処方薬と変更履歴", "icon": "medication", "page": "medications.html", "enabled": true, "core": true },
+    { "id": "symptom-log", "label": "症状きろく", "description": "関節の状態を毎日記録", "icon": "edit_note", "page": "symptom-log.html", "enabled": true },
+    { "id": "restroom", "label": "トイレさがし", "description": "近くのトイレをマップで表示", "icon": "wc", "page": "restroom.html", "enabled": false },
+    { "id": "emergency-card", "label": "緊急カード", "description": "救急時に見せる情報カード", "icon": "emergency", "page": "emergency-card.html", "enabled": true, "core": true },
+    { "id": "lab-tracker", "label": "検査値きろく", "description": "血液検査の推移をグラフ表示", "icon": "science", "page": "lab-tracker.html", "enabled": true, "core": true },
+    { "id": "summary", "label": "診察用サマリー", "description": "診察時に医師に見せる画面", "icon": "description", "page": "summary.html", "enabled": true, "core": true, "fullWidth": true },
+    { "id": "resources", "label": "患者会・支援情報", "description": "患者会・医療費助成・診療拠点情報", "icon": "groups", "page": "resources.html", "enabled": true, "core": true, "fullWidth": true }
+  ],
+
+  "medicationMaster": "ra-medications.json",
+
+  "resourcesConfig": {
+    "title": "患者会・支援情報",
+    "intro": "関節リウマチは自己免疫により関節に炎症が起きる疾患で、国内に推定60〜100万人の患者がいるとされます。指定難病ではありませんが、進行度に応じて身体障害者手帳や介護保険など利用できる制度があります ── そんな時に役立つ情報をまとめました。",
+    "sections": [
+      {
+        "heading": "患者会・ピアサポート",
+        "icon": "groups",
+        "items": [
+          { "name": "日本リウマチ友の会", "url": "https://www.tomonokai.net/", "note": "1960年設立の歴史ある患者会。会報『流』の発行、全国の支部活動、相談事業などを行っています。" }
+        ]
+      },
+      {
+        "heading": "公的支援・医療費助成",
+        "icon": "account_balance",
+        "items": [
+          { "name": "厚生労働省 身体障害者手帳", "url": "https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/hukushi_kaigo/shougaishahukushi/techou.html", "note": "関節機能障害が一定基準を満たす場合、肢体不自由として身体障害者手帳の対象になります。等級・申請方法を解説。" },
+          { "name": "厚生労働省 介護保険制度", "url": "https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/hukushi_kaigo/kaigo_koureisha/index.html", "note": "関節リウマチは介護保険の特定疾病に該当し、40〜64歳でもサービス利用が可能です。" }
+        ]
+      },
+      {
+        "heading": "医療情報・診療拠点",
+        "icon": "local_hospital",
+        "items": [
+          { "name": "日本リウマチ学会", "url": "https://www.ryumachi-jp.com/", "note": "診療ガイドライン、リウマチ専門医・指導医の検索ができ、認定施設を地域から探せます。" },
+          { "name": "日本リウマチ財団", "url": "https://www.rheuma-net.or.jp/", "note": "登録医・登録薬剤師制度を運営。市民向けのリウマチ情報や講演会の案内も掲載されています。" }
+        ]
+      }
+    ],
+    "footer": "掲載情報は執筆時点のものです。手続き・治療方針の最新情報は各公式サイト・主治医にご確認ください。"
+  },
+
+  "symptomConfig": {
+    "title": "症状きろく",
+    "metrics": [
+      { "id": "morningStiffness", "label": "朝のこわばり", "type": "counter", "min": 0, "max": 240, "default": 0, "unit": "分" },
+      { "id": "jointPain", "label": "関節の痛み", "type": "scale", "min": 0, "max": 5 },
+      { "id": "swollenJoints", "label": "腫れている関節数", "type": "counter", "min": 0, "max": 28, "default": 0, "unit": "箇所" },
+      { "id": "tenderJoints", "label": "圧痛関節数", "type": "counter", "min": 0, "max": 28, "default": 0, "unit": "箇所" },
+      { "id": "ptGa", "label": "患者全般評価（PtGA）", "type": "counter", "min": 0, "max": 100, "default": 0, "unit": "mm", "description": "VAS 0=とても良い 〜 100=とても悪い。CDAI/SDAI算出に必須" },
+      { "id": "phGa", "label": "医師全般評価（PhGA）", "type": "counter", "min": 0, "max": 100, "default": 0, "unit": "mm", "description": "VAS 0-100mm。CDAI/SDAI算出に必須" },
+      { "id": "fatigue", "label": "疲労感", "type": "scale", "min": 0, "max": 5 },
+      { "id": "funcLimitation", "label": "日常生活の支障", "type": "scale", "min": 0, "max": 5, "description": "0=なし ← → 5=寝たきり" }
+    ],
+    "summaryMetrics": [
+      { "id": "morningStiffness", "label": "平均こわばり(分)", "aggregate": "avg" },
+      { "id": "jointPain", "label": "平均関節痛", "aggregate": "avg" },
+      { "id": "swollenJoints", "label": "平均腫脹関節数", "aggregate": "avg" },
+      { "id": "ptGa", "label": "平均患者VAS", "aggregate": "avg" },
+      { "id": "fatigue", "label": "平均疲労", "aggregate": "avg" }
+    ]
+  },
+
+  "labConfig": {
+    "items": [
+      { "id": "crp", "label": "CRP", "unit": "mg/dL", "normalRange": [0, 0.3], "warnHigh": 1.0 },
+      { "id": "esr", "label": "赤沈（ESR）", "unit": "mm/h", "normalRange": [0, 15], "warnHigh": 30, "note": "男 2-10, 女 3-15" },
+      { "id": "rf", "label": "リウマトイド因子（RF）", "unit": "IU/mL", "normalRange": [0, 15], "warnHigh": 30 },
+      { "id": "accp", "label": "抗CCP抗体", "unit": "U/mL", "normalRange": [0, 4.5], "warnHigh": 10 },
+      { "id": "mmp3", "label": "MMP-3", "unit": "ng/mL", "normalRange": [17.3, 121], "note": "男 36.9-121 / 女 17.3-59.7（性差あり）" },
+      { "id": "kl6", "label": "KL-6", "unit": "U/mL", "normalRange": [0, 500], "warnHigh": 500, "note": "MTX肺障害・RA-ILD監視必須" },
+      { "id": "spd", "label": "SP-D", "unit": "ng/mL", "normalRange": [0, 110], "warnHigh": 110 },
+      { "id": "hb", "label": "Hb（ヘモグロビン）", "unit": "g/dL", "normalRange": [12, 17], "warnLow": 10 },
+      { "id": "plt", "label": "血小板数", "unit": "万/μL", "normalRange": [15, 35] },
+      { "id": "alt", "label": "ALT（GPT）", "unit": "U/L", "normalRange": [5, 40], "warnHigh": 80 },
+      { "id": "cre", "label": "クレアチニン", "unit": "mg/dL", "normalRange": [0.5, 1.0], "warnHigh": 1.3 },
+      { "id": "egfr", "label": "eGFR", "unit": "mL/min", "normalRange": [60, 150], "warnLow": 45 },
+      { "id": "ldl", "label": "LDLコレステロール", "unit": "mg/dL", "normalRange": [60, 139], "warnHigh": 140, "note": "JAK阻害薬使用時の心血管リスク管理" },
+      { "id": "hdl", "label": "HDLコレステロール", "unit": "mg/dL", "normalRange": [40, 96], "warnLow": 40 },
+      { "id": "tg", "label": "中性脂肪", "unit": "mg/dL", "normalRange": [30, 149], "warnHigh": 150 },
+      { "id": "hba1c", "label": "HbA1c", "unit": "%", "normalRange": [4.6, 6.2], "warnHigh": 7.0, "note": "JAK阻害薬心血管リスク評価" },
+      { "id": "hbv_dna", "label": "HBV-DNA", "unit": "LogIU/mL", "normalRange": [0, 1.3], "note": "bDMARD/JAK導入時必須" }
+    ]
+  },
+
+  "scoringTools": [
+    { "id": "das28crp", "label": "DAS28-CRP", "range": "0-10", "note": "<2.6=寛解、2.6-3.2=低活動、>3.2=中等度/高活動" },
+    { "id": "cdai", "label": "CDAI", "range": "0-76", "note": "TJC+SJC+PtGA(cm)+PhGA(cm)。<2.8=寛解" },
+    { "id": "sdai", "label": "SDAI", "range": "0-86", "note": "CDAI+CRP。<3.3=寛解" }
+  ],
+
+  "emergencyConfig": {
+    "title": "緊急情報カード",
+    "subtitle": "関節リウマチ",
+    "fields": [
+      { "id": "stage", "label": "進行度", "placeholder": "例: Stage II" },
+      { "id": "activity", "label": "疾患活動性", "placeholder": "例: 中等度" }
+    ],
+    "warnings": [
+      "生物学的製剤/JAK阻害薬使用中は感染症・結核再燃のリスク",
+      "メトトレキサート服用中は手術前に休薬相談が必要",
+      "ステロイド服用中の急な中断は副腎不全のリスク",
+      "免疫抑制状態のため発熱・感染兆候は早期受診"
+    ]
+  },
+
+  "timelineCategories": [
+    { "id": "diagnosis", "label": "診断", "color": "#dbeafe" },
+    { "id": "medication_change", "label": "薬変更", "color": "#d1fae5" },
+    { "id": "flare", "label": "再燃", "color": "#fca5a5" },
+    { "id": "exam", "label": "検査", "color": "#e9d5ff" },
+    { "id": "surgery", "label": "手術", "color": "#fecaca" },
+    { "id": "rehabilitation", "label": "リハビリ", "color": "#fde68a" },
+    { "id": "self-log", "label": "じぶんメモ", "color": "#e0f2fe" },
+    { "id": "other", "label": "その他", "color": "#e5e5e5" }
+  ]
+}

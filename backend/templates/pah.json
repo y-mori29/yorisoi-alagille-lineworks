@@ -1,0 +1,129 @@
+{
+  "id": "pah",
+  "name": "肺動脈性肺高血圧症",
+  "shortName": "PAH",
+  "description": "肺動脈性肺高血圧症（Pulmonary Arterial Hypertension）の治療歴・薬・症状を管理",
+  "color": "#0284c7",
+  "icon": "cardiology",
+
+  "modules": [
+    { "id": "timeline", "label": "治療タイムライン", "description": "治療経歴を時系列で管理", "icon": "timeline", "page": "timeline.html", "enabled": true, "core": true },
+    { "id": "medications", "label": "おくすり管理", "description": "処方薬と変更履歴", "icon": "medication", "page": "medications.html", "enabled": true, "core": true },
+    { "id": "symptom-log", "label": "症状きろく", "description": "息切れ・SpO2を記録", "icon": "edit_note", "page": "symptom-log.html", "enabled": true },
+    { "id": "restroom", "label": "トイレさがし", "description": "近くのトイレをマップで表示", "icon": "wc", "page": "restroom.html", "enabled": false },
+    { "id": "emergency-card", "label": "緊急カード", "description": "救急時に見せる情報カード", "icon": "emergency", "page": "emergency-card.html", "enabled": true, "core": true },
+    { "id": "lab-tracker", "label": "検査値きろく", "description": "血液検査の推移をグラフ表示", "icon": "science", "page": "lab-tracker.html", "enabled": true, "core": true },
+    { "id": "summary", "label": "診察用サマリー", "description": "診察時に医師に見せる画面", "icon": "description", "page": "summary.html", "enabled": true, "core": true, "fullWidth": true },
+    { "id": "resources", "label": "患者会・支援情報", "description": "患者会・医療費助成・診療拠点情報", "icon": "groups", "page": "resources.html", "enabled": true, "core": true, "fullWidth": true }
+  ],
+
+  "medicationMaster": "pah-medications.json",
+
+  "resourcesConfig": {
+    "title": "患者会・支援情報",
+    "intro": "肺動脈性肺高血圧症（PAH）は100万人に1〜2人とされる希少疾患で、指定難病86として医療費助成の対象です。患者会・公的支援・診療拠点の情報を、必要なときにすぐ手が届くよう集めました。",
+    "sections": [
+      {
+        "heading": "患者会・ピアサポート",
+        "icon": "groups",
+        "items": [
+          { "name": "NPO法人 PAHの会（肺高血圧症患者と家族の会）", "url": "https://www.pha-japan.ne.jp/", "note": "日本国内の代表的な肺高血圧症患者会。会員交流、生活支援情報、専門医とのつながりを提供しています。" },
+          { "name": "日本難病・疾病団体協議会（JPA）", "url": "https://nanbyo.jp/", "note": "難病・長期慢性疾病の患者団体の全国組織。地域の難病連絡先や制度に関する相談ができます。" }
+        ]
+      },
+      {
+        "heading": "公的支援・医療費助成",
+        "icon": "account_balance",
+        "items": [
+          { "name": "難病情報センター 肺動脈性肺高血圧症（指定難病86）", "url": "https://www.nanbyou.or.jp/entry/253", "note": "疾患概要・診断基準・医療費助成の対象基準を解説する公式情報ページです。" },
+          { "name": "肺高血圧症治療サポート 医療費と制度", "url": "https://pah-support.jp/connect/rule.php", "note": "指定難病・高額療養費・身体障害者手帳など、PAH患者が利用できる制度を整理しています。" }
+        ]
+      },
+      {
+        "heading": "医療情報・診療拠点",
+        "icon": "local_hospital",
+        "items": [
+          { "name": "日本肺高血圧・肺循環学会（JPCPHS）", "url": "http://jpcphs.org/", "note": "肺高血圧症診療の中核となる学会。診療ガイドライン・学術集会・登録研究の情報を発信しています。" },
+          { "name": "国立循環器病研究センター 肺高血圧症", "url": "https://www.ncvc.go.jp/hospital/pub/knowledge/disease/pph-index/", "note": "国の循環器専門センターによる疾患解説。症状・検査・治療を信頼性高くまとめています。" },
+          { "name": "肺高血圧症治療サポート（疾患情報サイト）", "url": "https://pah-support.jp/", "note": "症状・検査・治療・暮らしの工夫まで網羅した患者向け情報サイト（日本新薬運営）。" },
+          { "name": "Produce A Hope（PAH／PH患者向け情報サイト）", "url": "https://www.produceahope.jp/", "note": "PAH・PH患者と家族のための疾患情報・体験談・サポート情報を集約しています。" }
+        ]
+      }
+    ],
+    "footer": "掲載情報は執筆時点のものです。手続き・治療方針の最新情報は各公式サイト・主治医にご確認ください。"
+  },
+
+  "symptomConfig": {
+    "title": "症状きろく",
+    "metrics": [
+      { "id": "whoFc", "label": "WHO機能分類（WHO-FC）", "type": "scale", "min": 1, "max": 4, "labels": ["I", "II", "III", "IV"], "description": "I=無症状 II=軽労作息切れ III=軽労作息切れ/制限あり IV=安静時症状" },
+      { "id": "sixMwd", "label": "6分間歩行距離", "type": "counter", "min": 0, "max": 800, "default": 300, "unit": "m", "description": "リスク層別化: <165=高, 165-320=中高, 320-440=中低, >440=低" },
+      { "id": "spo2", "label": "SpO2", "type": "counter", "min": 70, "max": 100, "default": 95, "unit": "%" },
+      { "id": "edema", "label": "むくみ", "type": "scale", "min": 0, "max": 3, "labels": ["なし", "軽度", "中等度", "高度"] },
+      { "id": "chestPain", "label": "胸痛", "type": "toggle" },
+      { "id": "syncope", "label": "失神・前兆", "type": "toggle", "dangerColor": true, "description": "緊急受診を検討" },
+      { "id": "palpitation", "label": "動悸", "type": "toggle" },
+      { "id": "fever", "label": "発熱", "type": "toggle", "dangerColor": true, "description": "フローラン持続静注使用時はCRBSIを疑う" },
+      { "id": "fatigue", "label": "疲労感", "type": "scale", "min": 0, "max": 5 }
+    ],
+    "summaryMetrics": [
+      { "id": "whoFc", "label": "平均WHO-FC", "aggregate": "avg" },
+      { "id": "sixMwd", "label": "平均6MWD(m)", "aggregate": "avg" },
+      { "id": "spo2", "label": "平均SpO2", "aggregate": "avg" },
+      { "id": "edema", "label": "平均むくみ", "aggregate": "avg" },
+      { "id": "syncope", "label": "失神日数", "aggregate": "countTrue" },
+      { "id": "fever", "label": "発熱日数", "aggregate": "countTrue" }
+    ]
+  },
+
+  "labConfig": {
+    "items": [
+      { "id": "bnp", "label": "BNP", "unit": "pg/mL", "normalRange": [0, 18.4], "warnHigh": 100, "note": "予後予測・リスク層別化の中核指標" },
+      { "id": "ntprobnp", "label": "NT-proBNP", "unit": "pg/mL", "normalRange": [0, 125], "warnHigh": 300 },
+      { "id": "troponin", "label": "高感度トロポニン", "unit": "ng/L", "normalRange": [0, 14], "warnHigh": 50, "note": "右心負荷による心筋虚血の評価" },
+      { "id": "svo2", "label": "SvO2（混合静脈血酸素飽和度）", "unit": "%", "normalRange": [70, 80], "warnLow": 60, "note": "予後と最強相関。<60%で全身酸素需給破綻" },
+      { "id": "mpap", "label": "mPAP（平均肺動脈圧）", "unit": "mmHg", "normalRange": [10, 20], "warnHigh": 20, "note": "RHC時。≥20mmHgでPAH診断（ESC/ERS 2022）" },
+      { "id": "pvr", "label": "PVR（肺血管抵抗）", "unit": "WU", "normalRange": [0, 2], "warnHigh": 2, "note": "RHC時。>2WUでPAH診断" },
+      { "id": "pawp", "label": "PAWP（肺動脈楔入圧）", "unit": "mmHg", "normalRange": [0, 15], "warnHigh": 15, "note": "RHC時。≤15mmHgで前毛細血管性" },
+      { "id": "ci", "label": "CI（心係数）", "unit": "L/min/m²", "normalRange": [2.5, 4.0], "warnLow": 2.0, "note": "リスク層別化: ≥2.5=低, 2.0-2.4=中, <2.0=高" },
+      { "id": "rap", "label": "RAP（右房圧）", "unit": "mmHg", "normalRange": [0, 8], "warnHigh": 14 },
+      { "id": "egfr", "label": "eGFR", "unit": "mL/min", "normalRange": [60, 150], "warnLow": 45 },
+      { "id": "cre", "label": "クレアチニン", "unit": "mg/dL", "normalRange": [0.5, 1.0], "warnHigh": 1.3 },
+      { "id": "ast", "label": "AST", "unit": "U/L", "normalRange": [10, 40], "warnHigh": 80 },
+      { "id": "alt", "label": "ALT", "unit": "U/L", "normalRange": [5, 40], "warnHigh": 80 },
+      { "id": "ua", "label": "尿酸", "unit": "mg/dL", "normalRange": [3.5, 7.0], "warnHigh": 9 },
+      { "id": "na", "label": "Na", "unit": "mEq/L", "normalRange": [135, 145] },
+      { "id": "k", "label": "K（カリウム）", "unit": "mEq/L", "normalRange": [3.5, 5.0] },
+      { "id": "hb", "label": "Hb", "unit": "g/dL", "normalRange": [12, 17] },
+      { "id": "plt", "label": "血小板", "unit": "万/μL", "normalRange": [15, 35] }
+    ]
+  },
+
+  "emergencyConfig": {
+    "title": "緊急情報カード",
+    "subtitle": "肺動脈性肺高血圧症（PAH）",
+    "fields": [
+      { "id": "whoFc", "label": "WHO機能分類", "placeholder": "例: II" },
+      { "id": "therapy", "label": "現在の治療", "placeholder": "例: 3剤併用" }
+    ],
+    "warnings": [
+      "⚠️ プロスタサイクリン持続静注中の場合、ポンプ停止は生命の危険",
+      "失神・急激な呼吸困難は緊急受診",
+      "塩分・水分制限中",
+      "抗凝固薬（ワルファリン）服用の有無確認",
+      "妊娠は禁忌レベルのリスク",
+      "高所・飛行機搭乗は主治医相談が必要"
+    ]
+  },
+
+  "timelineCategories": [
+    { "id": "diagnosis", "label": "診断", "color": "#dbeafe" },
+    { "id": "rhc", "label": "右心カテーテル", "color": "#c7d2fe" },
+    { "id": "medication_change", "label": "薬変更", "color": "#d1fae5" },
+    { "id": "hospitalization", "label": "入院", "color": "#fde68a" },
+    { "id": "exam", "label": "検査", "color": "#e9d5ff" },
+    { "id": "complication", "label": "合併症", "color": "#fca5a5" },
+    { "id": "self-log", "label": "じぶんメモ", "color": "#e0f2fe" },
+    { "id": "other", "label": "その他", "color": "#e5e5e5" }
+  ]
+}

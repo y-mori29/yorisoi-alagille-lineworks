@@ -1,0 +1,167 @@
+{
+  "categories": [
+    {
+      "id": "levodopa",
+      "name": "レボドパ製剤",
+      "description": "ドパミン前駆体。パーキンソン病治療の中心薬",
+      "step": 1
+    },
+    {
+      "id": "device_therapy",
+      "name": "デバイス療法",
+      "description": "持続皮下注・持続経腸投与・DBS等の進行期治療",
+      "step": 4
+    },
+    {
+      "id": "dopamine_agonist",
+      "name": "ドパミンアゴニスト",
+      "description": "ドパミン受容体を直接刺激",
+      "step": 2
+    },
+    {
+      "id": "mao_b_inhibitor",
+      "name": "MAO-B阻害薬",
+      "description": "ドパミン分解を抑制して効果を延長",
+      "step": 2
+    },
+    {
+      "id": "comt_inhibitor",
+      "name": "COMT阻害薬",
+      "description": "レボドパの末梢代謝を抑制しバイオアベイラビリティを向上",
+      "step": 3
+    },
+    {
+      "id": "anticholinergic",
+      "name": "抗コリン薬",
+      "description": "振戦の改善に使用。高齢者には慎重投与",
+      "step": 3
+    },
+    {
+      "id": "other",
+      "name": "その他",
+      "description": "アデノシンA2A受容体拮抗薬・アマンタジン・DBS等",
+      "step": 4
+    }
+  ],
+  "medications": [
+    {
+      "genericName": "レボドパ/カルビドパ",
+      "brandNames": ["ネオドパストン", "メネシット"],
+      "category": "levodopa",
+      "dosageForms": ["経口"],
+      "notes": "最も基本的なPD治療薬。wearing-off対策で分割投与"
+    },
+    {
+      "genericName": "レボドパ/ベンセラジド",
+      "brandNames": ["マドパー"],
+      "category": "levodopa",
+      "dosageForms": ["経口"],
+      "notes": "DCI配合剤。ネオドパストン等と同等の効果"
+    },
+    {
+      "genericName": "ホスレボドパ/ホスカルビドパ",
+      "brandNames": ["ヴィアレブ"],
+      "category": "device_therapy",
+      "dosageForms": ["持続皮下注"],
+      "notes": "2022年12月世界初承認（日本）・2023年7月発売。24時間持続皮下注で進行期PDのウェアリングオフ改善"
+    },
+    {
+      "genericName": "アポモルヒネ",
+      "brandNames": ["アポカイン"],
+      "category": "device_therapy",
+      "dosageForms": ["皮下注射"],
+      "notes": "オフ症状のレスキュー療法・自己注射可"
+    },
+    {
+      "genericName": "プラミペキソール",
+      "brandNames": ["ミラペックス"],
+      "category": "dopamine_agonist",
+      "dosageForms": ["経口"],
+      "notes": "非麦角系。徐放錠（ミラペックスLA）あり"
+    },
+    {
+      "genericName": "ロピニロール",
+      "brandNames": ["レキップ"],
+      "category": "dopamine_agonist",
+      "dosageForms": ["経口"],
+      "notes": "非麦角系。徐放錠（レキップCR）あり"
+    },
+    {
+      "genericName": "ロチゴチン",
+      "brandNames": ["ニュープロパッチ"],
+      "category": "dopamine_agonist",
+      "dosageForms": ["貼付剤"],
+      "notes": "24時間持続型経皮吸収製剤。嚥下困難時にも使用可"
+    },
+    {
+      "genericName": "セレギリン",
+      "brandNames": ["エフピー"],
+      "category": "mao_b_inhibitor",
+      "dosageForms": ["経口"],
+      "notes": "選択的MAO-B阻害。レボドパとの併用で効果延長"
+    },
+    {
+      "genericName": "ラサギリン",
+      "brandNames": ["アジレクト"],
+      "category": "mao_b_inhibitor",
+      "dosageForms": ["経口"],
+      "notes": "1日1回投与。早期から進行期まで使用可"
+    },
+    {
+      "genericName": "サフィナミド",
+      "brandNames": ["エクフィナ"],
+      "category": "mao_b_inhibitor",
+      "dosageForms": ["経口"],
+      "notes": "MAO-B阻害+グルタミン酸放出抑制の二重作用"
+    },
+    {
+      "genericName": "エンタカポン",
+      "brandNames": ["コムタン"],
+      "category": "comt_inhibitor",
+      "dosageForms": ["経口"],
+      "notes": "レボドパ製剤と同時服用。末梢COMT阻害"
+    },
+    {
+      "genericName": "オピカポン",
+      "brandNames": ["オンジェンティス"],
+      "category": "comt_inhibitor",
+      "dosageForms": ["経口"],
+      "notes": "1日1回投与の長時間作用型COMT阻害薬"
+    },
+    {
+      "genericName": "トリヘキシフェニジル",
+      "brandNames": ["アーテン"],
+      "category": "anticholinergic",
+      "dosageForms": ["経口"],
+      "notes": "主に振戦に有効。高齢者は認知機能低下に注意"
+    },
+    {
+      "genericName": "イストラデフィリン",
+      "brandNames": ["ノウリアスト"],
+      "category": "other",
+      "dosageForms": ["経口"],
+      "notes": "アデノシンA2A受容体拮抗薬。wearing-off改善"
+    },
+    {
+      "genericName": "ゾニサミド",
+      "brandNames": ["トレリーフ"],
+      "category": "other",
+      "dosageForms": ["経口"],
+      "notes": "抗てんかん薬由来。wearing-off改善に適応追加"
+    },
+    {
+      "genericName": "アマンタジン",
+      "brandNames": ["シンメトレル"],
+      "category": "other",
+      "dosageForms": ["経口"],
+      "notes": "ドパミン遊離促進。ジスキネジア軽減にも使用"
+    },
+    {
+      "genericName": "DBS（脳深部刺激療法）",
+      "brandNames": ["DBS"],
+      "category": "other",
+      "dosageForms": ["デバイス"],
+      "notes": "薬物療法で十分なコントロールが得られない場合の外科的治療"
+    }
+  ]
+}

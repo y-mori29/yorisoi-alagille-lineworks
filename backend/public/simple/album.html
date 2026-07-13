@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>写真 - よりそい アラジール</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined">
+  <link rel="stylesheet" href="/css/alagille-family.css">
+  <script src="/js/account-guard.js"></script>
+  <style>
+    .album-page{padding-bottom:96px}.screen-title{color:var(--coral)}
+    .album-patient{min-height:68px;margin-bottom:12px;padding:10px 12px;display:grid;grid-template-columns:48px 1fr;gap:10px;align-items:center;border:1px solid rgba(190,214,180,.76);border-radius:8px;background:linear-gradient(90deg,#f2faee,#fffdf8)}
+    .album-patient img{width:48px;height:48px;object-fit:cover;border-radius:8px;background:#fff}.album-patient small,.album-patient strong{display:block}.album-patient small{color:var(--sage);font-size:10px;font-weight:900}.album-patient strong{margin-top:2px;color:var(--ink);font-size:16px}
+    .album-intro{margin-bottom:12px;color:var(--ink-soft);font-size:12px;line-height:1.7;font-weight:760}
+    .album-tabs{display:flex;gap:7px;overflow-x:auto;padding:2px 0 12px;scrollbar-width:none}.album-tabs::-webkit-scrollbar{display:none}.album-tab{flex:0 0 auto;min-height:42px;padding:0 15px;border:1.5px solid var(--line);border-radius:999px;background:rgba(255,255,255,.92);color:#6a5a49;font-size:12px;font-weight:900;cursor:pointer}.album-tab[aria-selected="true"]{border-color:var(--coral);background:var(--coral);color:#fff;box-shadow:0 6px 16px rgba(255,119,108,.2)}
+    .photo-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;min-height:120px}.photo-tile{min-width:0;aspect-ratio:1;border:0;border-radius:8px;padding:0;overflow:hidden;position:relative;background:#f5f0e9;cursor:pointer}.photo-tile img{width:100%;height:100%;display:block;object-fit:cover;object-position:center}.photo-tile span{position:absolute;left:5px;right:5px;bottom:5px;padding:4px 5px;border-radius:6px;background:rgba(61,47,38,.76);color:#fff;font-size:9px;line-height:1.25;font-weight:900;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+    .album-empty{grid-column:1/-1;padding:28px 14px;text-align:center;border:1px dashed rgba(163,144,128,.42);border-radius:8px;color:var(--muted);font-size:12px;line-height:1.75;font-weight:780}.album-empty .material-symbols-outlined{display:block;margin-bottom:6px;color:var(--mint);font-size:34px}
+    .album-status{min-height:24px;margin:10px 0 0;color:var(--muted);font-size:11px;text-align:center;font-weight:780}
+    dialog{width:min(390px,calc(100vw - 28px));max-height:calc(100dvh - 28px);padding:0;border:0;border-radius:8px;background:#fffdf8;color:var(--ink);box-shadow:0 24px 70px rgba(60,49,41,.28)}dialog::backdrop{background:rgba(59,53,47,.46);backdrop-filter:blur(2px)}.dialog-head{min-height:56px;padding:12px 14px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--line)}.dialog-head h2{margin:0;font-size:17px}.dialog-close{width:36px;height:36px;border:0;border-radius:50%;display:grid;place-items:center;background:#eef7eb;color:var(--ink);cursor:pointer}.dialog-body{padding:14px;overflow:auto}.detail-photo{width:100%;max-height:54dvh;display:block;object-fit:contain;border-radius:8px;background:#f5f0e9}.detail-meta{margin-top:12px;display:grid;gap:7px}.detail-meta strong{font-size:17px}.detail-meta small{color:var(--muted);font-size:11px;font-weight:850}.detail-meta p{margin:0;color:var(--ink-soft);font-size:12px;line-height:1.7;font-weight:760}.detail-link{min-height:48px;margin-top:12px;border-radius:8px;display:flex;align-items:center;justify-content:center;gap:7px;background:var(--mint);color:#fff;text-decoration:none;font-size:13px;font-weight:900}
+    .add-options{display:grid;gap:9px}.add-option{min-height:70px;padding:11px;border:1px solid var(--line);border-radius:8px;display:grid;grid-template-columns:44px 1fr 22px;gap:9px;align-items:center;color:var(--ink);text-decoration:none;background:#fff}.add-option>.material-symbols-outlined:first-child{width:44px;height:44px;border-radius:8px;display:grid;place-items:center;background:#eef8f3;color:var(--mint);font-size:25px}.add-option strong,.add-option small{display:block}.add-option strong{font-size:14px}.add-option small{margin-top:3px;color:var(--muted);font-size:10px;line-height:1.45;font-weight:780}.add-note{margin:12px 2px 0;color:var(--muted);font-size:10px;line-height:1.65;font-weight:760}
+    @media(max-width:360px){.photo-grid{gap:6px}.album-tab{padding:0 12px}}
+  </style>
+</head>
+<body>
+  <main class="app album-page">
+    <header class="screen-head">
+      <a class="round" href="/?disease=alagille" aria-label="ホームへ戻る"><span class="material-symbols-outlined">arrow_back</span></a>
+      <h1 class="screen-title">写真</h1>
+      <button class="round primary" id="open-add" type="button" aria-label="写真を追加"><span class="material-symbols-outlined">add</span></button>
+    </header>
+    <section class="album-patient" aria-label="健康記録の対象"><img id="patient-avatar" src="/assets/alagille-brand/avatars/avatar-child-boy-v1.png" alt=""><span><small>健康記録の対象</small><strong id="patient-name">読み込み中</strong></span></section>
+    <p class="album-intro">検査結果、お薬、日々の様子に残した写真を、ここでまとめて見返せます。</p>
+    <nav class="album-tabs" aria-label="写真カテゴリ">
+      <button class="album-tab" type="button" data-category="all" aria-selected="true">すべて</button>
+      <button class="album-tab" type="button" data-category="outpatient" aria-selected="false">外来資料</button>
+      <button class="album-tab" type="button" data-category="meal" aria-selected="false">食事</button>
+      <button class="album-tab" type="button" data-category="lab" aria-selected="false">検査</button>
+      <button class="album-tab" type="button" data-category="medication" aria-selected="false">お薬</button>
+      <button class="album-tab" type="button" data-category="growth" aria-selected="false">成長</button>
+      <button class="album-tab" type="button" data-category="daily" aria-selected="false">日々</button>
+    </nav>
+    <section class="photo-grid" id="photo-grid" aria-live="polite"></section>
+    <p class="album-status" id="album-status"></p>
+  </main>
+
+  <nav class="bottom-nav" aria-label="下部メニュー">
+    <a href="/?disease=alagille"><span class="material-symbols-outlined">home</span><span>ホーム</span></a>
+    <a href="/simple/calendar.html?disease=alagille"><span class="material-symbols-outlined">calendar_month</span><span>カレンダー</span></a>
+    <a class="active" href="/simple/album.html?disease=alagille"><span class="material-symbols-outlined">photo_library</span><span>写真</span></a>
+    <a href="/simple/settings.html?disease=alagille"><span class="material-symbols-outlined">clinical_notes</span><span>家族ノート</span></a>
+  </nav>
+
+  <dialog id="detail-dialog" aria-labelledby="detail-title">
+    <header class="dialog-head"><h2 id="detail-title">写真の詳細</h2><button class="dialog-close" type="button" data-close="detail-dialog" aria-label="閉じる"><span class="material-symbols-outlined">close</span></button></header>
+    <div class="dialog-body"><img class="detail-photo" id="detail-photo" alt=""><div class="detail-meta"><strong id="detail-name"></strong><small id="detail-info"></small><p id="detail-memo"></p></div><a class="detail-link" id="detail-link" href="#"><span class="material-symbols-outlined">open_in_new</span>関連する記録を開く</a></div>
+  </dialog>
+
+  <dialog id="add-dialog" aria-labelledby="add-title">
+    <header class="dialog-head"><h2 id="add-title">どの写真を残しますか？</h2><button class="dialog-close" type="button" data-close="add-dialog" aria-label="閉じる"><span class="material-symbols-outlined">close</span></button></header>
+    <div class="dialog-body"><div class="add-options">
+      <a class="add-option" href="/daily-logs.html?disease=alagille"><span class="material-symbols-outlined">photo_camera</span><span><strong>日々・食事・成長の写真</strong><small>写真や動画と短いメモを残します</small></span><span class="material-symbols-outlined">chevron_right</span></a>
+      <a class="add-option" href="/lab-tracker.html?disease=alagille"><span class="material-symbols-outlined">science</span><span><strong>検査結果・外来資料</strong><small>検査用紙を撮影して、数値も一緒に残します</small></span><span class="material-symbols-outlined">chevron_right</span></a>
+      <a class="add-option" href="/medications.html?disease=alagille"><span class="material-symbols-outlined">medication</span><span><strong>お薬の写真</strong><small>薬名、飲み方、変更内容と一緒に残します</small></span><span class="material-symbols-outlined">chevron_right</span></a>
+    </div><p class="add-note">写真だけを別に保存せず、関連する記録と一緒に残すため、あとから見返した時にも内容が分かります。</p></div>
+  </dialog>
+
+  <script>
+    const avatars={"adult-man":"/assets/alagille-brand/avatars/avatar-adult-man-v1.png","adult-woman":"/assets/alagille-brand/avatars/avatar-adult-woman-v1.png","child-boy":"/assets/alagille-brand/avatars/avatar-child-boy-v1.png","child-girl":"/assets/alagille-brand/avatars/avatar-child-girl-v1.png"};
+    const state={patientId:"",category:"all",items:[]};
+    const grid=document.getElementById("photo-grid");
+    const status=document.getElementById("album-status");
+
+    document.addEventListener("DOMContentLoaded",async()=>{
+      document.querySelectorAll("[data-close]").forEach((button)=>button.addEventListener("click",()=>document.getElementById(button.dataset.close).close()));
+      document.getElementById("open-add").addEventListener("click",()=>document.getElementById("add-dialog").showModal());
+      document.querySelectorAll(".album-tab").forEach((button)=>button.addEventListener("click",()=>selectCategory(button.dataset.category)));
+      try{
+        const response=await fetch("/api/family/patients");
+        const result=await response.json();
+        if(!response.ok)throw new Error(result.error);
+        const saved=localStorage.getItem("alagille-current-patient-id");
+        const patient=result.patients.find((item)=>item.id===saved)||result.patients[0];
+        if(!patient)throw new Error("健康記録の対象がありません");
+        state.patientId=patient.id;
+        document.getElementById("patient-name").textContent=patient.displayName;
+        document.getElementById("patient-avatar").src=avatars[patient.avatarKey]||avatars["child-boy"];
+        await loadPhotos();
+      }catch(error){renderError("写真を読み込めませんでした。時間をおいてお試しください。");}
+    });
+
+    async function loadPhotos(){
+      status.textContent="写真を読み込んでいます…";
+      const response=await fetch(`/api/photos?patientId=${encodeURIComponent(state.patientId)}`);
+      const result=await response.json();
+      if(!response.ok)throw new Error(result.error);
+      state.items=result.items||[];
+      status.textContent=state.items.length?`${state.items.length}枚の写真があります`:"";
+      renderPhotos();
+    }
+
+    function selectCategory(category){
+      state.category=category;
+      document.querySelectorAll(".album-tab").forEach((button)=>button.setAttribute("aria-selected",String(button.dataset.category===category)));
+      renderPhotos();
+    }
+
+    function renderPhotos(){
+      const items=state.category==="all"?state.items:state.items.filter((item)=>item.category===state.category);
+      grid.replaceChildren();
+      if(!items.length){
+        const empty=document.createElement("div");empty.className="album-empty";
+        const icon=document.createElement("span");icon.className="material-symbols-outlined";icon.textContent="photo_library";
+        const text=document.createElement("span");text.textContent=state.items.length?"このカテゴリの写真はまだありません。":"まだ写真はありません。右上の＋から記録を始められます。";
+        empty.append(icon,text);grid.append(empty);return;
+      }
+      items.forEach((item)=>{
+        const button=document.createElement("button");button.type="button";button.className="photo-tile";button.setAttribute("aria-label",`${item.categoryLabel} ${item.title} ${formatDate(item.date)}`);
+        const image=document.createElement("img");image.src=item.url;image.alt="";image.loading="lazy";
+        const label=document.createElement("span");label.textContent=item.title;
+        button.append(image,label);button.addEventListener("click",()=>openDetail(item));grid.append(button);
+      });
+    }
+
+    function openDetail(item){
+      document.getElementById("detail-photo").src=item.url;
+      document.getElementById("detail-photo").alt=`${item.title}の写真`;
+      document.getElementById("detail-name").textContent=item.title;
+      document.getElementById("detail-info").textContent=`${item.categoryLabel}・${formatDate(item.date)}`;
+      document.getElementById("detail-memo").textContent=item.memo||"メモはありません";
+      document.getElementById("detail-link").href=item.href;
+      document.getElementById("detail-dialog").showModal();
+    }
+
+    function renderError(message){grid.replaceChildren();const empty=document.createElement("div");empty.className="album-empty";empty.textContent=message;grid.append(empty);status.textContent="";}
+    function formatDate(value){if(!value)return"日付未登録";return new Intl.DateTimeFormat("ja-JP",{year:"numeric",month:"numeric",day:"numeric"}).format(new Date(`${value}T00:00:00`));}
+  </script>
+</body>
+</html>

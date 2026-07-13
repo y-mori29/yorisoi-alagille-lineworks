@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>家族ノート - よりそい アラジール</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined">
+  <link rel="stylesheet" href="/css/alagille-family.css">
+  <script src="/js/account-guard.js"></script>
+  <style>
+    .family-note-page{padding-bottom:96px}.screen-title{color:#58483c}.lead{margin:0 0 14px;color:var(--ink-soft);font-size:13px;line-height:1.7;font-weight:780}.settings-section{margin-bottom:16px}.section-label{margin:0 0 8px 4px;color:#7b6b5f;font-size:12px;font-weight:900}.settings-list{overflow:hidden}.settings-row{min-height:64px;padding:13px 14px;display:grid;grid-template-columns:34px 1fr 24px;gap:10px;align-items:center;color:var(--ink);text-decoration:none;border-bottom:1px solid rgba(232,237,240,.9)}.settings-row:last-child{border-bottom:0}.settings-row:active{background:rgba(142,219,210,.12)}.settings-row .material-symbols-outlined{color:var(--mint);font-size:24px}.settings-row .label{display:block;font-size:15px;line-height:1.35;font-weight:900}.settings-row .sub{display:block;margin-top:2px;color:var(--muted);font-size:11px;line-height:1.45;font-weight:760}.settings-row .chevron{color:#a99b90}
+  </style>
+</head>
+<body>
+  <main class="app family-note-page">
+    <header class="screen-head"><a class="round" href="/?disease=alagille" aria-label="ホームへ戻る"><span class="material-symbols-outlined">arrow_back</span></a><h1 class="screen-title">家族ノート</h1><a class="round" href="/simple/help.html?disease=alagille" aria-label="よくある質問"><span class="material-symbols-outlined">help</span></a></header>
+    <p class="lead">家族で共有している記録を、残す・見返す・診察へ持っていくための入口です。</p>
+
+    <section class="settings-section"><h2 class="section-label">記録を見返す</h2><div class="panel settings-list">
+      <a class="settings-row" href="/recent-changes.html?disease=alagille"><span class="material-symbols-outlined">history</span><span><span class="label">最近の記録</span><span class="sub">診察、検査、薬、成長、日々の記録を新しい順に見る</span></span><span class="material-symbols-outlined chevron">chevron_right</span></a>
+      <a class="settings-row" href="/simple/album.html?disease=alagille"><span class="material-symbols-outlined">photo_library</span><span><span class="label">写真アルバム</span><span class="sub">検査、お薬、日々の写真をまとめて見る</span></span><span class="material-symbols-outlined chevron">chevron_right</span></a>
+      <a class="settings-row" href="/simple/calendar.html?disease=alagille"><span class="material-symbols-outlined">calendar_month</span><span><span class="label">受診予定</span><span class="sub">次の受診日、病院、診療科を確認する</span></span><span class="material-symbols-outlined chevron">chevron_right</span></a>
+      <a class="settings-row" href="/questions.html?disease=alagille"><span class="material-symbols-outlined">contact_support</span><span><span class="label">次に聞くこと</span><span class="sub">受診前の質問と、先生からの回答を見返す</span></span><span class="material-symbols-outlined chevron">chevron_right</span></a>
+      <a class="settings-row" href="/simple/show.html?disease=alagille"><span class="material-symbols-outlined">ios_share</span><span><span class="label">先生に見せる</span><span class="sub">受診時に見せる記録をまとめる</span></span><span class="material-symbols-outlined chevron">chevron_right</span></a>
+    </div></section>
+
+    <section class="settings-section"><h2 class="section-label">記録を残す</h2><div class="panel settings-list">
+      <a class="settings-row" href="/simple/record.html?disease=alagille"><span class="material-symbols-outlined">mic</span><span><span class="label">診察メモ</span><span class="sub">録音または文字で、先生と話したことを残す</span></span><span class="material-symbols-outlined chevron">chevron_right</span></a>
+      <a class="settings-row" href="/daily-logs.html?disease=alagille"><span class="material-symbols-outlined">photo_camera</span><span><span class="label">日々の様子</span><span class="sub">皮膚、便、かゆみ、食事、動きなどを残す</span></span><span class="material-symbols-outlined chevron">chevron_right</span></a>
+      <a class="settings-row" href="/lab-tracker.html?disease=alagille"><span class="material-symbols-outlined">science</span><span><span class="label">検査値メモ</span><span class="sub">検査用紙の写真と数値を残す</span></span><span class="material-symbols-outlined chevron">chevron_right</span></a>
+      <a class="settings-row" href="/medications.html?disease=alagille"><span class="material-symbols-outlined">medication</span><span><span class="label">お薬メモ</span><span class="sub">お薬の名前、写真、飲み方、変更を残す</span></span><span class="material-symbols-outlined chevron">chevron_right</span></a>
+      <a class="settings-row" href="/simple/growth.html?disease=alagille"><span class="material-symbols-outlined">show_chart</span><span><span class="label">成長のきろく</span><span class="sub">身長、体重、メモを記録する</span></span><span class="material-symbols-outlined chevron">chevron_right</span></a>
+    </div></section>
+
+    <section class="settings-section"><h2 class="section-label">家族と安心して使う</h2><div class="panel settings-list">
+      <a class="settings-row" href="/?disease=alagille#family-share"><span class="material-symbols-outlined">group</span><span><span class="label">家族共有</span><span class="sub">参加している家族、権限、招待リンクを確認する</span></span><span class="material-symbols-outlined chevron">chevron_right</span></a>
+      <a class="settings-row" href="/simple/help.html?disease=alagille"><span class="material-symbols-outlined">help</span><span><span class="label">よくある質問</span><span class="sub">保存、費用、家族共有、安全性を確認する</span></span><span class="material-symbols-outlined chevron">chevron_right</span></a>
+    </div></section>
+  </main>
+  <nav class="bottom-nav" aria-label="下部メニュー"><a href="/?disease=alagille"><span class="material-symbols-outlined">home</span><span>ホーム</span></a><a href="/simple/calendar.html?disease=alagille"><span class="material-symbols-outlined">calendar_month</span><span>カレンダー</span></a><a href="/simple/album.html?disease=alagille"><span class="material-symbols-outlined">photo_library</span><span>写真</span></a><a class="active" href="/simple/settings.html?disease=alagille"><span class="material-symbols-outlined">clinical_notes</span><span>家族ノート</span></a></nav>
+</body>
+</html>

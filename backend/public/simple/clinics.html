@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>かかりつけ病院 - よりそい</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" />
+  <style>
+    .clinic-card {
+      background: var(--white); border: 2px solid var(--gray-200);
+      border-radius: 16px; padding: 16px; margin-bottom: 12px;
+    }
+    .clinic-card.primary { border-color: var(--brand-400); background: var(--brand-50); }
+    .clinic-name { font-size: 17px; font-weight: 700; letter-spacing: 0.5px; }
+    .clinic-primary-tag {
+      display: inline-block; font-size: 11px; font-weight: 700;
+      background: var(--brand-500); color: var(--white);
+      padding: 2px 8px; border-radius: 999px; margin-left: 6px;
+      vertical-align: middle;
+    }
+    .clinic-departments {
+      margin-top: 8px; display: flex; flex-wrap: wrap; gap: 6px;
+    }
+    .dept-chip {
+      font-size: 12px; padding: 3px 10px; border-radius: 999px;
+      background: var(--gray-100); color: var(--gray-700);
+    }
+    .clinic-meta { margin-top: 10px; font-size: 12px; color: var(--gray-500); line-height: 1.6; }
+    .clinic-actions { margin-top: 12px; display: flex; gap: 8px; }
+    .clinic-actions button {
+      flex: 1; padding: 8px 12px; border-radius: 8px; border: 1px solid var(--gray-300);
+      background: var(--white); font-size: 13px; cursor: pointer;
+    }
+    .clinic-actions .btn-edit { color: var(--brand-700); border-color: var(--brand-300); }
+    .clinic-actions .btn-delete { color: var(--danger); border-color: #fca5a5; }
+
+    .add-button {
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      width: 100%; padding: 16px;
+      background: var(--brand-500); color: var(--white);
+      border: none; border-radius: 16px;
+      font-size: 16px; font-weight: 700; letter-spacing: 1.5px;
+      cursor: pointer; box-shadow: var(--shadow);
+      margin-top: 16px;
+    }
+    .add-button:active { transform: scale(0.98); }
+
+    .form-modal-bg {
+      display: none;
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.4);
+      z-index: 100;
+      align-items: center; justify-content: center;
+    }
+    .form-modal-bg.show { display: flex; }
+    .form-modal {
+      background: var(--white); width: calc(100% - 32px); max-width: 400px;
+      max-height: 90vh; overflow-y: auto;
+      border-radius: 16px; padding: 20px;
+    }
+    .form-modal h3 { font-size: 18px; margin-bottom: 12px; letter-spacing: 1px; }
+    .form-row { margin-bottom: 14px; }
+    .form-row label {
+      display: block; font-size: 12px; font-weight: 700;
+      color: var(--gray-600); margin-bottom: 4px; letter-spacing: 0.5px;
+    }
+    .form-row input[type=text], .form-row textarea {
+      width: 100%; padding: 10px 12px;
+      border: 2px solid var(--gray-200); border-radius: 8px;
+      font-size: 14px; font-family: inherit;
+    }
+    .form-row textarea { resize: vertical; min-height: 60px; }
+    .form-row .hint { font-size: 11px; color: var(--gray-500); margin-top: 4px; }
+    .form-row.checkbox-row { display: flex; align-items: center; gap: 8px; }
+    .form-row.checkbox-row label { margin: 0; cursor: pointer; }
+
+    .form-actions { display: flex; gap: 8px; margin-top: 16px; }
+    .form-actions button {
+      flex: 1; padding: 12px; border-radius: 8px; border: none;
+      font-size: 14px; font-weight: 700; cursor: pointer;
+    }
+    .form-actions .btn-cancel { background: var(--gray-100); color: var(--gray-600); }
+    .form-actions .btn-save { background: var(--brand-500); color: var(--white); }
+
+    .empty-state { text-align: center; padding: 40px 20px; color: var(--gray-500); }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <button class="header-back" onclick="location.href='/simple/settings.html'+location.search">&larr;</button>
+    <h1>かかりつけ病院</h1>
+  </div>
+
+  <div class="content">
+    <div id="clinic-list">
+      <div class="loading"><div class="loading-spinner"></div><p class="mt-8 text-sm text-muted">読み込み中...</p></div>
+    </div>
+
+    <button class="add-button" id="add-btn">
+      <span class="material-symbols-outlined">add</span>
+      新しく登録
+    </button>
+  </div>
+
+  <div class="form-modal-bg" id="form-modal-bg">
+    <div class="form-modal">
+      <h3 id="form-title">新しいかかりつけ病院</h3>
+      <input type="hidden" id="f-id" value="">
+      <div class="form-row">
+        <label>病院・クリニック名</label>
+        <input type="text" id="f-name" placeholder="例: ○○クリニック">
+      </div>
+      <div class="form-row">
+        <label>診療科（カンマ「,」で区切る）</label>
+        <input type="text" id="f-departments" placeholder="例: 内科, 眼科">
+        <div class="hint">1つ以上入力してください</div>
+      </div>
+      <div class="form-row">
+        <label>住所（任意）</label>
+        <input type="text" id="f-address" placeholder="">
+      </div>
+      <div class="form-row">
+        <label>電話（任意）</label>
+        <input type="text" id="f-phone" placeholder="">
+      </div>
+      <div class="form-row">
+        <label>メモ（任意）</label>
+        <textarea id="f-note" placeholder=""></textarea>
+      </div>
+      <div class="form-row checkbox-row">
+        <input type="checkbox" id="f-isprimary">
+        <label for="f-isprimary">いちばんよく行くかかりつけ</label>
+      </div>
+      <div class="form-actions">
+        <button class="btn-cancel" id="form-cancel">やめる</button>
+        <button class="btn-save" id="form-save">保存する</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://static.line-scdn.net/liff/edge/2/sdk.js" defer></script>
+  <script src="/js/liff-init.js"></script>
+  <script>
+    let clinics = [];
+
+    function escHTML(s) {
+      const d = document.createElement("div");
+      d.textContent = s || "";
+      return d.innerHTML;
+    }
+
+    function renderList() {
+      const root = document.getElementById("clinic-list");
+      if (!clinics.length) {
+        root.innerHTML = `
+          <div class="empty-state">
+            <span class="material-symbols-outlined" style="font-size:48px;color:var(--gray-300);">local_hospital</span>
+            <p class="mt-8 text-sm">まだ かかりつけ病院が登録されていません</p>
+            <p class="text-sm text-muted mt-8">下の「新しく登録」から追加してください</p>
+          </div>`;
+        return;
+      }
+      const html = clinics.map((c) => `
+        <div class="clinic-card ${c.isPrimary ? 'primary' : ''}">
+          <div class="clinic-name">${escHTML(c.name)}${c.isPrimary ? '<span class="clinic-primary-tag">メイン</span>' : ''}</div>
+          <div class="clinic-departments">${(c.departments || []).map(d => `<span class="dept-chip">${escHTML(d)}</span>`).join("")}</div>
+          ${c.address || c.phone || c.note ? `<div class="clinic-meta">
+            ${c.address ? `📍 ${escHTML(c.address)}<br>` : ""}
+            ${c.phone ? `☎ ${escHTML(c.phone)}<br>` : ""}
+            ${c.note ? escHTML(c.note) : ""}
+          </div>` : ""}
+          <div class="clinic-actions">
+            <button class="btn-edit" data-id="${c.id}" data-action="edit">編集</button>
+            <button class="btn-delete" data-id="${c.id}" data-action="delete">削除</button>
+          </div>
+        </div>
+      `).join("");
+      root.innerHTML = html;
+
+      root.querySelectorAll("button[data-action]").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const id = btn.dataset.id;
+          if (btn.dataset.action === "edit") openForm(clinics.find(c => c.id === id));
+          else if (btn.dataset.action === "delete") deleteClinic(id);
+        });
+      });
+    }
+
+    async function loadClinics() {
+      try {
+        clinics = await apiGet("/api/clinics");
+        renderList();
+      } catch (err) {
+        console.error("Load error:", err);
+        document.getElementById("clinic-list").innerHTML =
+          '<p class="text-sm" style="color:var(--danger); text-align:center;">読み込みに失敗しました</p>';
+      }
+    }
+
+    function openForm(clinic) {
+      document.getElementById("form-title").textContent = clinic ? "編集" : "新しいかかりつけ病院";
+      document.getElementById("f-id").value = clinic?.id || "";
+      document.getElementById("f-name").value = clinic?.name || "";
+      document.getElementById("f-departments").value = (clinic?.departments || []).join(", ");
+      document.getElementById("f-address").value = clinic?.address || "";
+      document.getElementById("f-phone").value = clinic?.phone || "";
+      document.getElementById("f-note").value = clinic?.note || "";
+      document.getElementById("f-isprimary").checked = Boolean(clinic?.isPrimary);
+      document.getElementById("form-modal-bg").classList.add("show");
+    }
+
+    function closeForm() {
+      document.getElementById("form-modal-bg").classList.remove("show");
+    }
+
+    async function saveForm() {
+      const id = document.getElementById("f-id").value;
+      const name = document.getElementById("f-name").value.trim();
+      const departments = document.getElementById("f-departments").value
+        .split(/[,、]/).map(s => s.trim()).filter(Boolean);
+      if (!name) return alert("病院名を入力してください");
+      if (!departments.length) return alert("診療科を1つ以上入力してください");
+
+      const data = {
+        name,
+        departments,
+        address: document.getElementById("f-address").value.trim(),
+        phone: document.getElementById("f-phone").value.trim(),
+        note: document.getElementById("f-note").value.trim(),
+        isPrimary: document.getElementById("f-isprimary").checked,
+      };
+
+      try {
+        if (id) await apiPut(`/api/clinics/${id}`, data);
+        else await apiPost("/api/clinics", data);
+        closeForm();
+        await loadClinics();
+      } catch (err) {
+        console.error("Save error:", err);
+        alert("保存に失敗しました");
+      }
+    }
+
+    async function deleteClinic(id) {
+      if (!confirm("このかかりつけ病院を削除しますか？")) return;
+      try {
+        await apiDelete(`/api/clinics/${id}`);
+        await loadClinics();
+      } catch (err) {
+        console.error("Delete error:", err);
+        alert("削除に失敗しました");
+      }
+    }
+
+    document.addEventListener("DOMContentLoaded", async () => {
+      try { await initLiff(); } catch (_) {}
+      await loadClinics();
+
+      document.getElementById("add-btn").addEventListener("click", () => openForm(null));
+      document.getElementById("form-cancel").addEventListener("click", closeForm);
+      document.getElementById("form-save").addEventListener("click", saveForm);
+      document.getElementById("form-modal-bg").addEventListener("click", (e) => {
+        if (e.target.id === "form-modal-bg") closeForm();
+      });
+    });
+  </script>
+</body>
+</html>

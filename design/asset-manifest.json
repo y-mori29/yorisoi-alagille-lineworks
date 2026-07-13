@@ -1,0 +1,168 @@
+{
+  "version": "2026-07-12-pediatric-lab-report-and-source-comparison",
+  "references": [
+    {
+      "id": "home-final-candidate",
+      "path": "design/references/alagille-home-final-candidate.png",
+      "source": "images/alagille-home-designs-20260627/screens/01-integrated-home-final-candidate.png",
+      "role": "primary visual target"
+    },
+    {
+      "id": "home-ui-spec-sheet",
+      "path": "design/references/alagille-home-ui-spec-sheet.png",
+      "source": "images/alagille-final-ui-pack-20260628/output/01-final-home-ui-spec-sheet.png",
+      "role": "layout and annotation reference"
+    },
+    {
+      "id": "component-sheet",
+      "path": "design/references/alagille-ui-component-sheet.png",
+      "source": "images/alagille-final-ui-pack-20260628/output/16-final-design-system-component-sheet.png",
+      "role": "tokens and component reference"
+    }
+  ],
+  "assets": [
+    {
+      "id": "family-group",
+      "path": "backend/public/assets/alagille-brand/trimmed/12-family-group.png",
+      "usage": "home family sharing banner; clean replacement for framed family-share crop"
+    },
+    {
+      "id": "bird-outline",
+      "path": "backend/public/assets/alagille-brand/trimmed/11-bird-outline.png",
+      "usage": "home heading accent"
+    },
+    {
+      "id": "visit-notebook",
+      "path": "backend/public/assets/alagille-brand/trimmed/06-visit-notebook.png",
+      "usage": "visit memo and next question tiles"
+    },
+    {
+      "id": "medicine-bottle",
+      "path": "backend/public/assets/alagille-brand/trimmed/07-medicine-bottle.png",
+      "usage": "medication tile and clean replacement for cropped medicine asset"
+    },
+    {
+      "id": "medical-document",
+      "path": "backend/public/assets/alagille-brand/trimmed/03-medical-document.png",
+      "usage": "doctor summary tile and clean replacement for cropped checklist asset"
+    },
+    {
+      "id": "growth-child-ruler",
+      "path": "backend/public/assets/alagille-brand/trimmed/05-growth-child-ruler.png",
+      "usage": "growth summary"
+    },
+    {
+      "id": "plant-pot",
+      "path": "backend/public/assets/alagille-brand/trimmed/02-plant-pot.png",
+      "usage": "superseded raw crop; contains a leftover edge fragment and should not be used directly"
+    },
+    {
+      "id": "growth-plant-v2",
+      "path": "backend/public/assets/alagille-brand/ui-extracted/growth-plant-v2.png",
+      "usage": "clean standalone plant asset kept for future growth empty states or soft decorative accents"
+    },
+    {
+      "id": "home-parent-child-reference",
+      "path": "backend/public/assets/alagille-brand/generated/home-parent-child-reference-v3.png",
+      "usage": "patient pill avatar and warm family note tone"
+    },
+    {
+      "id": "wordmark-alagille",
+      "path": "backend/public/assets/alagille-brand/ui-extracted/wordmark-alagille-v1.png",
+      "usage": "header logo / wordmark, extracted from canonical home reference"
+    },
+    {
+      "id": "family-share-scene",
+      "path": "backend/public/assets/alagille-brand/ui-extracted/family-share-scene-v1.png",
+      "usage": "family sharing banner action"
+    },
+    {
+      "id": "patient-avatar-harukun",
+      "path": "backend/public/assets/alagille-brand/ui-extracted/patient-avatar-harukun-v1.png",
+      "usage": "superseded crop; kept only for comparison because it contains text/border remnants"
+    },
+    {
+      "id": "patient-avatar-harukun-v2",
+      "path": "backend/public/assets/alagille-brand/ui-extracted/patient-avatar-harukun-v2.png",
+      "usage": "superseded child-only avatar; retained for comparison"
+    },
+    {
+      "id": "avatar-adult-man-v1",
+      "path": "backend/public/assets/alagille-brand/avatars/avatar-adult-man-v1.png",
+      "usage": "selectable adult male patient avatar and family member avatar"
+    },
+    {
+      "id": "avatar-adult-woman-v1",
+      "path": "backend/public/assets/alagille-brand/avatars/avatar-adult-woman-v1.png",
+      "usage": "selectable adult female patient avatar and family member avatar"
+    },
+    {
+      "id": "avatar-child-boy-v1",
+      "path": "backend/public/assets/alagille-brand/avatars/avatar-child-boy-v1.png",
+      "usage": "selectable boy patient avatar"
+    },
+    {
+      "id": "avatar-child-girl-v1",
+      "path": "backend/public/assets/alagille-brand/avatars/avatar-child-girl-v1.png",
+      "usage": "selectable girl patient avatar"
+    },
+    {
+      "id": "lab-report-tutorial-sample-v1",
+      "path": "backend/public/assets/alagille-brand/generated/lab-report-tutorial-sample-v1.png",
+      "usage": "superseded simplified report retained only for comparison"
+    },
+    {
+      "id": "lab-report-tutorial-sample-v3",
+      "path": "backend/public/assets/alagille-brand/generated/lab-report-tutorial-sample-v3.png",
+      "usage": "current OCR tutorial source; realistic Japanese pediatric blood test report with age-aware reference ranges and red H / blue L flags"
+    },
+    {
+      "id": "tile-mic",
+      "path": "backend/public/assets/alagille-brand/ui-extracted/tile-mic-v1.png",
+      "usage": "visit note action tile"
+    },
+    {
+      "id": "tile-notebook-pencil",
+      "path": "backend/public/assets/alagille-brand/ui-extracted/tile-notebook-pencil-v1.png",
+      "usage": "superseded crop; not used in current home because crop remnants were visible"
+    },
+    {
+      "id": "tile-daily-camera",
+      "path": "backend/public/assets/alagille-brand/ui-extracted/tile-daily-camera-v2.png",
+      "usage": "daily log action tile for photo/video/short memo"
+    },
+    {
+      "id": "tile-test-tubes",
+      "path": "backend/public/assets/alagille-brand/ui-extracted/tile-test-tubes-v1.png",
+      "usage": "lab value action tile"
+    },
+    {
+      "id": "tile-medicine-bottle",
+      "path": "backend/public/assets/alagille-brand/ui-extracted/tile-medicine-bottle-v1.png",
+      "usage": "superseded crop; replaced by trimmed medicine bottle asset"
+    },
+    {
+      "id": "tile-checklist",
+      "path": "backend/public/assets/alagille-brand/ui-extracted/tile-checklist-v1.png",
+      "usage": "superseded crop; replaced by trimmed medical document asset"
+    },
+    {
+      "id": "tile-question-bubble",
+      "path": "backend/public/assets/alagille-brand/ui-extracted/tile-question-bubble-v1.png",
+      "usage": "next question action tile"
+    }
+  ],
+  "notes": [
+    "Full generated UI images are not used as UI backgrounds.",
+    "Text, buttons, cards, and navigation are rebuilt in HTML/CSS.",
+    "Material Symbols are used for functional UI icons because this static app already imports them.",
+    "Home actions do not link to legacy /simple pages until each destination is rebuilt from the canonical UI references.",
+    "The header wordmark and six home action illustrations were extracted as standalone transparent UI assets instead of using Material Symbols as the main visual.",
+    "2026-06-30: Patient switching was moved out of the header into a full-width selector card, and visible crop failures were replaced with cleaner standalone assets.",
+    "2026-06-30: The six primary action tiles were changed from a two-column grid to larger one-column buttons for readability.",
+    "2026-07-12: Added four age-inclusive selectable watercolor avatars: adult man, adult woman, boy, and girl.",
+    "2026-07-12: Removed child-only wording from patient switching because adult family members may also have Alagille syndrome.",
+    "2026-07-12: Added a realistic fictional lab report for OCR training. Tutorial records are kept outside the actual record store and disappear when the tutorial ends.",
+    "2026-07-12: Replaced the simplified report with pediatric v3, removed the reception number, added a reference range to every row, and aligned H/L colors and OCR values with the source image."
+  ]
+}

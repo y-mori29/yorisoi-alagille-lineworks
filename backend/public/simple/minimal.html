@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>最小モード - よりそい</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" />
+  <style>
+    body { background: var(--gray-50); padding: 0 0 24px; }
+
+    .page-header {
+      padding: 16px 20px;
+      background: linear-gradient(135deg, var(--brand-500), var(--brand-600));
+      color: var(--white);
+      display: flex; align-items: center; gap: 12px;
+    }
+    .back-btn { background: none; border: none; color: var(--white); font-size: 20px; cursor: pointer; padding: 4px 8px; }
+    .page-header h1 { font-size: 18px; font-weight: 700; letter-spacing: 1px; }
+
+    .intro {
+      padding: 14px 20px 4px; font-size: 12.5px; color: var(--gray-600); line-height: 1.6;
+    }
+
+    .form-card {
+      margin: 14px 16px; padding: 16px 18px;
+      background: #fff; border-radius: 16px; box-shadow: var(--shadow-sm);
+    }
+    .form-row + .form-row { margin-top: 14px; }
+    .form-label {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 13px; font-weight: 700; color: var(--gray-700);
+      margin-bottom: 6px; letter-spacing: 0.5px;
+    }
+    .form-label .material-symbols-outlined { font-size: 18px; color: var(--brand-500); }
+    .form-label .unit { font-weight: 400; font-size: 11px; color: var(--gray-400); margin-left: 4px; }
+
+    .num-input-wrap { display: flex; align-items: center; gap: 8px; }
+    .num-input {
+      flex: 1; padding: 12px 14px; font-size: 18px; font-weight: 700;
+      border: 1.5px solid var(--gray-300); border-radius: 12px;
+      font-family: inherit; text-align: center;
+    }
+    .num-input:focus { outline: none; border-color: var(--brand-400); }
+
+    .pill-row { display: flex; gap: 8px; }
+    .pill-btn {
+      flex: 1; padding: 12px 8px; border-radius: 12px;
+      background: var(--gray-50); border: 1.5px solid var(--gray-200);
+      font-size: 13px; font-weight: 600; color: var(--gray-700);
+      cursor: pointer; transition: all 0.12s;
+    }
+    .pill-btn:active { transform: scale(0.98); }
+    .pill-btn.selected { background: var(--brand-500); color: #fff; border-color: var(--brand-500); }
+    .pill-btn.danger.selected { background: #dc2626; border-color: #dc2626; }
+
+    .note-input {
+      width: 100%; padding: 10px 12px; font-size: 13px;
+      border: 1.5px solid var(--gray-300); border-radius: 10px;
+      font-family: inherit; resize: vertical; min-height: 60px;
+    }
+    .note-input:focus { outline: none; border-color: var(--brand-400); }
+
+    .save-btn {
+      width: calc(100% - 32px); margin: 18px 16px 8px; padding: 18px;
+      background: var(--brand-500); color: #fff;
+      border: none; border-radius: 16px;
+      font-size: 16px; font-weight: 700; letter-spacing: 2px;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(244,167,176,0.5);
+    }
+    .save-btn:active { transform: scale(0.98); }
+    .save-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .info-card {
+      margin: 14px 16px; padding: 14px 18px;
+      background: #f0f9ff; border: 1px solid #bae6fd;
+      border-radius: 14px;
+      font-size: 12.5px; color: #075985; line-height: 1.6;
+    }
+    .info-card strong { color: #0c4a6e; }
+
+    .trend-card {
+      margin: 14px 16px; padding: 14px 18px;
+      background: #fff; border-radius: 16px; box-shadow: var(--shadow-sm);
+    }
+    .trend-title {
+      font-size: 12px; font-weight: 700; color: var(--gray-500);
+      letter-spacing: 1px; margin-bottom: 10px;
+    }
+    .trend-row { display: flex; align-items: baseline; gap: 8px; padding: 6px 0; font-size: 13px; }
+    .trend-row .date { color: var(--gray-500); width: 60px; flex-shrink: 0; }
+    .trend-row .val { font-weight: 700; color: var(--gray-800); }
+    .trend-row .delta { font-size: 11px; margin-left: 6px; }
+    .delta.up { color: #dc2626; }
+    .delta.down { color: #16a34a; }
+    .delta.same { color: var(--gray-400); }
+
+    .toast {
+      position: fixed; left: 50%; bottom: 24px;
+      transform: translateX(-50%);
+      background: rgba(13,148,136,0.95); color: #fff;
+      padding: 12px 24px; border-radius: 30px;
+      font-size: 13px; font-weight: 700;
+      z-index: 100; display: none;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+    }
+    .toast.show { display: block; animation: toast-in 0.3s ease-out; }
+    @keyframes toast-in {
+      from { opacity: 0; transform: translate(-50%, 20px); }
+      to { opacity: 1; transform: translate(-50%, 0); }
+    }
+  </style>
+</head>
+<body>
+  <div class="page-header">
+    <button class="back-btn" onclick="location.href='/' + (location.search || '')">&larr;</button>
+    <h1>最小モード</h1>
+  </div>
+
+  <p class="intro">今日の数字だけサクッと。<br>気になる時だけ書いてください。空欄でも大丈夫です。</p>
+
+  <div class="form-card">
+    <div class="form-row">
+      <label class="form-label">
+        <span class="material-symbols-outlined">monitor_weight</span>体重
+        <span class="unit">kg</span>
+      </label>
+      <div class="num-input-wrap">
+        <input class="num-input" id="weight" type="number" step="0.1" inputmode="decimal" placeholder="例: 52.4">
+      </div>
+    </div>
+
+    <div class="form-row">
+      <label class="form-label">
+        <span class="material-symbols-outlined">device_thermostat</span>体温
+        <span class="unit">℃</span>
+      </label>
+      <div class="num-input-wrap">
+        <input class="num-input" id="temp" type="number" step="0.1" inputmode="decimal" placeholder="例: 36.4">
+      </div>
+    </div>
+
+    <div class="form-row" id="bleeding-row" style="display:none;">
+      <label class="form-label">
+        <span class="material-symbols-outlined">water_drop</span>血便
+      </label>
+      <div class="pill-row" id="bleeding-row-buttons">
+        <button class="pill-btn" data-val="none">なし</button>
+        <button class="pill-btn danger" data-val="little">少し</button>
+        <button class="pill-btn danger" data-val="much">多い</button>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <label class="form-label">
+        <span class="material-symbols-outlined">edit_note</span>気になること（一言だけ）
+      </label>
+      <textarea class="note-input" id="note" placeholder="例: 朝の疲労感が少しあり。便通は普通。"></textarea>
+    </div>
+  </div>
+
+  <button class="save-btn" id="save-btn">これだけ保存する</button>
+
+  <div class="trend-card">
+    <div class="trend-title">体重・体温の最近の記録</div>
+    <div id="trend-content">
+      <div style="text-align:center; padding: 16px; color: var(--gray-400); font-size: 12px;">
+        まだ記録がありません
+      </div>
+    </div>
+  </div>
+
+  <div class="info-card" id="crp-card" style="display:none;">
+    <strong>直近の CRP</strong>: <span id="crp-val">―</span>
+    <br><span style="font-size:11px; opacity:0.8;" id="crp-date"></span>
+    <br><span style="font-size:11px; opacity:0.8;">CRP は採血で測る炎症の数値です。寛解期は 0.3 以下が目安。</span>
+  </div>
+
+  <div class="toast" id="toast">保存しました</div>
+
+  <script src="https://static.line-scdn.net/liff/edge/2/sdk.js" defer></script>
+  <script src="/js/liff-init.js"></script>
+  <script>
+    let diseaseId = "uc";
+    let bleedingValue = null;
+    let recentLogs = [];
+
+    document.addEventListener("DOMContentLoaded", async () => {
+      try {
+        const ctx = await initLiff();
+        diseaseId = ctx.diseaseId || "uc";
+      } catch (_) {}
+
+      // IBD系（UC・クローン病）の場合は血便フィールドを出す
+      if (diseaseId === "uc" || diseaseId === "crohn") {
+        document.getElementById("bleeding-row").style.display = "block";
+      }
+
+      bindEvents();
+      await loadRecent();
+      await loadCrp();
+    });
+
+    function bindEvents() {
+      document.getElementById("bleeding-row-buttons").querySelectorAll(".pill-btn").forEach(btn => {
+        btn.addEventListener("click", () => {
+          document.querySelectorAll("#bleeding-row-buttons .pill-btn").forEach(b => b.classList.remove("selected"));
+          btn.classList.add("selected");
+          bleedingValue = btn.dataset.val;
+        });
+      });
+      document.getElementById("save-btn").addEventListener("click", save);
+    }
+
+    async function loadRecent() {
+      try {
+        const res = await fetch("/api/symptoms?days=14");
+        const logs = await res.json();
+        recentLogs = logs.filter(l => l.weight != null || l.temp != null).slice(0, 7);
+        renderTrend();
+      } catch (e) { /* ignore */ }
+    }
+
+    function renderTrend() {
+      const wrap = document.getElementById("trend-content");
+      if (!recentLogs.length) {
+        wrap.innerHTML = `<div style="text-align:center; padding: 16px; color: var(--gray-400); font-size: 12px;">まだ記録がありません</div>`;
+        return;
+      }
+      const sorted = [...recentLogs].sort((a, b) => (b.date || "").localeCompare(a.date || ""));
+      const html = sorted.map((l, i) => {
+        const next = sorted[i + 1];
+        const wDelta = next && l.weight != null && next.weight != null
+          ? formatDelta(l.weight - next.weight, "kg") : "";
+        const tDelta = next && l.temp != null && next.temp != null
+          ? formatDelta(l.temp - next.temp, "℃") : "";
+        return `
+          <div class="trend-row">
+            <span class="date">${shortDate(l.date)}</span>
+            <span class="val">${l.weight != null ? l.weight + " kg" : "—"}</span>
+            ${wDelta}
+            <span style="color:var(--gray-300); margin:0 4px;">／</span>
+            <span class="val">${l.temp != null ? l.temp + " ℃" : "—"}</span>
+            ${tDelta}
+          </div>`;
+      }).join("");
+      wrap.innerHTML = html;
+    }
+
+    function formatDelta(d, unit) {
+      const abs = Math.abs(d).toFixed(1);
+      if (abs == 0.0) return `<span class="delta same">±0</span>`;
+      const sign = d > 0 ? "↑" : "↓";
+      const cls = d > 0 ? "up" : "down";
+      return `<span class="delta ${cls}">${sign}${abs}</span>`;
+    }
+
+    function shortDate(s) {
+      if (!s || s.length < 10) return s || "";
+      return `${parseInt(s.slice(5,7))}/${parseInt(s.slice(8,10))}`;
+    }
+
+    async function loadCrp() {
+      try {
+        const res = await fetch("/api/labs");
+        const labs = await res.json();
+        const items = Array.isArray(labs) ? labs : (labs.labs || []);
+        const withCrp = items.filter(l => l.values && l.values.crp != null)
+          .sort((a, b) => (b.date || "").localeCompare(a.date || ""));
+        if (withCrp.length) {
+          const latest = withCrp[0];
+          document.getElementById("crp-val").textContent = latest.values.crp + " mg/dL";
+          document.getElementById("crp-date").textContent = shortDate(latest.date) + " の検査";
+          document.getElementById("crp-card").style.display = "block";
+        }
+      } catch (e) { /* ignore */ }
+    }
+
+    async function save() {
+      const btn = document.getElementById("save-btn");
+      const weight = parseFloat(document.getElementById("weight").value);
+      const temp = parseFloat(document.getElementById("temp").value);
+      const note = document.getElementById("note").value.trim();
+
+      // 何も入っていなければ保存しない
+      if (!isFinite(weight) && !isFinite(temp) && !bleedingValue && !note) {
+        showToast("何か一つだけ入れてみてください", true);
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = "保存中…";
+
+      try {
+        const payload = {
+          date: new Date().toISOString().slice(0, 10),
+          ...(isFinite(weight) ? { weight } : {}),
+          ...(isFinite(temp) ? { temp } : {}),
+          ...(bleedingValue ? { bleeding: bleedingValue !== "none" } : {}),
+          ...(note ? { note } : {}),
+          source: "minimal",
+        };
+        const res = await fetch("/api/symptoms", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+        if (!res.ok) throw new Error("HTTP " + res.status);
+        showToast("保存しました");
+        document.getElementById("weight").value = "";
+        document.getElementById("temp").value = "";
+        document.getElementById("note").value = "";
+        document.querySelectorAll("#bleeding-row-buttons .pill-btn").forEach(b => b.classList.remove("selected"));
+        bleedingValue = null;
+        await loadRecent();
+      } catch (e) {
+        showToast("保存に失敗：" + (e.message || e), true);
+      } finally {
+        btn.disabled = false;
+        btn.textContent = "これだけ保存する";
+      }
+    }
+
+    function showToast(msg, isError) {
+      const t = document.getElementById("toast");
+      t.textContent = msg;
+      t.style.background = isError ? "rgba(220,38,38,0.95)" : "rgba(13,148,136,0.95)";
+      t.classList.add("show");
+      setTimeout(() => t.classList.remove("show"), 2500);
+    }
+  </script>
+</body>
+</html>

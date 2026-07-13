@@ -1,0 +1,362 @@
+{
+  "id": "oi",
+  "name": "骨形成不全症",
+  "shortName": "OI",
+  "description": "骨形成不全症（Osteogenesis Imperfecta、指定難病274）の骨折歴・治療・症状を管理",
+  "color": "#0ea5e9",
+  "icon": "skeleton",
+
+  "modules": [
+    {
+      "id": "timeline",
+      "label": "治療タイムライン",
+      "description": "骨折・治療・手術を時系列で管理",
+      "icon": "timeline",
+      "page": "timeline.html",
+      "enabled": true,
+      "core": true
+    },
+    {
+      "id": "medications",
+      "label": "おくすり管理",
+      "description": "ビスホスホネート・Ca/VitD など",
+      "icon": "medication",
+      "page": "medications.html",
+      "enabled": true,
+      "core": true
+    },
+    {
+      "id": "symptom-log",
+      "label": "症状きろく",
+      "description": "痛み・歩行・転倒・聴こえを記録",
+      "icon": "edit_note",
+      "page": "symptom-log.html",
+      "enabled": true
+    },
+    {
+      "id": "restroom",
+      "label": "トイレさがし",
+      "description": "近くのトイレをマップで表示",
+      "icon": "wc",
+      "page": "restroom.html",
+      "enabled": false
+    },
+    {
+      "id": "emergency-card",
+      "label": "緊急カード",
+      "description": "救急・麻酔時に見せる情報カード",
+      "icon": "emergency",
+      "page": "emergency-card.html",
+      "enabled": true,
+      "core": true
+    },
+    {
+      "id": "lab-tracker",
+      "label": "検査値きろく",
+      "description": "骨代謝マーカー・骨密度の推移",
+      "icon": "science",
+      "page": "lab-tracker.html",
+      "enabled": true,
+      "core": true
+    },
+    {
+      "id": "summary",
+      "label": "診察用サマリー",
+      "description": "診察時に医師に見せる画面（多科併診対応）",
+      "icon": "description",
+      "page": "summary.html",
+      "enabled": true,
+      "core": true,
+      "fullWidth": true
+    },
+    {
+      "id": "resources",
+      "label": "患者会・支援情報",
+      "description": "患者会・医療費助成・診療拠点情報",
+      "icon": "groups",
+      "page": "resources.html",
+      "enabled": true,
+      "core": true,
+      "fullWidth": true
+    }
+  ],
+
+  "medicationMaster": "oi-medications.json",
+
+  "resourcesConfig": {
+    "title": "患者会・支援情報",
+    "intro": "骨形成不全症は I 型コラーゲン（COL1A1/COL1A2 遺伝子等）の異常で骨が脆くなる遺伝性疾患（指定難病274・小児慢性特定疾病）です。同じ病気の仲間と繋がる、公的支援を使う、診療拠点を知る ── そんな時に役立つ情報をまとめました。",
+    "sections": [
+      {
+        "heading": "患者会・ピアサポート",
+        "icon": "groups",
+        "items": [
+          {
+            "name": "全国骨形成不全症協会（OISJ：Osteogenesis Imperfecta Society Japan）",
+            "url": "https://oisj.jp/",
+            "note": "1995年設立の日本の患者会。全国大会・地域交流会・医療相談・冊子発行。家族・成人当事者・小児ともに対応。"
+          },
+          {
+            "name": "日本患者会情報センター 骨形成不全症",
+            "url": "https://kanjyakai.net/",
+            "note": "国内の希少・難病患者会の情報まとめ。地域別・疾患別の支援団体検索に。"
+          }
+        ]
+      },
+      {
+        "heading": "公的支援・医療費助成",
+        "icon": "account_balance",
+        "items": [
+          {
+            "name": "難病情報センター：骨形成不全症（指定難病274）",
+            "url": "https://www.nanbyou.or.jp/entry/4647",
+            "note": "疾患解説・重症度分類・医療費助成の要件・申請手続きを網羅した公式ページ。"
+          },
+          {
+            "name": "小児慢性特定疾病情報センター：骨形成不全症",
+            "url": "https://www.shouman.jp/disease/details/12_07_007/",
+            "note": "18歳未満で発症した方向けの公的助成。疾病概要と申請手引き。"
+          },
+          {
+            "name": "日本難病・疾病団体協議会（JPA）",
+            "url": "https://nanbyo.jp/support/",
+            "note": "難病相談・支援センター／就労支援サポーター制度の案内。"
+          }
+        ]
+      },
+      {
+        "heading": "医療情報・診療拠点",
+        "icon": "local_hospital",
+        "items": [
+          {
+            "name": "大阪母子医療センター 整形外科（骨系統疾患）",
+            "url": "https://www.wch.opho.jp/hospital/department/treat/orthopedics.html",
+            "note": "国内有数の骨系統疾患の診療拠点。小児期からの長期フォローに実績。"
+          },
+          {
+            "name": "国立成育医療研究センター 骨系統疾患",
+            "url": "https://www.ncchd.go.jp/hospital/sickness/children/skeletal.html",
+            "note": "小児の骨形成不全症診療・遺伝相談・移行期医療の拠点。"
+          },
+          {
+            "name": "MSDマニュアル：骨形成不全症",
+            "url": "https://www.msdmanuals.com/ja-jp/professional/19-小児科/結合組織病/骨形成不全症",
+            "note": "医療者向けの病型分類・治療方針の解説。受診前後の知識整理に。"
+          }
+        ]
+      }
+    ],
+    "footer": "掲載情報は執筆時点のものです。手続き・治療方針の最新情報は各公式サイト・主治医にご確認ください。"
+  },
+
+  "symptomConfig": {
+    "title": "症状きろく",
+    "metrics": [
+      {
+        "id": "bonePain",
+        "label": "骨・関節の痛み",
+        "type": "scale",
+        "min": 0,
+        "max": 5,
+        "description": "0=なし ← → 5=強い"
+      },
+      {
+        "id": "backPain",
+        "label": "背中・腰の痛み（側弯）",
+        "type": "scale",
+        "min": 0,
+        "max": 5
+      },
+      {
+        "id": "newFracture",
+        "label": "新しい骨折・受傷",
+        "type": "toggle",
+        "dangerColor": true,
+        "description": "軽微な外傷でも記録を。整形外科への受診目安に"
+      },
+      {
+        "id": "fall",
+        "label": "転倒・つまづき",
+        "type": "toggle",
+        "description": "頻度の把握はリハ計画に役立ちます"
+      },
+      {
+        "id": "walkDistance",
+        "label": "連続して歩けた距離",
+        "type": "counter",
+        "min": 0,
+        "max": 5000,
+        "default": 200,
+        "unit": "m",
+        "description": "目安で OK"
+      },
+      {
+        "id": "fatigue",
+        "label": "疲労感",
+        "type": "scale",
+        "min": 0,
+        "max": 5
+      },
+      {
+        "id": "hearingChange",
+        "label": "聴こえの変化（聞こえにくい・耳鳴り）",
+        "type": "toggle",
+        "description": "OI では成人期に難聴が出ることがあります（耳鼻科相談）"
+      },
+      {
+        "id": "toothIssue",
+        "label": "歯の異常（欠け・しみる）",
+        "type": "toggle",
+        "description": "象牙質形成不全（DI）の管理に。歯科相談を"
+      },
+      {
+        "id": "breathDifficulty",
+        "label": "息苦しさ・胸郭の張り",
+        "type": "toggle",
+        "description": "重症型・側弯例で要注意。早めの呼吸器評価を"
+      }
+    ],
+    "summaryMetrics": [
+      { "id": "bonePain", "label": "平均 骨・関節痛", "aggregate": "avg" },
+      { "id": "backPain", "label": "平均 腰背部痛", "aggregate": "avg" },
+      { "id": "newFracture", "label": "新規骨折日数", "aggregate": "countTrue" },
+      { "id": "fall", "label": "転倒日数", "aggregate": "countTrue" },
+      { "id": "walkDistance", "label": "平均歩行距離(m)", "aggregate": "avg" },
+      { "id": "hearingChange", "label": "聴こえ変化日数", "aggregate": "countTrue" }
+    ]
+  },
+
+  "labConfig": {
+    "items": [
+      {
+        "id": "bap",
+        "label": "BAP（骨型ALP）",
+        "unit": "μg/L",
+        "normalRange": [3.7, 20.9],
+        "note": "骨形成マーカー。ビスホスホネート効果判定に"
+      },
+      {
+        "id": "p1np",
+        "label": "P1NP（Ⅰ型プロコラーゲン-N-プロペプチド）",
+        "unit": "μg/L",
+        "normalRange": [19, 84],
+        "note": "骨形成マーカー（Ⅰ型コラーゲン由来）"
+      },
+      {
+        "id": "ntx_u",
+        "label": "尿中NTX",
+        "unit": "nmolBCE/mmol·Cr",
+        "normalRange": [9.3, 54.3],
+        "note": "骨吸収マーカー。BP治療で低下"
+      },
+      {
+        "id": "tracp5b",
+        "label": "TRACP-5b",
+        "unit": "mU/dL",
+        "normalRange": [120, 420],
+        "note": "骨吸収マーカー（破骨細胞由来）"
+      },
+      {
+        "id": "ca",
+        "label": "血清カルシウム",
+        "unit": "mg/dL",
+        "normalRange": [8.6, 10.1],
+        "warnLow": 8.0,
+        "warnHigh": 10.5
+      },
+      {
+        "id": "p",
+        "label": "血清リン",
+        "unit": "mg/dL",
+        "normalRange": [2.5, 4.5],
+        "warnLow": 2.0
+      },
+      {
+        "id": "alp",
+        "label": "ALP（IFCC）",
+        "unit": "U/L",
+        "normalRange": [38, 113],
+        "note": "成人IFCC基準。骨折直後は上昇"
+      },
+      {
+        "id": "vitd",
+        "label": "25(OH)ビタミンD",
+        "unit": "ng/mL",
+        "normalRange": [30, 50],
+        "warnLow": 20,
+        "note": "20未満で欠乏。BP治療前に補正"
+      },
+      {
+        "id": "intactPth",
+        "label": "intact-PTH",
+        "unit": "pg/mL",
+        "normalRange": [10, 65]
+      },
+      {
+        "id": "dxa_lumbar_yam",
+        "label": "DXA 腰椎 YAM",
+        "unit": "%",
+        "normalRange": [80, 130],
+        "warnLow": 70,
+        "note": "若年成人平均比。70%未満で骨粗しょう症"
+      },
+      {
+        "id": "dxa_lumbar_z",
+        "label": "DXA 腰椎 Zスコア",
+        "unit": "SD",
+        "normalRange": [-1, 2],
+        "warnLow": -2,
+        "note": "OI では Z スコアでの評価が中心（年齢比）"
+      },
+      {
+        "id": "dxa_femur_z",
+        "label": "DXA 大腿骨頸部 Zスコア",
+        "unit": "SD",
+        "normalRange": [-1, 2],
+        "warnLow": -2
+      }
+    ]
+  },
+
+  "scoringTools": [
+    { "id": "sillence", "label": "Sillence分類", "range": "I-IV", "note": "I型=軽症 / II型=致死型 / III型=進行性変形重症 / IV型=中等症" },
+    { "id": "bbs", "label": "Berg Balance Scale", "range": "0-56", "note": "転倒リスク・バランス評価" }
+  ],
+
+  "emergencyConfig": {
+    "title": "緊急情報カード",
+    "subtitle": "骨形成不全症（指定難病274）",
+    "fields": [
+      { "id": "sillenceType", "label": "Sillence分類", "placeholder": "例: IV型（中等症）" },
+      { "id": "geneType", "label": "原因遺伝子", "placeholder": "例: COL1A1 変異" },
+      { "id": "mainDoctors", "label": "主治医（多科併診）", "placeholder": "例: 整形外科 〇〇医師 / 内分泌 △△医師" }
+    ],
+    "warnings": [
+      "⚠️ 軽微な外傷でも骨折します。移乗・採血・処置時は丁寧な取り扱いを",
+      "⚠️ 麻酔・手術時は脊柱変形・短頸・気道確保困難・悪性高熱症のリスクを必ず申告",
+      "脊柱側弯・胸郭変形のため呼吸機能低下に注意（鎮静薬の慎重投与）",
+      "ビスホスホネート治療中：抜歯・口腔外科処置前に主治医・歯科に申告（顎骨壊死リスク）",
+      "難聴（伝音性／混合性）の既往があるため口頭指示はゆっくり明瞭に",
+      "象牙質形成不全（DI）のため挿管時の歯牙損傷に注意",
+      "止血機能低下（軽度）の報告あり。出血時間が長引くことがある",
+      "多科併診：整形外科・内分泌科・耳鼻科・歯科・リハビリテーション科・呼吸器科"
+    ]
+  },
+
+  "timelineCategories": [
+    { "id": "diagnosis", "label": "診断", "color": "#dbeafe" },
+    { "id": "genetic_test", "label": "遺伝子検査", "color": "#c7d2fe" },
+    { "id": "fracture", "label": "骨折", "color": "#fca5a5" },
+    { "id": "surgery", "label": "整形外科手術", "color": "#fbcfe8" },
+    { "id": "bp_therapy", "label": "ビスホスホネート治療", "color": "#bfdbfe" },
+    { "id": "medication_change", "label": "薬変更", "color": "#d1fae5" },
+    { "id": "rehab", "label": "リハビリ", "color": "#bbf7d0" },
+    { "id": "dxa", "label": "骨密度検査", "color": "#e9d5ff" },
+    { "id": "exam", "label": "検査", "color": "#e9d5ff" },
+    { "id": "hearing_check", "label": "聴力検査・補聴", "color": "#fef3c7" },
+    { "id": "dental", "label": "歯科処置", "color": "#fde68a" },
+    { "id": "hospitalization", "label": "入院", "color": "#fde68a" },
+    { "id": "self-log", "label": "じぶんメモ", "color": "#e0f2fe" },
+    { "id": "other", "label": "その他", "color": "#e5e5e5" }
+  ]
+}

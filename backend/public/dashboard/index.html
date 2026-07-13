@@ -1,0 +1,1268 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>よりそい 薬局ダッシュボード</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;600;700;800&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --paper: #F6F0E3;
+    --paper-warm: #FBF7ED;
+    --paper-deep: #EDE4CF;
+    --ink: #322B20;
+    --ink-soft: #6E6354;
+    --ink-faint: #9C8F7C;
+    --pine: #41634A;
+    --pine-deep: #2E4A36;
+    --pine-wash: rgba(65,99,74,0.08);
+    --amber: #C99650;
+    --terra: #C2603F;
+    --terra-soft: #D88A75;
+    --line-green: #06C755;
+    --seal: #B5482A;
+    --rule: rgba(80,66,46,0.16);
+    --rule-soft: rgba(80,66,46,0.09);
+    --shadow: 0 14px 38px rgba(60,48,30,0.12);
+    --shadow-soft: 0 4px 14px rgba(60,48,30,0.07);
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; }
+
+  body {
+    font-family: "Zen Kaku Gothic New", "Yu Gothic", sans-serif;
+    color: var(--ink);
+    background:
+      radial-gradient(circle at 12% -4%, rgba(255,255,255,0.85), transparent 30%),
+      radial-gradient(circle at 105% 110%, rgba(65,99,74,0.10), transparent 38%),
+      linear-gradient(168deg, var(--paper-warm), var(--paper) 46%, #F1E9D6);
+    line-height: 1.7;
+  }
+
+  /* 紙の粒子 */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.5;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 0.42 0 0 0 0 0.36 0 0 0 0 0.26 0 0 0 0.05 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+    z-index: 0;
+  }
+
+  .hidden { display: none !important; }
+
+  /* ===== 角印（よりそい印） ===== */
+  .seal {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    width: 54px;
+    height: 54px;
+    padding: 6px;
+    border: 2.5px solid var(--seal);
+    border-radius: 8px;
+    color: var(--seal);
+    font-family: "Shippori Mincho", serif;
+    font-weight: 800;
+    font-size: 17px;
+    line-height: 1;
+    place-items: center;
+    transform: rotate(-2.5deg);
+    background: rgba(181,72,42,0.04);
+    box-shadow: inset 0 0 0 1px rgba(181,72,42,0.18);
+    user-select: none;
+  }
+  .seal span { display: block; }
+
+  /* ふくちゃんロゴ（角印の代わり） */
+  .fuku-logo {
+    display: block;
+    flex: 0 0 auto;
+    border-radius: 14px;
+    object-fit: cover;
+    background: var(--paper-deep);
+    box-shadow: var(--shadow-soft);
+    border: 1px solid rgba(80,66,46,0.12);
+  }
+  .topbar .fuku-logo { width: 46px; height: 46px; border-radius: 13px; }
+  .login-intro .fuku-logo { width: 58px; height: 58px; }
+  .ledger-placeholder .fuku-logo { width: 66px; height: 66px; margin: 0 auto 18px; }
+
+  /* ===== ログイン ===== */
+  .login-stage {
+    position: relative;
+    z-index: 1;
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    padding: 24px;
+  }
+
+  .login-frame {
+    width: min(860px, 100%);
+    display: grid;
+    grid-template-columns: 1.15fr 1fr;
+    border: 1px solid var(--rule);
+    border-radius: 26px;
+    overflow: hidden;
+    background: rgba(251,247,237,0.82);
+    backdrop-filter: blur(3px);
+    box-shadow: var(--shadow);
+  }
+
+  .login-intro {
+    position: relative;
+    padding: 52px 48px;
+    border-right: 1px dashed var(--rule);
+    display: flex;
+    flex-direction: column;
+    gap: 26px;
+    overflow: hidden;
+  }
+
+  .login-intro::after {
+    content: "";
+    position: absolute;
+    right: -70px;
+    bottom: -70px;
+    width: 230px;
+    height: 230px;
+    border-radius: 50%;
+    border: 1.5px dashed rgba(65,99,74,0.30);
+  }
+
+  .brand-row { display: flex; align-items: center; gap: 18px; }
+
+  .brand-name {
+    font-family: "Shippori Mincho", serif;
+    font-size: 15px;
+    letter-spacing: 0.34em;
+    color: var(--pine-deep);
+    font-weight: 700;
+  }
+
+  .login-title {
+    margin: 0;
+    font-family: "Shippori Mincho", serif;
+    font-weight: 800;
+    font-size: clamp(30px, 4vw, 40px);
+    line-height: 1.5;
+    color: var(--ink);
+  }
+  .login-title em {
+    font-style: normal;
+    color: var(--pine);
+    border-bottom: 6px solid rgba(201,150,80,0.35);
+  }
+
+  .login-lead {
+    margin: 0;
+    color: var(--ink-soft);
+    font-size: 14.5px;
+    line-height: 2.0;
+  }
+
+  .login-points { display: grid; gap: 10px; margin-top: auto; }
+  .login-point {
+    display: flex;
+    gap: 10px;
+    align-items: baseline;
+    font-size: 13px;
+    color: var(--ink-soft);
+  }
+  .login-point::before {
+    content: "—";
+    color: var(--amber);
+    font-weight: 900;
+  }
+
+  .login-form {
+    padding: 52px 44px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 18px;
+    background:
+      linear-gradient(180deg, rgba(255,255,255,0.5), rgba(255,255,255,0.0) 60%),
+      var(--paper-warm);
+  }
+
+  .login-form h2 {
+    margin: 0 0 4px;
+    font-family: "Shippori Mincho", serif;
+    font-size: 19px;
+    font-weight: 700;
+    color: var(--pine-deep);
+  }
+
+  .field { display: grid; gap: 7px; }
+  .field label {
+    font-size: 12.5px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    color: var(--ink-soft);
+  }
+  .field input {
+    font: inherit;
+    font-size: 16px;
+    padding: 13px 15px;
+    border-radius: 13px;
+    border: 1.5px solid var(--rule);
+    background: #fff;
+    color: var(--ink);
+    outline: none;
+    transition: border-color 140ms ease, box-shadow 140ms ease;
+  }
+  .field input:focus {
+    border-color: var(--pine);
+    box-shadow: 0 0 0 4px rgba(65,99,74,0.13);
+  }
+
+  .login-error {
+    min-height: 20px;
+    color: var(--terra);
+    font-size: 13px;
+    font-weight: 700;
+  }
+
+  .btn-primary {
+    font: inherit;
+    font-weight: 900;
+    font-size: 15.5px;
+    letter-spacing: 0.18em;
+    color: #FBF7ED;
+    background: linear-gradient(160deg, var(--pine), var(--pine-deep));
+    border: 0;
+    border-radius: 999px;
+    padding: 15px 22px;
+    cursor: pointer;
+    box-shadow: 0 10px 22px rgba(46,74,54,0.28);
+    transition: transform 130ms ease, box-shadow 130ms ease, opacity 130ms ease;
+  }
+  .btn-primary:hover { transform: translateY(-1px); }
+  .btn-primary:active { transform: translateY(1px); box-shadow: 0 5px 12px rgba(46,74,54,0.25); }
+  .btn-primary:disabled { opacity: 0.55; cursor: wait; }
+
+  .login-note { font-size: 12px; color: var(--ink-faint); }
+
+  /* ===== アプリ本体 ===== */
+  .app {
+    position: relative;
+    z-index: 1;
+    height: 100vh;
+    display: grid;
+    grid-template-rows: auto 1fr;
+  }
+
+  .topbar {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding: 14px 26px;
+    border-bottom: 1px solid var(--rule);
+    background: rgba(251,247,237,0.86);
+    backdrop-filter: blur(4px);
+  }
+
+  .topbar .seal { width: 42px; height: 42px; font-size: 13px; border-width: 2px; padding: 4px; }
+
+  .topbar-title { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+  .topbar-title strong {
+    font-family: "Shippori Mincho", serif;
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    color: var(--ink);
+    white-space: nowrap;
+  }
+  .topbar-title span { font-size: 12px; color: var(--ink-faint); letter-spacing: 0.08em; }
+
+  .facility-chip {
+    margin-left: 6px;
+    padding: 7px 14px;
+    border-radius: 999px;
+    border: 1px solid rgba(65,99,74,0.32);
+    background: var(--pine-wash);
+    color: var(--pine-deep);
+    font-size: 13px;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+
+  .topbar-spacer { flex: 1; }
+
+  .ghost-btn {
+    font: inherit;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--pine-deep);
+    background: transparent;
+    border: 1px solid var(--rule);
+    border-radius: 999px;
+    padding: 9px 16px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    transition: background-color 130ms ease, transform 130ms ease;
+  }
+  .ghost-btn:hover { background: rgba(255,255,255,0.7); }
+  .ghost-btn:active { transform: translateY(1px); }
+  .ghost-btn svg { width: 15px; height: 15px; }
+  .ghost-btn.is-spinning svg { animation: spin 0.9s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .staff-tag { font-size: 12.5px; color: var(--ink-soft); white-space: nowrap; }
+  .staff-tag b { color: var(--ink); }
+
+  .layout {
+    display: grid;
+    grid-template-columns: 330px 1fr;
+    min-height: 0;
+  }
+
+  /* ===== 患者リスト（索引棚） ===== */
+  .shelf {
+    border-right: 1px solid var(--rule);
+    background: rgba(246,240,227,0.6);
+    display: grid;
+    grid-template-rows: auto auto 1fr;
+    min-height: 0;
+  }
+
+  .shelf-head {
+    padding: 18px 18px 6px;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+  }
+  .shelf-head h2 {
+    margin: 0;
+    font-family: "Shippori Mincho", serif;
+    font-size: 16px;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    color: var(--pine-deep);
+  }
+  .shelf-count { font-size: 12px; color: var(--ink-faint); }
+
+  .shelf-search { padding: 8px 16px 12px; }
+  .shelf-search input {
+    width: 100%;
+    font: inherit;
+    font-size: 14px;
+    padding: 10px 14px;
+    border-radius: 999px;
+    border: 1.5px solid var(--rule);
+    background: #fff;
+    outline: none;
+  }
+  .shelf-search input:focus { border-color: var(--pine); }
+
+  .shelf-list {
+    overflow-y: auto;
+    padding: 4px 14px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+  }
+
+  .patient-card {
+    position: relative;
+    text-align: left;
+    font: inherit;
+    border: 1px solid var(--rule-soft);
+    border-left: 4px solid transparent;
+    border-radius: 15px;
+    background: var(--paper-warm);
+    padding: 13px 14px 12px 16px;
+    cursor: pointer;
+    box-shadow: var(--shadow-soft);
+    transition: transform 130ms ease, border-color 130ms ease, box-shadow 130ms ease;
+  }
+  .patient-card:hover { transform: translateX(2px); }
+  .patient-card.is-active {
+    border-color: rgba(65,99,74,0.35);
+    border-left-color: var(--pine);
+    background: linear-gradient(135deg, rgba(65,99,74,0.07), var(--paper-warm) 55%);
+  }
+
+  .patient-card__name {
+    font-weight: 900;
+    font-size: 15.5px;
+    color: var(--ink);
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+  }
+  .patient-card__kana { font-size: 11px; font-weight: 500; color: var(--ink-faint); letter-spacing: 0.1em; }
+
+  .line-tag {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 900;
+    letter-spacing: 0.08em;
+    color: #047A37;
+    background: rgba(6,199,85,0.13);
+    border-radius: 6px;
+    padding: 2px 7px;
+    vertical-align: middle;
+    margin-left: 8px;
+  }
+  .patient-card__meta { margin-top: 3px; font-size: 12px; color: var(--ink-soft); }
+  .patient-card__snippet {
+    margin-top: 7px;
+    font-size: 12.5px;
+    color: var(--ink-soft);
+    line-height: 1.65;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .patient-card__badge {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    font-size: 10.5px;
+    font-weight: 900;
+    letter-spacing: 0.05em;
+    padding: 3px 8px;
+    border-radius: 999px;
+    background: rgba(201,150,80,0.16);
+    color: #8A6420;
+  }
+
+  .shelf-empty { padding: 30px 18px; color: var(--ink-faint); font-size: 13.5px; text-align: center; }
+
+  /* ===== 薬歴帳（タイムライン） ===== */
+  .ledger {
+    min-width: 0;
+    overflow-y: auto;
+    padding: 30px clamp(22px, 4vw, 56px) 70px;
+  }
+
+  .ledger-placeholder {
+    height: 100%;
+    display: grid;
+    place-items: center;
+    text-align: center;
+    color: var(--ink-faint);
+  }
+  .ledger-placeholder .seal { margin: 0 auto 18px; opacity: 0.7; }
+  .ledger-placeholder p { margin: 4px 0; font-size: 14px; }
+  .ledger-placeholder strong {
+    font-family: "Shippori Mincho", serif;
+    font-size: 19px;
+    color: var(--ink-soft);
+    letter-spacing: 0.12em;
+  }
+
+  .patient-head {
+    display: flex;
+    align-items: flex-end;
+    gap: 18px;
+    flex-wrap: wrap;
+    padding-bottom: 18px;
+    border-bottom: 2px solid var(--rule);
+    margin-bottom: 8px;
+  }
+  .patient-head h2 {
+    margin: 0;
+    font-family: "Shippori Mincho", serif;
+    font-weight: 800;
+    font-size: clamp(26px, 3vw, 34px);
+    letter-spacing: 0.05em;
+    line-height: 1.3;
+  }
+  .patient-head h2 small {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--ink-faint);
+    margin-left: 10px;
+    letter-spacing: 0.14em;
+  }
+  .patient-head .head-meta { font-size: 13px; color: var(--ink-soft); padding-bottom: 7px; }
+  .patient-head .head-note {
+    margin-left: auto;
+    padding-bottom: 7px;
+    font-size: 12px;
+    color: var(--ink-faint);
+  }
+
+  .timeline {
+    position: relative;
+    margin-top: 26px;
+    padding-left: 30px;
+  }
+  .timeline::before {
+    content: "";
+    position: absolute;
+    left: 7px;
+    top: 6px;
+    bottom: 6px;
+    width: 2px;
+    background: linear-gradient(180deg, rgba(65,99,74,0.4), rgba(65,99,74,0.08));
+  }
+
+  .entry {
+    position: relative;
+    margin-bottom: 30px;
+    opacity: 0;
+    transform: translateY(10px);
+    animation: rise 460ms ease forwards;
+  }
+  .entry:nth-child(1) { animation-delay: 40ms; }
+  .entry:nth-child(2) { animation-delay: 120ms; }
+  .entry:nth-child(3) { animation-delay: 200ms; }
+  .entry:nth-child(4) { animation-delay: 280ms; }
+  .entry:nth-child(n+5) { animation-delay: 340ms; }
+  @keyframes rise { to { opacity: 1; transform: translateY(0); } }
+
+  /* 自動更新時はアニメーションを再生しない（点滅防止） */
+  .timeline.no-anim .entry { animation: none; opacity: 1; transform: none; }
+
+  .entry::before {
+    content: "";
+    position: absolute;
+    left: -29px;
+    top: 14px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--paper-warm);
+    border: 3px solid var(--pine);
+  }
+  .entry.is-failed::before { border-color: var(--terra); }
+  .entry.is-processing::before { border-color: var(--amber); animation: pulse 1.6s ease-in-out infinite; }
+  @keyframes pulse { 50% { box-shadow: 0 0 0 6px rgba(201,150,80,0.18); } }
+
+  .entry-date {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 9px;
+  }
+  .entry-date time {
+    font-family: "Shippori Mincho", serif;
+    font-weight: 800;
+    font-size: 17px;
+    letter-spacing: 0.06em;
+    color: var(--pine-deep);
+  }
+
+  .chip {
+    font-size: 11px;
+    font-weight: 900;
+    letter-spacing: 0.06em;
+    padding: 4px 10px;
+    border-radius: 999px;
+    white-space: nowrap;
+  }
+  .chip--done { background: rgba(65,99,74,0.13); color: var(--pine-deep); }
+  .chip--line { background: rgba(6,199,85,0.13); color: #047A37; }
+  .chip--processing { background: rgba(201,150,80,0.18); color: #8A6420; }
+  .chip--failed { background: rgba(194,96,63,0.14); color: var(--terra); }
+
+  .entry-card {
+    border: 1px solid var(--rule-soft);
+    border-radius: 18px;
+    background: var(--paper-warm);
+    box-shadow: var(--shadow-soft);
+    padding: 20px 22px 16px;
+    display: grid;
+    gap: 16px;
+  }
+
+  .gist { display: grid; gap: 6px; }
+  .gist-label {
+    font-size: 11.5px;
+    font-weight: 900;
+    letter-spacing: 0.22em;
+    color: var(--amber);
+  }
+  .gist-text {
+    margin: 0;
+    font-family: "Shippori Mincho", serif;
+    font-size: 16.5px;
+    font-weight: 600;
+    line-height: 2.0;
+    color: var(--ink);
+  }
+
+  /* 患者さんに届いた診察メモ＝世代を問わず読みやすく大きめに */
+  .pv-title {
+    margin: 2px 0 0;
+    font-family: "Shippori Mincho", serif;
+    font-size: 24px;
+    font-weight: 800;
+    line-height: 1.5;
+    color: var(--ink);
+  }
+
+  .pv-lead {
+    margin: 8px 0 2px;
+    font-size: 17px;
+    line-height: 1.9;
+    color: var(--ink);
+  }
+
+  .pv-points {
+    margin: 8px 0 0;
+    padding-left: 1.3em;
+    color: var(--ink);
+    font-size: 16px;
+    line-height: 1.95;
+  }
+  .pv-points li { margin-bottom: 4px; }
+
+  /* お薬のこと（青）・気をつけること（緑）＝色付きブロックで区切る */
+  .pv-block {
+    margin-top: 12px;
+    border-radius: 14px;
+    padding: 12px 16px;
+  }
+  .pv-block b {
+    display: block;
+    font-size: 13px;
+    letter-spacing: 0.14em;
+    font-weight: 800;
+    margin-bottom: 5px;
+  }
+  .pv-block span { font-size: 16px; line-height: 1.85; color: var(--ink); }
+  .pv-block ul { margin: 0; padding-left: 1.3em; }
+  .pv-block li { font-size: 16px; line-height: 1.9; color: var(--ink); margin-bottom: 3px; }
+
+  .pv-block--med {
+    background: rgba(141,184,204,0.16);
+    border: 1px solid rgba(141,184,204,0.4);
+  }
+  .pv-block--med b { color: #2F6E8F; }
+
+  .pv-block--care {
+    background: rgba(150,180,130,0.18);
+    border: 1px solid rgba(120,160,100,0.42);
+  }
+  .pv-block--care b { color: #4E7038; }
+
+  .pharmacist-body {
+    margin-top: 10px;
+    display: grid;
+    gap: 12px;
+  }
+
+  .memo-strip {
+    border-left: 4px solid var(--amber);
+    background: rgba(201,150,80,0.09);
+    border-radius: 0 12px 12px 0;
+    padding: 10px 14px;
+    font-size: 13.5px;
+    color: var(--ink-soft);
+  }
+  .memo-strip b { color: #8A6420; font-size: 11.5px; letter-spacing: 0.14em; display: block; margin-bottom: 2px; }
+
+  .alert-strip {
+    border-left: 4px solid var(--terra);
+    background: rgba(194,96,63,0.08);
+    border-radius: 0 12px 12px 0;
+    padding: 10px 14px;
+    font-size: 13.5px;
+    color: var(--ink);
+  }
+  .alert-strip b { color: var(--terra); font-size: 11.5px; letter-spacing: 0.14em; display: block; margin-bottom: 2px; }
+  .alert-strip ul { margin: 2px 0 0; padding-left: 18px; }
+
+  .understanding-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  .understanding-cell {
+    border: 1px solid var(--rule-soft);
+    border-left: 4px solid var(--rule);
+    border-radius: 14px;
+    background: rgba(255,255,255,0.6);
+    padding: 14px 16px;
+  }
+  .understanding-cell h4 {
+    margin: 0 0 8px;
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    color: var(--pine-deep);
+    font-weight: 800;
+  }
+  .understanding-cell ul {
+    margin: 0;
+    padding-left: 1.3em;
+    font-size: 15px;
+    line-height: 1.9;
+    color: var(--ink);
+  }
+  .understanding-cell li { margin-bottom: 4px; }
+  .understanding-cell p { margin: 0; font-size: 15px; line-height: 1.9; color: var(--ink); white-space: pre-wrap; }
+
+  /* 観点ごとの色分け（不安=赤茶 / お薬=青 / 次回=緑 / 補足=アンバー） */
+  .understanding-cell--concern { border-left-color: var(--terra); }
+  .understanding-cell--concern h4 { color: var(--terra); }
+  .understanding-cell--med { border-left-color: var(--blue-dark); }
+  .understanding-cell--med h4 { color: #2F6E8F; }
+  .understanding-cell--voice { border-left-color: var(--pine); }
+  .understanding-cell--voice h4 { color: #4E7038; }
+  .understanding-cell--support { border-left-color: var(--amber); }
+  .understanding-cell--support h4 { color: #8A6420; }
+
+  .med-row { display: flex; flex-wrap: wrap; gap: 7px; }
+  .med-chip {
+    font-size: 12.5px;
+    font-weight: 700;
+    padding: 5px 12px;
+    border-radius: 999px;
+    background: var(--pine-wash);
+    border: 1px solid rgba(65,99,74,0.22);
+    color: var(--pine-deep);
+  }
+
+  details.transcript { border-top: 1px dashed var(--rule); padding-top: 10px; }
+  details.transcript summary {
+    cursor: pointer;
+    font-size: 12.5px;
+    font-weight: 700;
+    color: var(--ink-faint);
+    letter-spacing: 0.1em;
+    list-style: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+  }
+  details.transcript summary::-webkit-details-marker { display: none; }
+  details.transcript summary::before { content: "▸"; transition: transform 150ms ease; }
+  details.transcript[open] summary::before { transform: rotate(90deg); }
+  details.transcript pre {
+    margin: 10px 0 4px;
+    white-space: pre-wrap;
+    font-family: inherit;
+    font-size: 13px;
+    line-height: 1.9;
+    color: var(--ink-soft);
+    background: rgba(255,255,255,0.55);
+    border: 1px solid var(--rule-soft);
+    border-radius: 12px;
+    padding: 13px 15px;
+    max-height: 260px;
+    overflow-y: auto;
+  }
+
+  .entry-foot {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    font-size: 11.5px;
+    color: var(--ink-faint);
+  }
+
+  .toast {
+    position: fixed;
+    left: 50%;
+    bottom: 26px;
+    transform: translate(-50%, 80px);
+    background: var(--ink);
+    color: var(--paper-warm);
+    font-size: 13.5px;
+    font-weight: 700;
+    border-radius: 999px;
+    padding: 11px 22px;
+    box-shadow: var(--shadow);
+    transition: transform 240ms ease;
+    z-index: 50;
+  }
+  .toast.show { transform: translate(-50%, 0); }
+
+  @media (max-width: 860px) {
+    .login-frame { grid-template-columns: 1fr; }
+    .login-intro { border-right: 0; border-bottom: 1px dashed var(--rule); padding: 40px 32px; }
+    .layout { grid-template-columns: 1fr; grid-template-rows: 270px 1fr; }
+    .shelf { border-right: 0; border-bottom: 1px solid var(--rule); }
+    .topbar { flex-wrap: wrap; }
+  }
+</style>
+</head>
+<body>
+
+  <!-- ===== ログイン ===== -->
+  <div id="loginStage" class="login-stage">
+    <div class="login-frame">
+      <section class="login-intro">
+        <div class="brand-row">
+          <img class="fuku-logo" src="/patient/avatars/fukuchan-ready-soft-closed.png" alt="よりそい" decoding="async">
+          <div class="brand-name">YORISOI PHARMACY</div>
+        </div>
+        <h1 class="login-title">患者さんの声が、<br><em>薬局に届く。</em></h1>
+        <p class="login-lead">患者さんがLINEから自分のペースで残した診察メモを、服薬指導と継続支援のために見返すための場所です。</p>
+        <div class="login-points">
+          <div class="login-point">承認や送信の操作はありません。閲覧に徹した画面です</div>
+          <div class="login-point">記録は患者さん本人のLINEにも届いています</div>
+          <div class="login-point">気になる記録は、次の声かけの手がかりに</div>
+        </div>
+      </section>
+      <form id="loginForm" class="login-form">
+        <h2>スタッフログイン</h2>
+        <div class="field">
+          <label for="loginId">スタッフID</label>
+          <input id="loginId" autocomplete="username" inputmode="numeric" placeholder="000001" required>
+        </div>
+        <div class="field">
+          <label for="loginPw">パスワード</label>
+          <input id="loginPw" type="password" autocomplete="current-password" required>
+        </div>
+        <div id="loginError" class="login-error" role="alert"></div>
+        <button id="loginBtn" class="btn-primary" type="submit">ログイン</button>
+        <div class="login-note">IDとパスワードは管理者にご確認ください。</div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ===== アプリ ===== -->
+  <div id="app" class="app hidden">
+    <header class="topbar">
+      <img class="fuku-logo" src="/patient/avatars/fukuchan-ready-soft-closed.png" alt="よりそい" decoding="async">
+      <div class="topbar-title">
+        <strong>よりそい 薬局ダッシュボード</strong>
+        <span>患者さんの診察メモを見返す</span>
+      </div>
+      <div id="facilityChip" class="facility-chip hidden"></div>
+      <div class="topbar-spacer"></div>
+      <span id="staffTag" class="staff-tag"></span>
+      <button id="refreshBtn" class="ghost-btn" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M21 12a9 9 0 0 1-15.3 6.4"></path><path d="M3 12a9 9 0 0 1 15.3-6.4"></path>
+          <path d="M18 3v4h-4"></path><path d="M6 21v-4h4"></path>
+        </svg>
+        更新
+      </button>
+      <button id="logoutBtn" class="ghost-btn" type="button">ログアウト</button>
+    </header>
+
+    <div class="layout">
+      <aside class="shelf">
+        <div class="shelf-head">
+          <h2>患者さん</h2>
+          <span id="patientCount" class="shelf-count"></span>
+        </div>
+        <div class="shelf-search">
+          <input id="searchInput" placeholder="お名前で探す" aria-label="患者検索">
+        </div>
+        <div id="patientList" class="shelf-list" role="list"></div>
+      </aside>
+
+      <main id="ledger" class="ledger" aria-live="polite">
+        <div class="ledger-placeholder">
+          <div>
+            <img class="fuku-logo" src="/patient/avatars/fukuchan-ready-soft-closed.png" alt="よりそい" decoding="async">
+            <strong>左から患者さんを選んでください</strong>
+            <p>患者さんがLINEで残した診察メモが、ここに時系列で並びます。</p>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <div id="toast" class="toast" role="status"></div>
+
+<script>
+/* ======= 設定 ======= */
+const params = new URLSearchParams(location.search);
+const TENANT_ID = params.get('tenant') || 'tenant-demo-a';
+const API = '/api';
+const TOKEN_KEY = 'pharmacy.dashboard.token';
+const STAFF_KEY = 'pharmacy.dashboard.staff';
+const AUTO_REFRESH_MS = 20000;
+
+/* ======= 状態 ======= */
+let patients = [];
+let selectedPatientId = null;
+let autoTimer = null;
+let lastSignature = '';
+
+// データ内容の指紋。自動更新で変化がないときは再描画しない（点滅防止）。
+function dataSignature(list) {
+  return list.map(p => [
+    p.id,
+    p.name,
+    (p.records || []).map(r => `${r.id}:${r.encounterStatus || ''}:${r.lineDeliveryStatus || ''}`).join(','),
+  ].join('|')).join('||');
+}
+
+const el = (id) => document.getElementById(id);
+
+function esc(v = '') {
+  return String(v)
+    .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+}
+
+function token() { return sessionStorage.getItem(TOKEN_KEY) || ''; }
+
+function authHeaders() {
+  return {
+    'X-Tenant-Id': TENANT_ID,
+    'Authorization': `Bearer ${token()}`,
+  };
+}
+
+function toast(msg) {
+  const t = el('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2600);
+}
+
+/* ======= 表示ヘルパー ======= */
+function fmtDate(value) {
+  if (!value) return '日付なし';
+  const d = new Date(value);
+  if (Number.isNaN(d.getTime())) return String(value).slice(0, 16);
+  return new Intl.DateTimeFormat('ja-JP', { year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' }).format(d);
+}
+
+function calcAge(dob) {
+  if (!dob) return null;
+  const d = new Date(dob);
+  if (Number.isNaN(d.getTime())) return null;
+  const now = new Date();
+  let age = now.getFullYear() - d.getFullYear();
+  if (now.getMonth() < d.getMonth() || (now.getMonth() === d.getMonth() && now.getDate() < d.getDate())) age--;
+  return age;
+}
+
+// 患者向けビュー優先。旧記録は report_100 から「📄 要約（…）」のラベル行を除いて使う
+function cleanGist(record) {
+  const cd = record.clinicalData || {};
+  if (cd.patient_view?.headline) return cd.patient_view.headline;
+  if (cd.patient_view?.summary) return cd.patient_view.summary;
+  let text = cd.report_100 || cd.summary || cd.soap?.s || record.transcript || '';
+  text = String(text).replace(/^📄[^\n]*\n?/, '').trim();
+  return text;
+}
+
+function compactText(value) {
+  if (!value) return '';
+  if (typeof value === 'string') return value.trim();
+  if (typeof value === 'object') {
+    return Object.values(value)
+      .filter(v => v != null && v !== '')
+      .map(v => typeof v === 'string' ? v : JSON.stringify(v))
+      .join('・')
+      .trim();
+  }
+  return String(value).trim();
+}
+
+function listify(value) {
+  const raw = Array.isArray(value) ? value : (value ? [value] : []);
+  return raw.map(compactText).filter(Boolean);
+}
+
+function uniqueItems(items) {
+  const seen = new Set();
+  return items.filter(item => {
+    const key = item.replace(/\s+/g, ' ').trim();
+    if (!key || seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+}
+
+function understandingCell(title, items, accentClass = '') {
+  const values = uniqueItems(items).slice(0, 5);
+  if (!values.length) return '';
+  return `
+    <div class="understanding-cell ${accentClass}">
+      <h4>${esc(title)}</h4>
+      <ul>${values.map(v => `<li>${esc(v)}</li>`).join('')}</ul>
+    </div>
+  `;
+}
+
+function recordChip(record) {
+  const enc = record.encounterStatus;
+  const line = record.lineDeliveryStatus;
+  if (enc === 'FAILED') return { cls: 'chip--failed', label: '作成できませんでした', state: 'is-failed' };
+  if (enc === 'PROCESSING' || enc === 'ANALYZING') return { cls: 'chip--processing', label: '作成中', state: 'is-processing' };
+  if (line === 'SENT') return { cls: 'chip--line', label: 'LINE送信済み', state: '' };
+  if (line === 'FAILED') return { cls: 'chip--failed', label: 'LINE送信失敗', state: '' };
+  return { cls: 'chip--done', label: '作成済み', state: '' };
+}
+
+/* ======= ログイン ======= */
+async function login(id, password) {
+  const res = await fetch(`${API}/auth/login`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'X-Tenant-Id': TENANT_ID },
+    body: JSON.stringify({ id, password }),
+  });
+  if (!res.ok) {
+    const j = await res.json().catch(() => ({}));
+    throw new Error(j.error === 'Invalid credentials' ? 'IDまたはパスワードが違います' : (j.error || 'ログインできませんでした'));
+  }
+  return res.json();
+}
+
+function showApp() {
+  el('loginStage').classList.add('hidden');
+  el('app').classList.remove('hidden');
+  const staff = JSON.parse(sessionStorage.getItem(STAFF_KEY) || '{}');
+  el('staffTag').innerHTML = staff.displayName ? `<b>${esc(staff.displayName)}</b> さん` : '';
+  loadFacility();
+  loadPatients({ first: true });
+  if (autoTimer) clearInterval(autoTimer);
+  autoTimer = setInterval(() => loadPatients({ silent: true }), AUTO_REFRESH_MS);
+}
+
+function logout() {
+  sessionStorage.removeItem(TOKEN_KEY);
+  sessionStorage.removeItem(STAFF_KEY);
+  if (autoTimer) clearInterval(autoTimer);
+  location.reload();
+}
+
+/* ======= データ取得 ======= */
+async function loadFacility() {
+  try {
+    const res = await fetch(`${API}/facilities`, { headers: authHeaders() });
+    if (!res.ok) return;
+    const j = await res.json();
+    const f = (j.facilities || [])[0];
+    if (f) {
+      const chip = el('facilityChip');
+      chip.textContent = f.name;
+      chip.classList.remove('hidden');
+    }
+  } catch (e) { /* 表示用なので失敗は無視 */ }
+}
+
+async function loadPatients({ first = false, silent = false } = {}) {
+  const btn = el('refreshBtn');
+  if (!silent) btn.classList.add('is-spinning');
+  try {
+    const res = await fetch(`${API}/patients`, { headers: authHeaders() });
+    if (res.status === 401 || res.status === 403) { logout(); return; }
+    if (!res.ok) throw new Error(`patients ${res.status}`);
+    const j = await res.json();
+    patients = j.patients || [];
+
+    // 変化がなければDOMを触らない（閲覧中の点滅・スクロール飛び防止）
+    const sig = dataSignature(patients);
+    const changed = sig !== lastSignature;
+    lastSignature = sig;
+    if (!changed && silent) return;
+
+    renderPatientList();
+    if (selectedPatientId) renderLedger({ keepScroll: true, animate: !silent });
+    if (first && patients.length === 1) selectPatient(patients[0].id);
+  } catch (e) {
+    console.error('loadPatients error:', e);
+    if (!silent) toast('読み込みに失敗しました。通信環境をご確認ください');
+  } finally {
+    btn.classList.remove('is-spinning');
+  }
+}
+
+/* ======= 患者リスト ======= */
+function renderPatientList() {
+  const q = el('searchInput').value.trim();
+  const list = el('patientList');
+  const filtered = patients.filter(p => !q || (p.name || '').includes(q) || (p.kana || '').includes(q));
+
+  el('patientCount').textContent = `${filtered.length}名`;
+
+  if (!filtered.length) {
+    list.innerHTML = `<div class="shelf-empty">${q ? 'お名前に一致する患者さんがいません。' : 'まだ患者さんの記録がありません。<br>LINEから診察メモが作られると、ここに並びます。'}</div>`;
+    return;
+  }
+
+  // 最新記録が新しい順
+  const sorted = [...filtered].sort((a, b) => {
+    const da = a.records?.[0]?.date || '';
+    const db = b.records?.[0]?.date || '';
+    return db.localeCompare(da);
+  });
+
+  list.innerHTML = sorted.map(p => {
+    const latest = p.records?.[0];
+    const age = calcAge(p.dob);
+    const todayBadge = latest && new Date(latest.date).toDateString() === new Date().toDateString()
+      ? '<span class="patient-card__badge">今日</span>' : '';
+    return `
+      <button class="patient-card ${p.id === selectedPatientId ? 'is-active' : ''}" role="listitem" data-id="${esc(p.id)}">
+        ${todayBadge}
+        <div class="patient-card__name">${esc(p.name || 'LINE利用者')}<span class="patient-card__kana">${esc(p.kana || '')}</span>${p.lineUserId ? '<span class="line-tag">LINE</span>' : ''}</div>
+        <div class="patient-card__meta">${age != null ? `${age}歳 ・ ` : ''}記録 ${p.records?.length || 0}件${latest ? ` ・ 最終 ${fmtDate(latest.date).replace(/^\d+年/, '')}` : ''}</div>
+        ${latest ? `<div class="patient-card__snippet">${esc(cleanGist(latest))}</div>` : ''}
+      </button>
+    `;
+  }).join('');
+
+  list.querySelectorAll('.patient-card').forEach(card => {
+    card.addEventListener('click', () => selectPatient(card.dataset.id));
+  });
+}
+
+function selectPatient(id) {
+  selectedPatientId = id;
+  renderPatientList();
+  renderLedger();
+}
+
+/* ======= 薬歴帳 ======= */
+function renderLedger({ keepScroll = false, animate = true } = {}) {
+  const main = el('ledger');
+  const p = patients.find(x => x.id === selectedPatientId);
+  if (!p) return;
+
+  const scrollY = keepScroll ? main.scrollTop : 0;
+  const age = calcAge(p.dob);
+  const records = p.records || [];
+
+  const entries = records.map(r => {
+    const chip = recordChip(r);
+    const cd = r.clinicalData || {};
+    const pv = cd.patient_view;
+    const gist = cleanGist(r);
+    const soap = cd.soap || {};
+    const focus = cd.pharmacy_focus || {};
+    const alerts = cd.alerts || {};
+    const meta = cd.meta || {};
+    // 新スキーマ headline/points/care_points（旧 summary/talked_points/next_questions にフォールバック）
+    const headline = pv?.headline || pv?.summary || '';
+    const points = listify(pv?.points && pv.points.length ? pv.points : pv?.talked_points);
+    const carePoints = listify(pv?.care_points && pv.care_points.length ? pv.care_points : pv?.next_questions);
+    const meds = (focus.medications || []).map(m =>
+      typeof m === 'string' ? m : [m.name, m.status].filter(Boolean).join('・')
+    ).filter(Boolean);
+    const flags = listify(alerts.red_flags);
+    const needContact = listify(alerts.need_to_contact_physician);
+
+    // メイン: 患者さんに届いた診察メモ（patient_view）。旧記録は要点フォールバック
+    let mainView = '';
+    if (pv) {
+      mainView = `
+        <div class="gist">
+          <div class="gist-label">患者さんに届いた診察メモ</div>
+          ${pv.title ? `<p class="pv-title">${esc(pv.title)}</p>` : ''}
+          ${headline ? `<p class="pv-lead">${esc(headline)}</p>` : ''}
+          ${points.length ? `<ul class="pv-points">${points.map(t => `<li>${esc(t)}</li>`).join('')}</ul>` : ''}
+          ${pv.med_talk ? `<div class="pv-block pv-block--med"><b>お薬のこと</b><span>${esc(pv.med_talk)}</span></div>` : ''}
+          ${carePoints.length ? `<div class="pv-block pv-block--care"><b>気をつけること</b><ul>${carePoints.map(t => `<li>${esc(t)}</li>`).join('')}</ul></div>` : ''}
+        </div>
+      `;
+    } else if (gist) {
+      mainView = `<div class="gist"><div class="gist-label">今日の要点</div><p class="gist-text">${esc(gist)}</p></div>`;
+    }
+
+    const concernItems = [
+      ...listify(cd.patientMemo).map(v => `自分用メモ: ${v}`),
+      ...listify(meta.main_problems),
+      ...flags.map(v => `注意: ${v}`),
+    ];
+    const medicationItems = [
+      compactText(pv?.med_talk),
+      compactText(focus.adherence) ? `服薬状況: ${compactText(focus.adherence)}` : '',
+      ...listify(focus.side_effects).map(v => `副作用の話: ${v}`),
+      ...listify(focus.drug_related_problems).map(v => `お薬の確認: ${v}`),
+      ...listify(focus.labs_and_monitoring).map(v => `検査・確認: ${v}`),
+    ];
+    const nextVoiceItems = [
+      ...carePoints.map(v => `次回までに: ${v}`),
+      compactText(focus.follow_up),
+      compactText(meta.note_for_pharmacy),
+    ];
+    const supportItems = [
+      ...needContact.map(v => `連携確認: ${v}`),
+      ...listify(focus.patient_education).map(v => `説明の手がかり: ${v}`),
+      (!carePoints.length && !focus.follow_up && soap.p) ? `AI整理: ${soap.p}` : '',
+    ];
+    const understandingGrid = [
+      understandingCell('不安・気がかり', concernItems, 'understanding-cell--concern'),
+      understandingCell('お薬まわり', medicationItems, 'understanding-cell--med'),
+      understandingCell('次回の声かけ', nextVoiceItems, 'understanding-cell--voice'),
+      understandingCell('補足・連携', supportItems, 'understanding-cell--support'),
+    ].filter(Boolean).join('');
+
+    const pharmacistInner = [
+      understandingGrid ? `<div class="understanding-grid">${understandingGrid}</div>` : '',
+      meds.length ? `<div class="med-row">${meds.map(m => `<span class="med-chip">${esc(m)}</span>`).join('')}</div>` : '',
+    ].filter(Boolean).join('');
+
+    return `
+      <article class="entry ${chip.state}">
+        <div class="entry-date">
+          <time>${esc(fmtDate(r.date))}</time>
+          <span class="chip ${chip.cls}">${esc(chip.label)}</span>
+        </div>
+        <div class="entry-card">
+          ${mainView}
+          ${cd.patientMemo ? `<div class="memo-strip"><b>患者さんの自分用メモ</b>${esc(cd.patientMemo)}</div>` : ''}
+          ${pharmacistInner ? `<details class="transcript"><summary>患者理解メモ（薬局スタッフ向け）</summary><div class="pharmacist-body">${pharmacistInner}</div></details>` : ''}
+          ${r.transcript ? `<details class="transcript"><summary>会話の記録（文字起こし）</summary><pre>${esc(r.transcript)}</pre></details>` : ''}
+          <div class="entry-foot">
+            <span>記録: 患者さん本人（LINEから）</span>
+            <span>${r.lineDeliveryStatus === 'SENT' ? '本人のLINEに通知済み' : ''}</span>
+          </div>
+        </div>
+      </article>
+    `;
+  }).join('');
+
+  // LINEから取れる情報は表示名だけ。年齢・性別・カナは登録があるときのみ表示する。
+  const metaParts = [];
+  if (age != null) metaParts.push(`${age}歳`);
+  if (p.gender === 'male') metaParts.push('男性');
+  else if (p.gender === 'female') metaParts.push('女性');
+  metaParts.push(`診察メモ ${records.length}件`);
+
+  main.innerHTML = `
+    <div class="patient-head">
+      <h2>${esc(p.name || 'LINE利用者')}<small>${esc(p.kana || '')}</small>${p.lineUserId ? '<span class="line-tag">LINE</span>' : ''}</h2>
+      <div class="head-meta">${metaParts.join(' ・ ')}</div>
+      <div class="head-note">この画面は閲覧用です。記録は患者さん本人が作っています。</div>
+    </div>
+    ${records.length
+      ? `<div class="timeline ${animate ? '' : 'no-anim'}">${entries}</div>`
+      : `<div class="ledger-placeholder" style="height:60%"><div><strong>まだ診察メモがありません</strong><p>患者さんがLINEから録音すると、ここに届きます。</p></div></div>`}
+  `;
+  if (keepScroll) main.scrollTop = scrollY;
+}
+
+/* ======= 起動 ======= */
+document.addEventListener('DOMContentLoaded', () => {
+  el('loginForm').addEventListener('submit', async (ev) => {
+    ev.preventDefault();
+    const btn = el('loginBtn');
+    btn.disabled = true;
+    el('loginError').textContent = '';
+    try {
+      const j = await login(el('loginId').value.trim(), el('loginPw').value);
+      sessionStorage.setItem(TOKEN_KEY, j.token);
+      sessionStorage.setItem(STAFF_KEY, JSON.stringify(j.user || {}));
+      showApp();
+    } catch (e) {
+      el('loginError').textContent = e.message;
+    } finally {
+      btn.disabled = false;
+    }
+  });
+
+  el('refreshBtn').addEventListener('click', () => loadPatients());
+  el('logoutBtn').addEventListener('click', logout);
+  el('searchInput').addEventListener('input', renderPatientList);
+
+  if (token()) showApp();
+});
+</script>
+</body>
+</html>

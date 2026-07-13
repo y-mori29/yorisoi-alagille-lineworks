@@ -1,0 +1,35 @@
+# Dockerイメージへのコピー（COPY . .）から除外するもの。
+# .env / sa-key.json をイメージに焼き込まない（Cloud Run は ADC で認証する）。
+
+.env
+.env.*
+sa-key.json
+*.pem
+*.key
+
+node_modules/
+data/
+backups/
+output/
+
+test-*.js
+test_*.js
+debug-*.js
+debug_*.js
+verify_*.js
+check_models.js
+list-gemini-models.js
+register_local_files.js
+init-cors.js
+seed.js
+scripts/
+tests/
+bootstrap-yorisoi-env.sh
+stt-diag*.js
+*.zip
+*.log
+
+.git/
+.gitignore
+.gcloudignore
+Dockerfile

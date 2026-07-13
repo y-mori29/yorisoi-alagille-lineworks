@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>次に聞くこと - よりそい アラジール</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined">
+  <link rel="stylesheet" href="/css/alagille-family.css">
+  <link rel="stylesheet" href="/css/alagille-planning.css">
+  <script src="/js/account-guard.js"></script>
+</head>
+<body>
+  <main class="app no-tabbar planning-page">
+    <header class="screen-head">
+      <a class="round" href="/?disease=alagille" aria-label="ホームへ戻る"><span class="material-symbols-outlined">arrow_back</span></a>
+      <h1 class="screen-title">次に聞くこと</h1>
+      <a class="round" href="/simple/calendar.html?disease=alagille" aria-label="受診予定"><span class="material-symbols-outlined">calendar_month</span></a>
+    </header>
+
+    <section class="planning-patient" aria-label="健康記録の対象">
+      <img id="patient-avatar" src="/assets/alagille-brand/avatars/avatar-child-boy-v1.png" alt="">
+      <span><small>健康記録の対象</small><strong id="patient-name">読み込み中</strong></span>
+    </section>
+
+    <section class="panel question-intro">
+      <div><h2>受診前に、家族でメモ</h2><p>気になった時に短く残しておくと、診察で聞き忘れにくくなります。</p></div>
+      <img src="/assets/alagille-brand/ui-extracted/tile-question-bubble-v1.png" alt="質問の水彩イラスト">
+    </section>
+
+    <section class="panel planning-form" aria-label="質問を追加">
+      <h2><span class="material-symbols-outlined">contact_support</span><span id="question-form-title">聞きたいことを追加</span></h2>
+      <div class="question-categories">
+        <label class="question-category-option"><input type="radio" name="question-category" value="doctor" checked><span>診察全般</span></label>
+        <label class="question-category-option"><input type="radio" name="question-category" value="medication"><span>お薬</span></label>
+        <label class="question-category-option"><input type="radio" name="question-category" value="test"><span>検査</span></label>
+        <label class="question-category-option"><input type="radio" name="question-category" value="growth"><span>成長・食事</span></label>
+        <label class="question-category-option"><input type="radio" name="question-category" value="daily"><span>日々の様子</span></label>
+        <label class="question-category-option"><input type="radio" name="question-category" value="other"><span>その他</span></label>
+      </div>
+      <label class="planning-field">先生に聞きたいこと<textarea id="question-text" maxlength="500" placeholder="例：夜のかゆみが強い時は、どのように対応すればよいですか？"></textarea></label>
+      <label class="planning-field" id="answer-field" hidden>聞いた内容・回答メモ<textarea id="answer-memo" maxlength="1000" placeholder="診察で聞いた内容を短く残せます"></textarea></label>
+      <p class="planning-status" id="question-message" role="status"></p>
+      <div class="planning-actions"><button class="planning-cancel" id="cancel-question" type="button" hidden>編集をやめる</button><button class="planning-save" id="save-question" type="button"><span class="material-symbols-outlined">add_circle</span><span id="question-save-label">追加する</span></button></div>
+    </section>
+
+    <div class="section-row"><h2>次に聞くこと</h2><a href="/simple/calendar.html?disease=alagille">受診予定を見る</a></div>
+    <section class="planning-list" id="open-questions" aria-live="polite"></section>
+    <div class="section-row"><h2>確認済み</h2><span></span></div>
+    <section class="planning-list" id="asked-questions" aria-live="polite"></section>
+    <section class="panel notification-note">診察メモのAI整理で見つかった質問候補は、後の「先生に見せる」画面で確認します。自動で正規の質問には追加しません。</section>
+  </main>
+
+  <script>
+    const avatarArtwork = { "adult-man":"/assets/alagille-brand/avatars/avatar-adult-man-v1.png", "adult-woman":"/assets/alagille-brand/avatars/avatar-adult-woman-v1.png", "child-boy":"/assets/alagille-brand/avatars/avatar-child-boy-v1.png", "child-girl":"/assets/alagille-brand/avatars/avatar-child-girl-v1.png" };
+    const categoryLabels = { doctor:"診察全般", medication:"お薬", test:"検査", growth:"成長・食事", daily:"日々の様子", other:"その他" };
+    const state = { patientId:"", questions:[], editingId:null };
+    const $ = (id) => document.getElementById(id);
+
+    document.addEventListener("DOMContentLoaded", async () => {
+      $("save-question").addEventListener("click", saveQuestion); $("cancel-question").addEventListener("click", resetForm);
+      $("open-questions").addEventListener("click", handleAction); $("asked-questions").addEventListener("click", handleAction);
+      await loadPatient(); await loadQuestions();
+    });
+
+    async function loadPatient(){const response=await fetch("/api/family/patients");if(!response.ok)throw new Error("patient load failed");const result=await response.json();const savedId=localStorage.getItem("alagille-current-patient-id");const patient=result.patients.find((item)=>item.id===savedId)||result.patients[0];if(!patient)throw new Error("patient missing");state.patientId=patient.id;$("patient-name").textContent=patient.displayName;$("patient-avatar").src=avatarArtwork[patient.avatarKey]||avatarArtwork["child-boy"];}
+    async function loadQuestions(){$("question-message").textContent="質問を読み込んでいます…";try{const response=await fetch(`/api/questions?patientId=${encodeURIComponent(state.patientId)}`);const result=await response.json();if(!response.ok)throw new Error(result.error||"load failed");state.questions=result.questions||[];$("question-message").textContent="";renderQuestions();}catch{$("question-message").textContent="質問を読み込めませんでした。時間をおいてお試しください。";}}
+
+    async function saveQuestion(){const text=$("question-text").value.trim();if(!text){$("question-message").textContent="先生に聞きたいことを入力してください。";return;}const existing=state.questions.find((item)=>item.id===state.editingId);const payload={patientId:state.patientId,text,category:selectedCategory(),status:existing?.status||"open",answerMemo:$("answer-memo").value.trim(),askedAt:existing?.askedAt||""};const editing=Boolean(state.editingId);const button=$("save-question");button.disabled=true;$("question-message").textContent="保存しています…";try{const response=await fetch(editing?`/api/questions/${encodeURIComponent(state.editingId)}`:"/api/questions",{method:editing?"PATCH":"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)});const result=await response.json();if(!response.ok)throw new Error(result.error||"save failed");resetForm();await loadQuestions();$("question-message").textContent=editing?"変更を保存しました。":"聞きたいことを追加しました。";}catch{$("question-message").textContent="保存できませんでした。入力内容を確認してください。";}finally{button.disabled=false;}}
+
+    function renderQuestions(){renderList("open-questions",state.questions.filter((item)=>item.status==="open"),"まだ質問はありません。気になった時に短く残せます。");renderList("asked-questions",state.questions.filter((item)=>item.status==="asked"),"確認済みの質問はまだありません。");}
+    function renderList(id,items,emptyText){const root=$(id);root.replaceChildren();if(!items.length){const empty=document.createElement("div");empty.className="panel planning-empty";empty.textContent=emptyText;root.append(empty);return;}items.forEach((item)=>root.append(questionCard(item)));}
+    function questionCard(item){const card=document.createElement("article");card.className="panel question-card";card.dataset.status=item.status;const head=document.createElement("div");head.className="question-head";const copy=document.createElement("div");const category=document.createElement("span");category.className="question-category";category.textContent=categoryLabels[item.category]||categoryLabels.other;const title=document.createElement("h3");title.textContent=item.text;copy.append(category,title);const actions=document.createElement("span");actions.className="card-actions";actions.append(actionButton("edit","編集",item.id),actionButton("delete","削除",item.id));head.append(copy,actions);card.append(head);if(item.answerMemo){const answer=document.createElement("p");answer.className="answer-memo";answer.textContent=`回答メモ：${item.answerMemo}`;card.append(answer);}const check=document.createElement("button");check.type="button";check.className="question-check";check.dataset.action=item.status==="open"?"asked":"reopen";check.dataset.id=item.id;check.textContent=item.status==="open"?"診察で確認済みにする":"もう一度、次に聞くことへ戻す";card.append(check);return card;}
+    function actionButton(action,label,id){const button=document.createElement("button");button.type="button";button.dataset.action=action;button.dataset.id=id;button.setAttribute("aria-label",label);const icon=document.createElement("span");icon.className="material-symbols-outlined";icon.textContent=action;button.append(icon);return button;}
+
+    async function handleAction(event){const button=event.target.closest("button[data-action]");if(!button)return;const item=state.questions.find((record)=>record.id===button.dataset.id);if(!item)return;if(button.dataset.action==="edit")startEdit(item);else if(button.dataset.action==="delete")await deleteQuestion(item);else await changeStatus(item,button.dataset.action==="asked"?"asked":"open");}
+    function startEdit(item){state.editingId=item.id;$("question-text").value=item.text;$("answer-memo").value=item.answerMemo||"";document.querySelector(`input[name="question-category"][value="${item.category}"]`).checked=true;$("answer-field").hidden=item.status!=="asked";$("question-form-title").textContent="聞きたいことを編集";$("question-save-label").textContent="変更を保存";$("cancel-question").hidden=false;window.scrollTo({top:0,behavior:"smooth"});}
+    async function changeStatus(item,status){const payload={patientId:state.patientId,text:item.text,category:item.category,status,answerMemo:item.answerMemo||"",askedAt:status==="asked"?new Date().toISOString():""};try{const response=await fetch(`/api/questions/${encodeURIComponent(item.id)}`,{method:"PATCH",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)});const result=await response.json();if(!response.ok)throw new Error(result.error);await loadQuestions();$("question-message").textContent=status==="asked"?"確認済みに移しました。":"次に聞くことへ戻しました。";}catch{$("question-message").textContent="変更できませんでした。";}}
+    async function deleteQuestion(item){if(!confirm("この質問を削除しますか？"))return;try{const response=await fetch(`/api/questions/${encodeURIComponent(item.id)}?patientId=${encodeURIComponent(state.patientId)}`,{method:"DELETE"});const result=await response.json();if(!response.ok)throw new Error(result.error);await loadQuestions();$("question-message").textContent="質問を削除しました。";}catch{$("question-message").textContent="削除できませんでした。";}}
+    function resetForm(){state.editingId=null;$("question-text").value="";$("answer-memo").value="";document.querySelector('input[name="question-category"][value="doctor"]').checked=true;$("answer-field").hidden=true;$("question-form-title").textContent="聞きたいことを追加";$("question-save-label").textContent="追加する";$("cancel-question").hidden=true;}
+    function selectedCategory(){return document.querySelector('input[name="question-category"]:checked')?.value||"other";}
+  </script>
+</body>
+</html>

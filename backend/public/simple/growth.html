@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>成長のきろく - よりそい アラジール</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined">
+  <link rel="stylesheet" href="/css/alagille-family.css">
+  <script src="/js/account-guard.js"></script>
+  <style>
+    .tabs { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+    .tab { min-height: 45px; border-radius: 8px; border: 1.5px solid var(--line); background: rgba(255,255,255,.82); color: #6b5748; display: grid; place-items: center; font: inherit; font-weight: 900; text-decoration: none; }
+    .tab.active { color: #fff; border-color: var(--mint); background: linear-gradient(180deg, #5ed0bf, var(--mint)); box-shadow: 0 10px 20px rgba(29,169,157,.16); }
+    .metrics { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+    .metric { min-height: 76px; padding: 11px; display: grid; grid-template-columns: 38px 1fr; gap: 8px; align-items: center; }
+    .metric-icon { width: 38px; height: 38px; border-radius: 14px; display: grid; place-items: center; background: #fff8de; color: var(--honey); }
+    .metric.weight .metric-icon { background: var(--sky-soft); color: var(--sky); }
+    .metric-label { font-size: 12px; font-weight: 900; color: var(--muted); }
+    .metric-value { display: block; color: var(--mint); font-size: 24px; line-height: 1.1; font-weight: 950; }
+    .unit { font-size: 12px; color: var(--muted); margin-left: 2px; }
+    .delta { display: block; color: var(--mint); font-size: 12px; font-weight: 850; margin-top: 2px; }
+    .growth-form { padding: 14px; margin-bottom: 14px; background: linear-gradient(135deg,#fffdf8,#f0fbf8); border-color: rgba(142,219,210,.58); }
+    .form-title { margin: 0 0 10px; color: #58483c; font-size: 15px; line-height: 1.45; font-weight: 900; display: flex; align-items: center; gap: 6px; }
+    .form-title .material-symbols-outlined { color: var(--mint); font-size: 21px; }
+    .input-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; }
+    .field { display: grid; gap: 5px; color: #6a5a49; font-size: 12px; font-weight: 900; }
+    .field.full { grid-column: 1 / -1; }
+    input, textarea { width: 100%; border: 1.5px solid #e4ddd5; border-radius: 13px; background: #fffdfa; color: var(--ink); font: inherit; font-size: 14px; font-weight: 800; padding: 10px 11px; outline: none; }
+    textarea { min-height: 66px; resize: vertical; line-height: 1.6; }
+    input:focus, textarea:focus { border-color: var(--mint-line); box-shadow: 0 0 0 3px rgba(142,219,210,.22); }
+    .save-growth { width: 100%; min-height: 48px; margin-top: 11px; border: none; border-radius: 16px; background: var(--mint); color: #fff; font: inherit; font-size: 14px; font-weight: 900; display: inline-flex; align-items: center; justify-content: center; gap: 7px; box-shadow: 0 10px 18px rgba(29,169,157,.18); }
+    .recent-growth { margin-top: 10px; display: grid; gap: 7px; }
+    .recent-row { min-height: 52px; padding: 9px 10px; border-radius: 8px; background: rgba(255,255,255,.82); color: #5f554c; font-size: 12px; line-height: 1.45; font-weight: 850; display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 8px; }
+    .recent-row small { color: var(--muted); font-weight: 800; }
+    .recent-actions { display: flex; gap: 5px; }
+    .recent-actions button { width: 38px; height: 38px; display: grid; place-items: center; border: 1px solid #ddd6cd; border-radius: 8px; color: #70645b; background: #fff; }
+    .recent-actions .delete { color: #b45149; }
+    .recent-actions .material-symbols-outlined { font-size: 19px; }
+    .chart-panel { padding: 15px; margin-bottom: 14px; }
+    .panel-title { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; font-size: 15px; line-height: 1.45; font-weight: 900; }
+    .panel-title small { color: var(--muted); font-size: 11px; font-weight: 850; }
+    .info { width: 23px; height: 23px; border-radius: 999px; border: 1.4px solid #bfd5ce; color: #6e827d; display: grid; place-items: center; font-size: 13px; }
+    .chart { height: 260px; position: relative; padding: 8px 0 0; }
+    .chart canvas { width: 100%; height: 240px; display: block; }
+    .chart-empty { height: 240px; display: grid; place-items: center; padding: 24px; color: var(--muted); text-align: center; font-size: 13px; line-height: 1.65; font-weight: 800; }
+    .axis { position: absolute; left: 33px; right: 8px; top: 24px; bottom: 38px; border-left: 1.5px solid #bdcbc7; border-bottom: 1.5px solid #bdcbc7; background: repeating-linear-gradient(to top, transparent 0 47px, rgba(160,170,166,.18) 48px); }
+    .chart svg { position: absolute; left: 39px; top: 54px; width: calc(100% - 50px); height: 155px; overflow: visible; }
+    .bubble { position: absolute; left: 62%; top: 60px; padding: 8px 12px; border-radius: 15px; background: #55c7b8; color: #fff; font-size: 12px; line-height: 1.35; text-align: center; font-weight: 900; box-shadow: 0 8px 18px rgba(85,199,184,.25); }
+    .dot { position: absolute; left: 70%; top: 141px; width: 19px; height: 19px; border-radius: 999px; background: #55c7b8; border: 4px solid #fff; box-shadow: 0 4px 10px rgba(31,113,102,.25); }
+    .yl, .xl { position: absolute; color: #6e827d; font-size: 11px; font-weight: 850; }
+    .y1 { left: 4px; top: 45px; } .y2 { left: 4px; top: 119px; } .y3 { left: 10px; top: 192px; }
+    .x1 { left: 62px; bottom: 0; } .x2 { left: 134px; bottom: 0; } .x3 { left: 206px; bottom: 0; } .x4 { right: 28px; bottom: 0; }
+    .legend { display: flex; justify-content: center; gap: 8px; }
+    .legend span { padding: 4px 12px; border-radius: 999px; background: #edf7f3; color: #5c756f; font-size: 11px; font-weight: 850; }
+    .memo { padding: 13px 14px; display: grid; grid-template-columns: 1fr 82px; gap: 10px; align-items: end; background: linear-gradient(135deg,#fffdf8,#f1fbf7); margin-bottom: 14px; }
+    .memo-title { margin: 0 0 8px; color: #6a5a49; font-size: 15px; font-weight: 900; }
+    .memo-title .material-symbols-outlined { color: var(--mint); font-size: 21px; vertical-align: -5px; }
+    .memo p { margin: 0; color: #5f554c; font-size: 13px; line-height: 1.8; font-weight: 800; }
+    .growth-art { width: 78px; align-self: end; }
+    .notice { padding: 15px; text-align: center; color: var(--mint); font-size: 13px; line-height: 1.7; font-weight: 900; }
+    .growth-patient { min-height: 68px; display: grid; grid-template-columns: 48px 1fr; align-items: center; gap: 10px; margin: 12px 0 14px; padding: 9px 11px; border: 1.5px solid rgba(111,149,84,.32); border-radius: 8px; background: linear-gradient(100deg,rgba(237,246,232,.92),rgba(255,255,255,.88)); }
+    .growth-patient img { width: 48px; height: 48px; border-radius: 8px; object-fit: cover; background: #fff; }
+    .growth-patient small, .growth-patient strong { display: block; }
+    .growth-patient small { color: var(--sage); font-size: 11px; font-weight: 900; }
+    .growth-patient strong { margin-top: 2px; font-size: 17px; }
+    .form-message { min-height: 18px; margin: 8px 0 0; color: #765f4a; font-size: 12px; font-weight: 800; }
+    .form-buttons { display: grid; grid-template-columns: 1fr 1.6fr; gap: 8px; }
+    .cancel-growth { min-height: 48px; margin-top: 11px; border: 1.5px solid #ddd6cd; border-radius: 8px; color: #70645b; background: #fff; font: inherit; font-weight: 900; }
+    .growth-tutorial-banner { margin-bottom: 10px; padding: 11px 12px; display: grid; grid-template-columns: 28px 1fr auto; gap: 8px; align-items: center; border: 1.5px solid rgba(225,171,55,.42); border-radius: 8px; background: #fff8df; color: #705b2f; }
+    .growth-tutorial-banner .material-symbols-outlined { color: var(--honey); }
+    .growth-tutorial-banner strong,.growth-tutorial-banner small { display: block; }
+    .growth-tutorial-banner strong { font-size: 12px; }.growth-tutorial-banner small { margin-top: 2px; font-size: 10px; line-height: 1.45; font-weight: 760; }
+    .growth-tutorial-banner button,.growth-tutorial-start { min-height: 40px; border: 1.5px solid rgba(29,169,157,.34); border-radius: 8px; color: var(--mint); background: #fff; font: inherit; font-size: 11px; font-weight: 900; }
+    .growth-tutorial-start { width: 100%; margin-bottom: 12px; display: flex; align-items: center; justify-content: center; gap: 6px; }
+  </style>
+</head>
+<body>
+  <main class="app no-tabbar">
+    <header class="screen-head">
+      <a class="round" href="/?disease=alagille" aria-label="戻る"><span class="material-symbols-outlined">arrow_back</span></a>
+      <h1 class="screen-title">成長のきろく</h1>
+      <a class="round" href="/simple/calendar.html?disease=alagille" aria-label="カレンダー"><span class="material-symbols-outlined">calendar_month</span></a>
+    </header>
+
+    <section class="growth-patient" aria-label="健康記録の対象">
+      <img id="patient-avatar" src="/assets/alagille-brand/avatars/avatar-child-boy-v1.png" alt="">
+      <span><small>健康記録の対象</small><strong id="patient-name">読み込み中</strong></span>
+    </section>
+
+    <aside class="growth-tutorial-banner" id="growth-tutorial-banner" hidden><span class="material-symbols-outlined">school</span><span><strong>使い方のお試し中</strong><small>入力・グラフ・編集を試しても、実際の記録には保存されません。</small></span><button id="finish-growth-tutorial" type="button">終了</button></aside>
+    <button class="growth-tutorial-start" id="start-growth-tutorial" type="button"><span class="material-symbols-outlined">play_circle</span>使い方をお試しする</button>
+
+    <nav class="tabs" aria-label="成長記録の表示切り替え">
+      <button class="tab active" type="button" data-chart="height">身長の推移</button>
+      <button class="tab" type="button" data-chart="weight">体重の推移</button>
+    </nav>
+
+    <section class="metrics" aria-label="最新の成長記録">
+      <div class="panel metric"><span class="metric-icon"><span class="material-symbols-outlined">straighten</span></span><span><span class="metric-label">身長</span><span class="metric-value" id="height-value">102.3<span class="unit">cm</span></span><span class="delta" id="height-delta">前回より +1.4 cm</span></span></div>
+      <div class="panel metric weight"><span class="metric-icon"><span class="material-symbols-outlined">monitor_weight</span></span><span><span class="metric-label">体重</span><span class="metric-value" id="weight-value">15.8<span class="unit">kg</span></span><span class="delta" id="weight-delta">前回より +0.4 kg</span></span></div>
+    </section>
+
+    <section class="panel growth-form" aria-label="成長記録を追加">
+      <h2 class="form-title" id="growth-form-title"><span class="material-symbols-outlined">edit</span>身長・体重を残す</h2>
+      <div class="input-grid">
+        <label class="field">日付<input id="growth-date" type="date"></label>
+        <label class="field">身長 cm<input id="growth-height" type="number" step="0.1" inputmode="decimal" placeholder="102.3"></label>
+        <label class="field">体重 kg<input id="growth-weight" type="number" step="0.1" inputmode="decimal" placeholder="15.8"></label>
+        <label class="field full">メモ<textarea id="growth-memo" placeholder="食欲、かゆみ、睡眠、園や学校での様子など"></textarea></label>
+      </div>
+      <p class="form-message" id="form-message" role="status"></p>
+      <div class="form-buttons"><button class="cancel-growth" id="cancel-growth" type="button" hidden>編集をやめる</button><button class="save-growth" id="save-growth" type="button"><span class="material-symbols-outlined">add_circle</span><span id="save-label">記録する</span></button></div>
+      <div class="recent-growth" id="recent-growth" aria-live="polite"></div>
+    </section>
+
+    <section class="panel chart-panel" id="height-weight">
+      <div class="panel-title"><span id="chart-title">身長の推移 <small>（記録した実測値）</small></span><span class="info">i</span></div>
+      <div class="chart" aria-label="身長の推移グラフ">
+        <canvas id="growth-chart" width="700" height="300"></canvas>
+        <div id="chart-empty" class="chart-empty" hidden>記録が2件以上になると、推移を線で確認できます。</div>
+      </div>
+      <div class="legend"><span id="chart-legend">身長 cm</span></div>
+    </section>
+
+    <section class="panel memo" id="review">
+      <div><h2 class="memo-title"><span class="material-symbols-outlined">edit</span> 最近のメモ</h2><p id="latest-memo">記録したメモがここに表示されます。</p></div>
+      <img class="asset growth-art" src="/assets/alagille-brand/trimmed/05-growth-child-ruler.png" alt="身長を測るお子さんのイラスト">
+    </section>
+
+    <section class="panel notice">診断ではなく、受診時に見返すための補助です。<br>気になる変化は主治医にご相談ください。</section>
+  </main>
+  <script>
+    const avatarArtwork = {
+      "adult-man": "/assets/alagille-brand/avatars/avatar-adult-man-v1.png",
+      "adult-woman": "/assets/alagille-brand/avatars/avatar-adult-woman-v1.png",
+      "child-boy": "/assets/alagille-brand/avatars/avatar-child-boy-v1.png",
+      "child-girl": "/assets/alagille-brand/avatars/avatar-child-girl-v1.png"
+    };
+    const state = { patientId: "", records: [], realRecords: [], editingId: null, chart: "height", tutorial: false };
+    const $ = (id) => document.getElementById(id);
+
+    document.addEventListener("DOMContentLoaded", async () => {
+      $("growth-date").value = new Date().toISOString().slice(0, 10);
+      $("save-growth").addEventListener("click", saveGrowthRecord);
+      $("cancel-growth").addEventListener("click", resetForm);
+      $("start-growth-tutorial").addEventListener("click", startGrowthTutorial);
+      $("finish-growth-tutorial").addEventListener("click", finishGrowthTutorial);
+      document.querySelectorAll("[data-chart]").forEach((button) => button.addEventListener("click", () => setChart(button.dataset.chart)));
+      $("recent-growth").addEventListener("click", handleRecordAction);
+      window.addEventListener("resize", () => drawChart());
+      await loadPatient();
+      await loadGrowthRecords();
+    });
+
+    async function loadPatient() {
+      const response = await fetch("/api/family/patients");
+      if (!response.ok) throw new Error("patient load failed");
+      const result = await response.json();
+      const savedId = localStorage.getItem("alagille-current-patient-id");
+      const patient = result.patients.find((item) => item.id === savedId) || result.patients[0];
+      if (!patient) throw new Error("patient missing");
+      state.patientId = patient.id;
+      $("patient-name").textContent = patient.displayName;
+      $("patient-avatar").src = avatarArtwork[patient.avatarKey] || avatarArtwork["child-boy"];
+    }
+
+    async function loadGrowthRecords() {
+      $("form-message").textContent = "成長記録を読み込んでいます…";
+      try {
+        const response = await fetch(`/api/growth-records?patientId=${encodeURIComponent(state.patientId)}`);
+        const result = await response.json();
+        if (!response.ok) throw new Error(result.error || "load failed");
+        state.realRecords = result.records || [];
+        if (!state.tutorial) state.records = state.realRecords;
+        $("form-message").textContent = "";
+        renderGrowthRecords();
+      } catch {
+        $("form-message").textContent = "成長記録を読み込めませんでした。時間をおいてお試しください。";
+      }
+    }
+
+    async function saveGrowthRecord() {
+      const heightValue = $("growth-height").value;
+      const weightValue = $("growth-weight").value;
+      if (!heightValue && !weightValue) {
+        $("form-message").textContent = "身長または体重を入力してください。";
+        return;
+      }
+      const payload = {
+        patientId: state.patientId,
+        measuredAt: $("growth-date").value,
+        heightCm: heightValue === "" ? null : Number(heightValue),
+        weightKg: weightValue === "" ? null : Number(weightValue),
+        memo: $("growth-memo").value.trim()
+      };
+      const button = $("save-growth");
+      button.disabled = true;
+      $("form-message").textContent = state.tutorial ? "お試し記録へ反映しています…" : "保存しています…";
+      try {
+        const editing = Boolean(state.editingId);
+        if (state.tutorial) {
+          const tutorialRecord = { id: editing ? state.editingId : `tutorial-growth-${Date.now()}`, measuredAt: payload.measuredAt, heightCm: payload.heightCm, weightKg: payload.weightKg, memo: payload.memo, isTutorial: true };
+          state.records = editing ? state.records.map((item) => item.id === state.editingId ? tutorialRecord : item) : [tutorialRecord, ...state.records];
+          state.records.sort((a,b) => b.measuredAt.localeCompare(a.measuredAt));
+          resetForm();
+          renderGrowthRecords();
+          $("form-message").textContent = editing ? "お試しの変更を反映しました。実際の記録には保存されていません。" : "お試し記録を追加しました。実際の記録には保存されていません。";
+          return;
+        }
+        const response = await fetch(editing ? `/api/growth-records/${encodeURIComponent(state.editingId)}` : "/api/growth-records", {
+          method: editing ? "PATCH" : "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+        const result = await response.json();
+        if (!response.ok) throw new Error(result.error || "save failed");
+        resetForm();
+        await loadGrowthRecords();
+        $("form-message").textContent = editing ? "変更を保存しました。" : "成長記録を保存しました。";
+      } catch {
+        $("form-message").textContent = "保存できませんでした。入力内容を確認してください。";
+      } finally {
+        button.disabled = false;
+      }
+    }
+
+    function renderGrowthRecords() {
+      const latestHeight = state.records.find((item) => item.heightCm !== null);
+      const previousHeight = state.records.find((item) => item.id !== latestHeight?.id && item.heightCm !== null);
+      const latestWeight = state.records.find((item) => item.weightKg !== null);
+      const previousWeight = state.records.find((item) => item.id !== latestWeight?.id && item.weightKg !== null);
+      $("height-value").innerHTML = latestHeight ? `${latestHeight.heightCm.toFixed(1)}<span class="unit">cm</span>` : `--<span class="unit">cm</span>`;
+      $("weight-value").innerHTML = latestWeight ? `${latestWeight.weightKg.toFixed(1)}<span class="unit">kg</span>` : `--<span class="unit">kg</span>`;
+      $("height-delta").textContent = latestHeight && previousHeight ? `前回より ${formatDelta(latestHeight.heightCm - previousHeight.heightCm)} cm` : "身長を記録できます";
+      $("weight-delta").textContent = latestWeight && previousWeight ? `前回より ${formatDelta(latestWeight.weightKg - previousWeight.weightKg)} kg` : "体重を記録できます";
+      $("latest-memo").textContent = state.records.find((item) => item.memo)?.memo || "記録したメモがここに表示されます。";
+      const root = $("recent-growth");
+      root.replaceChildren();
+      if (!state.records.length) {
+        const empty = document.createElement("p");
+        empty.className = "recent-row";
+        empty.textContent = "まだ記録がありません。身長または体重から始められます。";
+        root.append(empty);
+      } else state.records.slice(0, 10).forEach((record) => root.append(recordRow(record)));
+      drawChart();
+    }
+
+    function recordRow(record) {
+      const row = document.createElement("div");
+      row.className = "recent-row";
+      const copy = document.createElement("span");
+      const values = [record.heightCm !== null ? `${record.heightCm.toFixed(1)}cm` : "", record.weightKg !== null ? `${record.weightKg.toFixed(1)}kg` : ""].filter(Boolean).join(" / ");
+      copy.append(document.createTextNode(`${formatDate(record.measuredAt)} ${values}`));
+      if (record.memo) { const memo = document.createElement("small"); memo.textContent = record.memo; copy.append(document.createElement("br"), memo); }
+      const actions = document.createElement("span"); actions.className = "recent-actions";
+      actions.append(iconButton("edit", "編集", record.id), iconButton("delete", "削除", record.id, "delete"));
+      row.append(copy, actions);
+      return row;
+    }
+
+    function iconButton(action, label, id, className = "") {
+      const button = document.createElement("button");
+      button.type = "button"; button.dataset.action = action; button.dataset.id = id; button.className = className; button.setAttribute("aria-label", label);
+      const icon = document.createElement("span"); icon.className = "material-symbols-outlined"; icon.textContent = action;
+      button.append(icon); return button;
+    }
+
+    async function handleRecordAction(event) {
+      const button = event.target.closest("button[data-action]");
+      if (!button) return;
+      const record = state.records.find((item) => item.id === button.dataset.id);
+      if (!record) return;
+      if (button.dataset.action === "edit") startEdit(record);
+      if (button.dataset.action === "delete") await deleteRecord(record);
+    }
+
+    function startEdit(record) {
+      state.editingId = record.id;
+      $("growth-date").value = record.measuredAt;
+      $("growth-height").value = record.heightCm ?? "";
+      $("growth-weight").value = record.weightKg ?? "";
+      $("growth-memo").value = record.memo || "";
+      $("growth-form-title").lastChild.textContent = "成長記録を編集";
+      $("save-label").textContent = "変更を保存";
+      $("cancel-growth").hidden = false;
+      $("growth-date").focus();
+    }
+
+    function resetForm() {
+      state.editingId = null;
+      $("growth-date").value = new Date().toISOString().slice(0, 10);
+      $("growth-height").value = ""; $("growth-weight").value = ""; $("growth-memo").value = "";
+      $("growth-form-title").lastChild.textContent = "身長・体重を残す";
+      $("save-label").textContent = "記録する";
+      $("cancel-growth").hidden = true;
+    }
+
+    async function deleteRecord(record) {
+      if (state.tutorial) {
+        state.records = state.records.filter((item) => item.id !== record.id);
+        resetForm(); renderGrowthRecords();
+        $("form-message").textContent = "お試し記録を削除しました。実際の記録には影響しません。";
+        return;
+      }
+      if (!window.confirm(`${formatDate(record.measuredAt)}の成長記録を削除しますか？\nこの操作は元に戻せません。`)) return;
+      try {
+        const response = await fetch(`/api/growth-records/${encodeURIComponent(record.id)}?patientId=${encodeURIComponent(state.patientId)}`, { method: "DELETE" });
+        if (!response.ok) throw new Error();
+        await loadGrowthRecords();
+        $("form-message").textContent = "成長記録を削除しました。";
+      } catch { $("form-message").textContent = "削除できませんでした。時間をおいてお試しください。"; }
+    }
+
+    function setChart(chart) {
+      state.chart = chart;
+      document.querySelectorAll("[data-chart]").forEach((button) => button.classList.toggle("active", button.dataset.chart === chart));
+      $("chart-title").innerHTML = `${chart === "height" ? "身長" : "体重"}の推移 <small>（記録した実測値）</small>`;
+      $("chart-legend").textContent = chart === "height" ? "身長 cm" : "体重 kg";
+      drawChart();
+    }
+
+    function startGrowthTutorial() {
+      state.tutorial = true;
+      state.records = [
+        { id:"tutorial-growth-new", measuredAt:"2026-07-13", heightCm:107.2, weightKg:17.6, memo:"食欲と睡眠の様子も一緒にメモできます。", isTutorial:true },
+        { id:"tutorial-growth-old", measuredAt:"2026-05-25", heightCm:105.8, weightKg:17.2, memo:"前回の架空記録です。", isTutorial:true }
+      ];
+      $("growth-tutorial-banner").hidden = false;
+      $("start-growth-tutorial").hidden = true;
+      $("growth-date").value = "2026-07-13";
+      $("growth-height").value = "107.2";
+      $("growth-weight").value = "17.6";
+      $("growth-memo").value = "食欲と睡眠の様子も一緒にメモできます。";
+      $("form-message").textContent = "架空の2回分を表示しています。値を変えて「記録する」を押してみてください。";
+      renderGrowthRecords();
+    }
+
+    function finishGrowthTutorial() {
+      state.tutorial = false;
+      state.records = state.realRecords;
+      $("growth-tutorial-banner").hidden = true;
+      $("start-growth-tutorial").hidden = false;
+      resetForm(); renderGrowthRecords();
+      $("form-message").textContent = "お試しを終了しました。実際の記録には何も追加されていません。";
+    }
+
+    function drawChart() {
+      const key = state.chart === "height" ? "heightCm" : "weightKg";
+      const points = state.records.filter((item) => item[key] !== null).sort((a, b) => a.measuredAt.localeCompare(b.measuredAt));
+      const canvas = $("growth-chart");
+      const empty = $("chart-empty");
+      canvas.hidden = points.length < 2; empty.hidden = points.length >= 2;
+      if (points.length < 2) return;
+      const width = canvas.clientWidth || 350, height = 240, dpr = window.devicePixelRatio || 1;
+      canvas.width = Math.round(width * dpr); canvas.height = Math.round(height * dpr);
+      const ctx = canvas.getContext("2d"); ctx.scale(dpr, dpr); ctx.clearRect(0, 0, width, height);
+      const pad = { left: 42, right: 14, top: 18, bottom: 38 };
+      const values = points.map((item) => item[key]);
+      const spread = Math.max(...values) - Math.min(...values) || 1;
+      const min = Math.min(...values) - spread * .18, max = Math.max(...values) + spread * .18;
+      ctx.strokeStyle = "rgba(142,159,154,.28)"; ctx.lineWidth = 1; ctx.fillStyle = "#6e827d"; ctx.font = "11px sans-serif";
+      for (let i = 0; i < 4; i++) { const y = pad.top + (height-pad.top-pad.bottom) * i / 3; ctx.beginPath(); ctx.moveTo(pad.left,y); ctx.lineTo(width-pad.right,y); ctx.stroke(); ctx.fillText((max-(max-min)*i/3).toFixed(1),2,y+4); }
+      const coords = points.map((item,index) => ({ x: pad.left + (width-pad.left-pad.right)*index/(points.length-1), y: pad.top + (max-item[key])/(max-min)*(height-pad.top-pad.bottom), item }));
+      ctx.strokeStyle = state.chart === "height" ? "#1da99d" : "#5f9fc8"; ctx.lineWidth = 4; ctx.lineCap = "round"; ctx.lineJoin = "round"; ctx.beginPath();
+      coords.forEach((point,index) => index ? ctx.lineTo(point.x,point.y) : ctx.moveTo(point.x,point.y)); ctx.stroke();
+      coords.forEach((point) => { ctx.fillStyle="#fff"; ctx.beginPath(); ctx.arc(point.x,point.y,6,0,Math.PI*2); ctx.fill(); ctx.strokeStyle=state.chart === "height" ? "#1da99d" : "#5f9fc8"; ctx.lineWidth=3; ctx.stroke(); });
+      ctx.fillStyle="#6e827d"; ctx.font="10px sans-serif"; ctx.textAlign="center";
+      const labels = coords.length > 4 ? [coords[0],coords[Math.floor((coords.length-1)/2)],coords[coords.length-1]] : coords;
+      labels.forEach((point) => ctx.fillText(formatShortDate(point.item.measuredAt),point.x,height-14));
+    }
+
+    function formatDelta(value) {
+      return `${value >= 0 ? "+" : ""}${value.toFixed(1)}`;
+    }
+
+    function formatDate(value) {
+      const d = new Date(value + "T00:00:00");
+      return `${d.getFullYear()}/${d.getMonth() + 1}/${d.getDate()}`;
+    }
+    function formatShortDate(value) { const parts = value.split("-"); return `${Number(parts[1])}/${Number(parts[2])}`; }
+  </script>
+</body>
+</html>

@@ -1,0 +1,242 @@
+{
+  "id": "parkinson",
+  "name": "パーキンソン病",
+  "shortName": "PD",
+  "description": "パーキンソン病（Parkinson's Disease）の治療歴・薬・症状を管理",
+  "color": "#6366f1",
+  "icon": "neurology",
+
+  "modules": [
+    {
+      "id": "timeline",
+      "label": "治療タイムライン",
+      "description": "治療経歴を時系列で管理",
+      "icon": "timeline",
+      "page": "timeline.html",
+      "enabled": true,
+      "core": true
+    },
+    {
+      "id": "medications",
+      "label": "おくすり管理",
+      "description": "処方薬と変更履歴",
+      "icon": "medication",
+      "page": "medications.html",
+      "enabled": true,
+      "core": true
+    },
+    {
+      "id": "symptom-log",
+      "label": "症状きろく",
+      "description": "毎日の体調をかんたん記録",
+      "icon": "edit_note",
+      "page": "symptom-log.html",
+      "enabled": true
+    },
+    {
+      "id": "restroom",
+      "label": "トイレさがし",
+      "description": "近くのトイレをマップで表示",
+      "icon": "wc",
+      "page": "restroom.html",
+      "enabled": false
+    },
+    {
+      "id": "emergency-card",
+      "label": "緊急カード",
+      "description": "救急時に見せる情報カード",
+      "icon": "emergency",
+      "page": "emergency-card.html",
+      "enabled": true,
+      "core": true
+    },
+    {
+      "id": "lab-tracker",
+      "label": "検査値きろく",
+      "description": "血液検査の推移をグラフ表示",
+      "icon": "science",
+      "page": "lab-tracker.html",
+      "enabled": true,
+      "core": true
+    },
+    {
+      "id": "summary",
+      "label": "診察用サマリー",
+      "description": "診察時に医師に見せる画面",
+      "icon": "description",
+      "page": "summary.html",
+      "enabled": true,
+      "core": true,
+      "fullWidth": true
+    },
+    {
+      "id": "resources",
+      "label": "患者会・支援情報",
+      "description": "患者会・医療費助成・診療拠点情報",
+      "icon": "groups",
+      "page": "resources.html",
+      "enabled": true,
+      "core": true,
+      "fullWidth": true
+    }
+  ],
+
+  "medicationMaster": "pd-medications.json",
+
+  "resourcesConfig": {
+    "title": "患者会・支援情報",
+    "intro": "パーキンソン病（指定難病6）は国内推計患者数約20万人、高齢化に伴い増加している神経難病です。同じ経験を持つ仲間と繋がる、公的支援を使う、診療拠点を知る ── そんな時に役立つ情報をまとめました。",
+    "sections": [
+      {
+        "heading": "患者会・ピアサポート",
+        "icon": "groups",
+        "items": [
+          { "name": "一般社団法人 全国パーキンソン病友の会（JPDA）", "url": "https://jpda.jp/", "note": "全国43都道府県に支部・会員約6,000名。医療講演会・リハビリ講習・体操やコーラスなど地域活動が充実。" },
+          { "name": "全国パーキンソン病友の会 各都道府県支部", "url": "https://jpda.jp/%E5%90%84%E9%83%BD%E9%81%93%E5%BA%9C%E7%9C%8C%E6%94%AF%E9%83%A8%E3%81%AE%E6%83%85%E5%A0%B1/", "note": "お住まいの地域の支部・定例会・連絡先を検索。はじめの一歩はここから。" }
+        ]
+      },
+      {
+        "heading": "公的支援・医療費助成",
+        "icon": "account_balance",
+        "items": [
+          { "name": "難病情報センター：パーキンソン病（指定難病6）", "url": "https://www.nanbyou.or.jp/entry/314", "note": "疾患解説・ヤール重症度・医療費助成の要件・申請方法をまとめた公式ページ。" },
+          { "name": "日本難病・疾病団体協議会（JPA）", "url": "https://nanbyo.jp/", "note": "難病相談支援センター・就労支援・介護保険との併用など制度相談の入口。" }
+        ]
+      },
+      {
+        "heading": "医療情報・診療拠点",
+        "icon": "local_hospital",
+        "items": [
+          { "name": "日本神経学会：パーキンソン病診療ガイドライン2018", "url": "https://www.neurology-jp.org/guidelinem/parkinson_2018.html", "note": "専門医向けの公式ガイドライン。診断・薬物・デバイス補助療法・リハビリの標準指針。" },
+          { "name": "日本神経学会 ガイドライン一覧", "url": "https://www.neurology-jp.org/guidelinem/index.html", "note": "神経疾患全般の診療ガイドライン索引。改訂版が出たらここから辿れる。" }
+        ]
+      }
+    ],
+    "footer": "掲載情報は執筆時点のものです。手続き・治療方針の最新情報は各公式サイト・主治医にご確認ください。"
+  },
+
+  "symptomConfig": {
+    "title": "症状きろく",
+    "metrics": [
+      {
+        "id": "onTime",
+        "label": "ON時間",
+        "type": "counter",
+        "min": 0,
+        "max": 24,
+        "default": 0,
+        "unit": "時間",
+        "description": "薬が効いて動きやすい時間"
+      },
+      {
+        "id": "offTime",
+        "label": "OFF時間",
+        "type": "counter",
+        "min": 0,
+        "max": 24,
+        "default": 0,
+        "unit": "時間",
+        "description": "薬の効果が切れて動きにくい時間"
+      },
+      {
+        "id": "tremor",
+        "label": "振戦の強さ",
+        "type": "scale",
+        "min": 0,
+        "max": 4,
+        "description": "0=なし ← → 4=非常に強い"
+      },
+      {
+        "id": "freezing",
+        "label": "すくみ足",
+        "type": "toggle",
+        "dangerColor": true
+      },
+      {
+        "id": "fallCount",
+        "label": "転倒回数",
+        "type": "counter",
+        "min": 0,
+        "max": 10,
+        "default": 0,
+        "unit": "回"
+      },
+      {
+        "id": "dyskinesia",
+        "label": "ジスキネジア（不随意運動）",
+        "type": "toggle",
+        "description": "薬が効きすぎている時間帯の評価"
+      },
+      {
+        "id": "hallucination",
+        "label": "幻視・幻覚",
+        "type": "toggle",
+        "dangerColor": true,
+        "description": "ドパミン作動薬副作用の早期発見"
+      },
+      {
+        "id": "painScore",
+        "label": "痛み",
+        "type": "scale",
+        "min": 0,
+        "max": 5,
+        "description": "0=なし ← → 5=とても痛い"
+      }
+    ],
+    "summaryMetrics": [
+      { "id": "onTime", "label": "平均ON時間/日", "aggregate": "avg" },
+      { "id": "offTime", "label": "平均OFF時間/日", "aggregate": "avg" },
+      { "id": "tremor", "label": "平均振戦スコア", "aggregate": "avg" },
+      { "id": "freezing", "label": "すくみ足日数", "aggregate": "countTrue" },
+      { "id": "dyskinesia", "label": "ジスキネジア日数", "aggregate": "countTrue" },
+      { "id": "hallucination", "label": "幻視日数", "aggregate": "countTrue" },
+      { "id": "fallCount", "label": "合計転倒回数", "aggregate": "sum" }
+    ]
+  },
+
+  "labConfig": {
+    "items": [
+      { "id": "tsh", "label": "TSH", "unit": "μIU/mL", "normalRange": [0.5, 5.0] },
+      { "id": "ast", "label": "AST", "unit": "U/L", "normalRange": [10, 40], "warnHigh": 80 },
+      { "id": "alt", "label": "ALT", "unit": "U/L", "normalRange": [5, 45], "warnHigh": 80 },
+      { "id": "bun", "label": "BUN", "unit": "mg/dL", "normalRange": [8, 20], "warnHigh": 30 },
+      { "id": "cre", "label": "Cre（クレアチニン）", "unit": "mg/dL", "normalRange": [0.6, 1.1], "warnHigh": 1.5 },
+      { "id": "ck", "label": "CK（クレアチンキナーゼ）", "unit": "U/L", "normalRange": [50, 230], "warnHigh": 500 }
+    ]
+  },
+
+  "scoringTools": [
+    { "id": "mds_updrs", "label": "MDS-UPDRS", "range": "Part I-IV", "note": "国際標準のPD評価。PartIV=運動合併症（ジスキネジア・ウェアリングオフ）" },
+    { "id": "hy_scale", "label": "Hoehn & Yahr重症度", "range": "Stage 0-5", "note": "modified版が標準" },
+    { "id": "ledd", "label": "LEDD（Levodopa Equivalent Daily Dose）", "unit": "mg/day", "note": "薬剤調整・デバイス療法適応判断の基準" },
+    { "id": "moca_j", "label": "MoCA-J", "range": "0-30", "note": "認知機能スクリーニング。≤25で認知機能障害疑い" }
+  ],
+
+  "emergencyConfig": {
+    "title": "緊急情報カード",
+    "subtitle": "パーキンソン病",
+    "fields": [
+      { "id": "hoehnYahr", "label": "Hoehn-Yahr重症度", "placeholder": "例: ステージ3" },
+      { "id": "onsetYear", "label": "発症年", "placeholder": "例: 2020年" },
+      { "id": "dbs", "label": "DBS（脳深部刺激療法）", "placeholder": "例: なし / あり（2023年〜）" }
+    ],
+    "warnings": [
+      "レボドパ（L-DOPA）を中断しないでください — 急な中断は悪性症候群のリスクがあります",
+      "悪性症候群の初期症状: 高熱・筋強剛・意識障害・CK上昇",
+      "抗精神病薬（ドパミン遮断薬）の投与は原則禁忌です",
+      "嚥下障害がある場合、経口投与が困難なことがあります — 経鼻・注射剤を検討してください",
+      "転倒リスクが高いため、移動時の介助・環境整備に注意してください"
+    ]
+  },
+
+  "timelineCategories": [
+    { "id": "diagnosis", "label": "診断", "color": "#dbeafe" },
+    { "id": "medication_change", "label": "薬変更", "color": "#d1fae5" },
+    { "id": "exam", "label": "検査", "color": "#e9d5ff" },
+    { "id": "treatment_change", "label": "治療方針変更", "color": "#ffedd5" },
+    { "id": "hospitalization", "label": "入院", "color": "#fde68a" },
+    { "id": "rehabilitation", "label": "リハビリ", "color": "#a7f3d0" },
+    { "id": "self-log", "label": "じぶんメモ", "color": "#e0f2fe" },
+    { "id": "other", "label": "その他", "color": "#e5e5e5" }
+  ]
+}

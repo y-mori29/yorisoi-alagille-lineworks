@@ -1,0 +1,197 @@
+{
+  "categories": [
+    {
+      "id": "bisphosphonate_iv",
+      "name": "ビスホスホネート（点滴）",
+      "description": "OI 治療の中心。骨吸収を抑え骨折頻度を減らす。歯科処置前は主治医確認",
+      "step": 1
+    },
+    {
+      "id": "bisphosphonate_oral",
+      "name": "ビスホスホネート（経口）",
+      "description": "週1回経口製剤。起床時十分な水で服用、30分は横にならない",
+      "step": 1
+    },
+    {
+      "id": "anti_rankl",
+      "name": "抗RANKL抗体",
+      "description": "デノスマブ。低Ca・中止後反跳性骨折に注意（OIには適応外、慎重投与）",
+      "step": 2
+    },
+    {
+      "id": "anabolic",
+      "name": "骨形成促進薬",
+      "description": "テリパラチド／ロモソズマブ。OIには適応外、専門医判断で",
+      "step": 2
+    },
+    {
+      "id": "calcium_vitd",
+      "name": "カルシウム・ビタミンD",
+      "description": "BP治療の基礎。Ca/VitD 欠乏時は補正必須",
+      "step": 1
+    },
+    {
+      "id": "active_vitd",
+      "name": "活性型ビタミンD",
+      "description": "腎機能・血清Ca を見ながら使用",
+      "step": 2
+    },
+    {
+      "id": "analgesic",
+      "name": "鎮痛薬",
+      "description": "急性骨折痛・慢性痛のコントロール",
+      "step": 2
+    },
+    {
+      "id": "support",
+      "name": "支持療法・関連処方",
+      "description": "便秘・睡眠・PPI など合併症対策",
+      "step": 3
+    }
+  ],
+  "medications": [
+    {
+      "genericName": "パミドロン酸ナトリウム",
+      "brandNames": ["パミドロン酸Ⅱ静注", "アレディア"],
+      "category": "bisphosphonate_iv",
+      "dosageForms": ["点滴"],
+      "mechanism": "破骨細胞の機能抑制（骨吸収抑制）",
+      "notes": "★OIで国内外ともに最も使用実績の多い治療。小児期は3か月毎・成人期は6か月毎が目安。初回は急性期反応（発熱・倦怠感）あり"
+    },
+    {
+      "genericName": "ゾレドロン酸",
+      "brandNames": ["リクラスト", "ゾメタ"],
+      "category": "bisphosphonate_iv",
+      "dosageForms": ["点滴"],
+      "mechanism": "強力な骨吸収抑制",
+      "notes": "年1回投与で効果持続。OIには適応外だが成人OIで使用報告多数。腎機能・低Caに注意"
+    },
+    {
+      "genericName": "アレンドロン酸",
+      "brandNames": ["フォサマック", "ボナロン"],
+      "category": "bisphosphonate_oral",
+      "dosageForms": ["経口"],
+      "mechanism": "骨吸収抑制",
+      "notes": "週1回経口（35mg）。起床時に水道水コップ1杯で服用、服用後30分間は横にならない・飲食しない"
+    },
+    {
+      "genericName": "リセドロン酸",
+      "brandNames": ["アクトネル", "ベネット"],
+      "category": "bisphosphonate_oral",
+      "dosageForms": ["経口"],
+      "notes": "週1回または月1回製剤あり。胃腸障害がアレンドロン酸より少なめ"
+    },
+    {
+      "genericName": "ミノドロン酸",
+      "brandNames": ["ボノテオ", "リカルボン"],
+      "category": "bisphosphonate_oral",
+      "dosageForms": ["経口"],
+      "notes": "月1回製剤。服薬負担が少ない"
+    },
+    {
+      "genericName": "イバンドロン酸",
+      "brandNames": ["ボンビバ"],
+      "category": "bisphosphonate_oral",
+      "dosageForms": ["経口", "点滴"],
+      "notes": "月1回経口または静注。服薬コンプライアンス改善目的"
+    },
+    {
+      "genericName": "デノスマブ",
+      "brandNames": ["プラリア", "ランマーク"],
+      "category": "anti_rankl",
+      "dosageForms": ["皮下注射"],
+      "notes": "OIには適応外。中止後の反跳性多発椎体骨折リスクのため計画的減薬が必須。BP前治療歴の確認を"
+    },
+    {
+      "genericName": "テリパラチド",
+      "brandNames": ["フォルテオ", "テリボン"],
+      "category": "anabolic",
+      "dosageForms": ["皮下注射"],
+      "notes": "OIには適応外（小児・若年は原則禁忌）。重症骨粗しょう症成人例で慎重に検討"
+    },
+    {
+      "genericName": "ロモソズマブ",
+      "brandNames": ["イベニティ"],
+      "category": "anabolic",
+      "dosageForms": ["皮下注射"],
+      "notes": "OIには適応外。成人重症例で慎重に検討、心血管リスク評価必須"
+    },
+    {
+      "genericName": "炭酸カルシウム",
+      "brandNames": ["カルチコール", "アスパラCA", "新カルシチュウ"],
+      "category": "calcium_vitd",
+      "dosageForms": ["経口"],
+      "notes": "BP治療中の基礎補充。Ca元素として500-1000mg/日"
+    },
+    {
+      "genericName": "コレカルシフェロール（ビタミンD3）",
+      "brandNames": ["デノタスチュアブル", "OTC各種"],
+      "category": "calcium_vitd",
+      "dosageForms": ["経口"],
+      "notes": "25(OH)D 30 ng/mL 以上を目安に補充"
+    },
+    {
+      "genericName": "アルファカルシドール",
+      "brandNames": ["アルファロール", "ワンアルファ"],
+      "category": "active_vitd",
+      "dosageForms": ["経口"],
+      "notes": "活性型VitD3。低Ca・腎機能低下時に使用、血清Ca をモニタ"
+    },
+    {
+      "genericName": "エルデカルシトール",
+      "brandNames": ["エディロール"],
+      "category": "active_vitd",
+      "dosageForms": ["経口"],
+      "notes": "骨粗しょう症適応の活性型VitD。高Ca血症に注意"
+    },
+    {
+      "genericName": "アセトアミノフェン",
+      "brandNames": ["カロナール"],
+      "category": "analgesic",
+      "dosageForms": ["経口"],
+      "notes": "骨折急性期痛の第一選択。腎・胃腸障害が少ない"
+    },
+    {
+      "genericName": "ロキソプロフェン",
+      "brandNames": ["ロキソニン"],
+      "category": "analgesic",
+      "dosageForms": ["経口"],
+      "notes": "NSAIDs。骨癒合への影響可能性あり、骨折急性期は短期使用"
+    },
+    {
+      "genericName": "セレコキシブ",
+      "brandNames": ["セレコックス"],
+      "category": "analgesic",
+      "dosageForms": ["経口"],
+      "notes": "COX-2選択的NSAIDs。胃腸障害が少ない"
+    },
+    {
+      "genericName": "トラマドール",
+      "brandNames": ["トラマール", "ワントラム"],
+      "category": "analgesic",
+      "dosageForms": ["経口"],
+      "notes": "骨折・術後痛のコントロール。便秘・吐き気の対策併用"
+    },
+    {
+      "genericName": "プレガバリン",
+      "brandNames": ["リリカ"],
+      "category": "analgesic",
+      "dosageForms": ["経口"],
+      "notes": "神経障害性疼痛・慢性痛に。眠気・浮腫に注意"
+    },
+    {
+      "genericName": "酸化マグネシウム",
+      "brandNames": ["マグミット"],
+      "category": "support",
+      "dosageForms": ["経口"],
+      "notes": "便秘対策。OIでは活動制限による便秘が多い"
+    },
+    {
+      "genericName": "ランソプラゾール",
+      "brandNames": ["タケプロン"],
+      "category": "support",
+      "dosageForms": ["経口"],
+      "notes": "経口BP併用時の胃粘膜保護"
+    }
+  ]
+}

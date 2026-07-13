@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>診察メモを残す - よりそい アラジール</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined">
+  <link rel="stylesheet" href="/css/alagille-family.css">
+  <script src="/js/account-guard.js"></script>
+  <style>
+    body { background: linear-gradient(180deg,#fffdf8,#f7fbf8); }
+    .app { padding-bottom: 104px; }
+    .record-head { margin-bottom: 12px; padding-bottom: 11px; border-bottom: 1px solid #e9eeeb; }
+    .record-title { color: #40352e; font-size: 19px; }
+    .record-patient { min-height: 68px; display: grid; grid-template-columns: 48px 1fr; align-items: center; gap: 10px; margin-bottom: 13px; padding: 9px 11px; border: 1.5px solid rgba(111,149,84,.32); border-radius: 8px; background: linear-gradient(100deg,rgba(237,246,232,.92),rgba(255,255,255,.88)); }
+    .record-patient img { width: 48px; height: 48px; border-radius: 8px; object-fit: cover; background: #fff; }
+    .record-patient small,.record-patient strong { display: block; }
+    .record-patient small { color: var(--sage); font-size: 11px; font-weight: 900; }
+    .record-patient strong { margin-top: 2px; font-size: 17px; }
+    .intro-card { display: grid; grid-template-columns: 1fr 74px; align-items: center; gap: 11px; margin-bottom: 13px; padding: 14px; background: linear-gradient(135deg,#f0fbf8,#fff); }
+    .intro-card h2 { margin: 0; font-size: 18px; line-height: 1.5; }
+    .intro-card p { margin: 5px 0 0; color: var(--ink-soft); font-size: 12px; line-height: 1.65; font-weight: 700; }
+    .intro-card img { width: 70px; }
+    .visit-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
+    .field { display: grid; gap: 5px; color: #68594d; font-size: 12px; font-weight: 900; }
+    .field.full { grid-column: 1/-1; }
+    .field input,.field textarea { width: 100%; min-height: 46px; padding: 10px 11px; border: 1.5px solid #e4ddd5; border-radius: 8px; color: var(--ink); background: #fffdfa; font: inherit; font-size: 14px; font-weight: 750; }
+    .field textarea { min-height: 82px; resize: vertical; line-height: 1.6; }
+    .voice-panel { padding: 18px 15px 16px; margin-bottom: 13px; text-align: center; border-color: rgba(255,119,108,.34); background: linear-gradient(180deg,#fff7f5,#fff 72%); }
+    .voice-title { margin: 0 0 6px; color: #5b463a; font-size: 18px; font-weight: 900; }
+    .voice-hint { max-width: 300px; margin: 0 auto 12px; color: var(--ink-soft); font-size: 12px; line-height: 1.7; font-weight: 750; }
+    .voice-button { width: 108px; height: 108px; display: grid; place-items: center; margin: 4px auto 12px; border: 0; border-radius: 50%; color: #9b3f48; background: #ffc5c8; box-shadow: 0 14px 26px rgba(255,116,107,.23); }
+    .voice-button.recording { color: #fff; background: var(--coral); animation: pulse 1.2s ease-in-out infinite; }
+    .voice-button:disabled { opacity: .55; }
+    .voice-button .material-symbols-outlined { font-size: 44px; }
+    .voice-status { min-height: 44px; color: var(--ink-soft); font-size: 13px; line-height: 1.7; font-weight: 800; }
+    @keyframes pulse { 50% { transform: scale(1.04); } }
+    .optional-card { margin-bottom: 13px; padding: 0; overflow: hidden; }
+    .optional-card summary { min-height: 54px; display: flex; align-items: center; justify-content: space-between; padding: 0 14px; color: var(--ink); font-size: 14px; font-weight: 900; cursor: pointer; list-style: none; }
+    .optional-card summary::-webkit-details-marker { display: none; }
+    .optional-content { display: grid; gap: 10px; padding: 13px; border-top: 1px solid #edf0ed; }
+    .text-actions { display: grid; grid-template-columns: 1.35fr 1fr; gap: 8px; }
+    .primary-btn,.secondary-btn { min-height: 49px; display: inline-flex; align-items: center; justify-content: center; gap: 6px; border-radius: 8px; font: inherit; font-size: 12px; font-weight: 900; }
+    .primary-btn { border: 0; color: #fff; background: var(--mint); }
+    .secondary-btn { border: 1.5px solid #ded6cd; color: var(--ink); background: #fff; }
+    .primary-btn:disabled,.secondary-btn:disabled { opacity: .55; }
+    .section-title { margin: 18px 0 9px; color: var(--ink); font-size: 15px; }
+    .saved-list { display: grid; gap: 10px; }
+    .saved-card { padding: 14px; }
+    .saved-card h3 { margin: 7px 0 5px; font-size: 17px; }
+    .saved-card p { margin: 0; color: var(--ink-soft); font-size: 13px; line-height: 1.7; }
+    .chips { display: flex; flex-wrap: wrap; gap: 6px; }
+    .chip { padding: 4px 8px; border-radius: 8px; color: #675c54; background: #f6efeb; font-size: 11px; font-weight: 850; }
+    .note-section { margin-top: 10px; }
+    .note-section strong { font-size: 12px; }
+    .memo-list { margin: 5px 0 0; padding-left: 1.15em; color: #3d3a36; font-size: 13px; line-height: 1.75; }
+    .saved-card audio { width: 100%; margin-top: 11px; }
+    .saved-actions { display: flex; justify-content: flex-end; gap: 7px; margin-top: 11px; }
+    .saved-actions button { min-height: 39px; display: inline-flex; align-items: center; gap: 4px; padding: 6px 10px; border: 1px solid #ddd6cd; border-radius: 8px; color: #675c54; background: #fff; font: inherit; font-size: 11px; font-weight: 900; }
+    .saved-actions .delete { color: #b45149; }
+    .empty { padding: 20px 14px; color: var(--muted); text-align: center; font-size: 13px; line-height: 1.7; }
+    .toast { position: fixed; z-index: 30; left: 50%; bottom: 88px; transform: translateX(-50%); width: max-content; max-width: calc(100% - 32px); padding: 10px 14px; border-radius: 8px; color: #fff; background: rgba(29,169,157,.96); font-size: 12px; font-weight: 900; box-shadow: 0 10px 22px rgba(0,0,0,.14); display: none; }
+    .toast.show { display: block; }
+    .toast.error { background: rgba(180,81,73,.96); }
+    .bottom-actions { position: fixed; z-index: 5; left: 50%; bottom: 0; transform: translateX(-50%); width: min(100%,430px); min-height: 76px; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 9px 13px; border-top: 1px solid #edf0f2; background: rgba(255,255,255,.96); }
+    .bottom-actions a { min-height: 54px; display: grid; place-items: center; gap: 1px; border-radius: 8px; color: #46413d; background: #f7f7f5; text-decoration: none; font-size: 12px; font-weight: 850; }
+    .bottom-actions .primary { color: #846016; background: #fff1cc; }
+    .record-tutorial-start { width:100%;min-height:44px;margin:0 0 12px;border:1.5px solid rgba(29,169,157,.34);border-radius:8px;display:flex;align-items:center;justify-content:center;gap:6px;color:var(--mint);background:#fff;font:inherit;font-size:12px;font-weight:900; }
+    .record-tutorial-banner { margin-bottom:12px;padding:11px 12px;display:grid;grid-template-columns:28px 1fr auto;gap:8px;align-items:center;border:1.5px solid rgba(225,171,55,.42);border-radius:8px;background:#fff8df;color:#705b2f; }
+    .record-tutorial-banner>.material-symbols-outlined{color:var(--honey)}.record-tutorial-banner strong,.record-tutorial-banner small{display:block}.record-tutorial-banner strong{font-size:12px}.record-tutorial-banner small{margin-top:2px;font-size:10px;line-height:1.45;font-weight:760}.record-tutorial-banner button{min-height:38px;border:1px solid rgba(112,91,47,.25);border-radius:8px;color:#705b2f;background:#fff;font:inherit;font-size:11px;font-weight:900}
+    @media(max-width:360px){ .visit-fields,.text-actions{grid-template-columns:1fr;} }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <header class="screen-head record-head">
+      <a class="round" href="/?disease=alagille" aria-label="ホームへ戻る"><span class="material-symbols-outlined">arrow_back</span></a>
+      <h1 class="screen-title record-title">診察メモを残す</h1>
+      <a class="round" href="/?disease=alagille" aria-label="ホーム"><span class="material-symbols-outlined">home</span></a>
+    </header>
+
+    <section class="record-patient" aria-label="健康記録の対象">
+      <img id="patient-avatar" src="/assets/alagille-brand/avatars/avatar-child-boy-v1.png" alt="">
+      <span><small>健康記録の対象</small><strong id="patient-name">読み込み中</strong></span>
+    </section>
+
+    <aside class="record-tutorial-banner" id="record-tutorial-banner" hidden><span class="material-symbols-outlined">school</span><span><strong>使い方のお試し中</strong><small>録音ボタンや文字入力を試しても、実際の記録には保存されません。</small></span><button id="finish-record-tutorial" type="button">終了</button></aside>
+    <button class="record-tutorial-start" id="start-record-tutorial" type="button"><span class="material-symbols-outlined">play_circle</span>使い方をお試しする</button>
+
+    <section class="panel intro-card">
+      <div><h2>録音で、診察の会話を残します。</h2><p>録音後に文字起こしし、家族で見返しやすい項目へ整理します。</p></div>
+      <img class="asset" src="/assets/alagille-brand/trimmed/06-visit-notebook.png" alt="">
+    </section>
+
+    <section class="visit-fields">
+      <label class="field">受診日<input id="visit-date" type="date" required></label>
+      <label class="field">診療科<input id="department" type="text" maxlength="80" placeholder="例：小児肝臓外来"></label>
+      <label class="field full">病院・外来<input id="clinic-name" type="text" maxlength="120" placeholder="例：〇〇こども病院"></label>
+    </section>
+
+    <section class="panel voice-panel">
+      <p class="voice-title">診察で話したことを、そのまま録音</p>
+      <p class="voice-hint">録音を止めると、自動で文字起こし・整理・保存まで進みます。</p>
+      <button class="voice-button" id="voice-button" type="button" aria-label="録音を開始"><span class="material-symbols-outlined">mic</span></button>
+      <div class="voice-status" id="voice-status">録音ボタンを押して開始します。終わったらもう一度押してください。</div>
+    </section>
+
+    <details class="panel optional-card" id="optional-fields">
+      <summary><span>必要なときだけ文字で補足する</span><span class="material-symbols-outlined">expand_more</span></summary>
+      <div class="optional-content">
+        <label class="field">先生に言われたこと・文字起こし<textarea id="doctor-note" maxlength="50000" placeholder="録音を使わない場合や、修正したい内容を入力できます"></textarea></label>
+        <label class="field">次に聞きたいこと<textarea id="question-note" maxlength="2000" placeholder="次回確認したいこと"></textarea></label>
+        <label class="field">家族メモ<textarea id="family-note" maxlength="2000" placeholder="診察前後に気づいたこと"></textarea></label>
+        <div class="text-actions">
+          <button class="primary-btn" id="save-ai" type="button"><span class="material-symbols-outlined">auto_awesome</span><span id="save-ai-label">整理して保存</span></button>
+          <button class="secondary-btn" id="save-plain" type="button"><span class="material-symbols-outlined">save</span>そのまま保存</button>
+        </div>
+      </div>
+    </details>
+
+    <section id="result-area" aria-live="polite"></section>
+    <h2 class="section-title">最近残した診察メモ</h2>
+    <section id="saved-list" class="saved-list" aria-live="polite"></section>
+  </main>
+
+  <nav class="bottom-actions" aria-label="診察メモの操作">
+    <a href="/?disease=alagille"><span class="material-symbols-outlined">home</span><span>ホーム</span></a>
+    <a class="primary" href="/simple/show.html?disease=alagille"><span class="material-symbols-outlined">ios_share</span><span>先生に見せる</span></a>
+  </nav>
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const avatarArtwork = {
+      "adult-man": "/assets/alagille-brand/avatars/avatar-adult-man-v1.png",
+      "adult-woman": "/assets/alagille-brand/avatars/avatar-adult-woman-v1.png",
+      "child-boy": "/assets/alagille-brand/avatars/avatar-child-boy-v1.png",
+      "child-girl": "/assets/alagille-brand/avatars/avatar-child-girl-v1.png"
+    };
+    const state = { patientId: "", notes: [], realNotes: [], editingId: null, mediaRecorder: null, stream: null, recordingId: "", sequence: 0, uploadChain: Promise.resolve(), isRecording: false, tutorial: false, tutorialRecording: false };
+    const $ = (id) => document.getElementById(id);
+
+    document.addEventListener("DOMContentLoaded", async () => {
+      $("visit-date").value = new Date().toISOString().slice(0,10);
+      $("voice-button").addEventListener("click", toggleRecording);
+      $("save-ai").addEventListener("click", () => saveTextNote(true));
+      $("save-plain").addEventListener("click", () => saveTextNote(false));
+      $("start-record-tutorial").addEventListener("click", startRecordTutorial);
+      $("finish-record-tutorial").addEventListener("click", finishRecordTutorial);
+      $("saved-list").addEventListener("click", handleNoteAction);
+      await loadPatient();
+      await loadNotes();
+    });
+
+    async function loadPatient() {
+      const response = await fetch("/api/family/patients");
+      if (!response.ok) throw new Error("patient load failed");
+      const result = await response.json();
+      const savedId = localStorage.getItem("alagille-current-patient-id");
+      const patient = result.patients.find((item) => item.id === savedId) || result.patients[0];
+      if (!patient) throw new Error("patient missing");
+      state.patientId = patient.id;
+      $("patient-name").textContent = patient.displayName;
+      $("patient-avatar").src = avatarArtwork[patient.avatarKey] || avatarArtwork["child-boy"];
+    }
+
+    async function loadNotes() {
+      try {
+        const response = await fetch(`/api/visit-notes?patientId=${encodeURIComponent(state.patientId)}`);
+        const result = await response.json();
+        if (!response.ok) throw new Error();
+        state.realNotes = result.notes || [];
+        if (!state.tutorial) state.notes = state.realNotes;
+        renderSavedNotes();
+      } catch { $("saved-list").innerHTML = '<div class="panel empty">診察メモを読み込めませんでした。時間をおいてお試しください。</div>'; }
+    }
+
+    function supportedMimeType() {
+      return ["audio/webm;codecs=opus","audio/webm","audio/mp4"].find((type) => MediaRecorder.isTypeSupported?.(type)) || "";
+    }
+
+    async function toggleRecording() {
+      if (state.tutorial) return toggleTutorialRecording();
+      if (state.isRecording) return stopRecording();
+      if (!navigator.mediaDevices || !window.MediaRecorder) return showToast("このブラウザでは録音を使えません。文字で補足できます。", true);
+      try {
+        const mimeType = supportedMimeType();
+        const response = await fetch("/api/visit-notes/recordings", { method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({ patientId:state.patientId, contentType:mimeType||"audio/webm", visitDate:$("visit-date").value, clinicName:$("clinic-name").value.trim(), department:$("department").value.trim(), familyMemo:$("family-note").value.trim() }) });
+        const initialized = await response.json();
+        if (!response.ok) throw new Error();
+        state.recordingId = initialized.recordingId;
+        state.sequence = 0;
+        state.uploadChain = Promise.resolve();
+        state.stream = await navigator.mediaDevices.getUserMedia({ audio:{ echoCancellation:true, noiseSuppression:true, autoGainControl:true } });
+        state.mediaRecorder = mimeType ? new MediaRecorder(state.stream,{mimeType}) : new MediaRecorder(state.stream);
+        state.mediaRecorder.ondataavailable = (event) => {
+          if (!event.data?.size) return;
+          const seq = ++state.sequence;
+          state.uploadChain = state.uploadChain.then(() => uploadChunk(event.data,seq));
+        };
+        state.mediaRecorder.onstop = finishRecording;
+        state.mediaRecorder.start(10000);
+        state.isRecording = true;
+        $("voice-button").classList.add("recording");
+        $("voice-button").innerHTML = '<span class="material-symbols-outlined">stop</span>';
+        $("voice-button").setAttribute("aria-label","録音を停止");
+        $("voice-status").textContent = "録音しています。終わったらもう一度押してください。";
+      } catch { state.stream?.getTracks().forEach((track)=>track.stop()); showToast("録音を開始できませんでした",true); }
+    }
+
+    function stopRecording() {
+      state.isRecording = false;
+      $("voice-button").disabled = true;
+      $("voice-button").classList.remove("recording");
+      $("voice-button").innerHTML = '<span class="material-symbols-outlined">mic</span>';
+      $("voice-status").textContent = "録音を送信しています。この画面を開いたままお待ちください。";
+      state.mediaRecorder.stop();
+    }
+
+    async function uploadChunk(blob,seq) {
+      const response = await fetch(`/api/visit-notes/recordings/${encodeURIComponent(state.recordingId)}/chunks/${seq}?patientId=${encodeURIComponent(state.patientId)}`, { method:"PUT", headers:{"Content-Type":blob.type||state.mediaRecorder?.mimeType||"audio/webm"}, body:blob });
+      if (!response.ok) throw new Error("chunk upload failed");
+    }
+
+    async function finishRecording() {
+      state.stream?.getTracks().forEach((track)=>track.stop());
+      try {
+        await state.uploadChain;
+        const response = await fetch(`/api/visit-notes/recordings/${encodeURIComponent(state.recordingId)}/finalize`, { method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({patientId:state.patientId,familyMemo:$("family-note").value.trim()}) });
+        if (!response.ok) throw new Error();
+        $("voice-status").textContent = "文字起こしと整理をしています。";
+        await pollRecording(state.recordingId);
+      } catch { $("voice-status").textContent = "録音を保存できませんでした。通信を確認してもう一度お試しください。"; showToast("録音を保存できませんでした",true); }
+      finally { $("voice-button").disabled=false; state.mediaRecorder=null; state.stream=null; }
+    }
+
+    async function pollRecording(recordingId) {
+      for (let i=0;i<120;i++) {
+        await new Promise((resolve)=>setTimeout(resolve,2500));
+        const response = await fetch(`/api/visit-notes/recordings/${encodeURIComponent(recordingId)}/status?patientId=${encodeURIComponent(state.patientId)}`);
+        const result = await response.json();
+        if (!response.ok) throw new Error();
+        if (result.status === "PROCESSED") { $("voice-status").textContent="診察メモを保存しました。"; if(result.note) renderResult(result.note); await loadNotes(); showToast("診察メモを保存しました"); return; }
+        if (result.status === "FAILED") throw new Error();
+        $("voice-status").textContent = result.note?.status === "ANALYZING" ? "文字起こしが完了し、内容を整理しています。" : "録音を文字起こししています。";
+      }
+      throw new Error("timeout");
+    }
+
+    function collectInput() {
+      return { visitDate:$("visit-date").value, clinicName:$("clinic-name").value.trim(), department:$("department").value.trim(), doctorNote:$("doctor-note").value.trim(), questionNote:$("question-note").value.trim(), familyMemo:$("family-note").value.trim() };
+    }
+
+    function buildText(input) {
+      return [input.clinicName?`病院・外来: ${input.clinicName}`:"",input.department?`診療科: ${input.department}`:"",input.doctorNote?`先生に言われたこと:\n${input.doctorNote}`:"",input.questionNote?`次に聞きたいこと:\n${input.questionNote}`:"",input.familyMemo?`家族メモ:\n${input.familyMemo}`:""].filter(Boolean).join("\n\n");
+    }
+
+    function plainAnalysis(input) {
+      return { summary:"受診で話したことを記録しました。", doctorSaid:input.doctorNote?[input.doctorNote]:[], nextQuestions:input.questionNote?[input.questionNote]:[], medicationChanges:[], labAndTestTopics:[], growthNutritionTopics:[], dailyLifeTopics:input.familyMemo?[input.familyMemo]:[], departments:input.department?[input.department]:[] };
+    }
+
+    async function saveTextNote(useAi) {
+      const input=collectInput();
+      const transcript=buildText(input);
+      if(!input.doctorNote&&!input.questionNote&&!input.familyMemo) return showToast("文字の補足を入力してください",true);
+      if(state.tutorial){
+        const editing=Boolean(state.editingId);const analysis=plainAnalysis(input);
+        const note={id:editing?state.editingId:`tutorial-note-${Date.now()}`,visitDate:input.visitDate,clinicName:input.clinicName,department:input.department,familyMemo:input.familyMemo,transcript,...analysis,summary:useAi?"診察で聞いた内容を項目ごとに整理しました。":"受診で話したことを記録しました。",isTutorial:true};
+        state.notes=editing?state.notes.map((item)=>item.id===state.editingId?note:item):[note,...state.notes];
+        renderResult(note);clearForm();renderSavedNotes();showToast("お試し記録へ反映しました。実際の記録には保存されていません");return;
+      }
+      setBusy(true);
+      let analysis=plainAnalysis(input);
+      if(useAi){ try{ const response=await fetch("/api/visit-notes/analyze",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({patientId:state.patientId,transcript,familyMemo:input.familyMemo})}); const result=await response.json(); if(!response.ok)throw new Error(); analysis=result.analysis; }catch{ showToast("AI整理に失敗したため、そのまま保存します",true); } }
+      try{
+        const editing=Boolean(state.editingId);
+        const response=await fetch(editing?`/api/visit-notes/${encodeURIComponent(state.editingId)}`:"/api/visit-notes",{method:editing?"PATCH":"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({patientId:state.patientId,visitDate:input.visitDate,clinicName:input.clinicName,department:input.department,familyMemo:input.familyMemo,transcript,analysis,inputMode:"text"})});
+        const result=await response.json(); if(!response.ok)throw new Error(); renderResult(result.note); clearForm(); await loadNotes(); showToast(editing?"変更を保存しました":"診察メモを保存しました");
+      }catch{ showToast("診察メモを保存できませんでした",true); }finally{ setBusy(false); }
+    }
+
+    function noteSections(note){ return [["先生が言ったこと",note.doctorSaid],["次に聞くこと",note.nextQuestions],["お薬の変更",note.medicationChanges],["検査のこと",note.labAndTestTopics],["成長・食事のこと",note.growthNutritionTopics],["日々の様子",note.dailyLifeTopics]].filter(([,items])=>Array.isArray(items)&&items.length).map(([title,items])=>`<div class="note-section"><strong>${escapeHtml(title)}</strong><ul class="memo-list">${items.map((item)=>`<li>${escapeHtml(item)}</li>`).join("")}</ul></div>`).join(""); }
+
+    function noteHtml(note,label,actions){ return `<article class="panel saved-card"><div class="chips"><span class="chip">${escapeHtml(label)}</span>${note.department?`<span class="chip">${escapeHtml(note.department)}</span>`:""}</div><h3>${escapeHtml(note.clinicName||"診察メモ")}</h3><p>${escapeHtml(note.summary||(note.status==="PROCESSING"?"文字起こしと整理をしています。":"受診内容を記録しました。"))}</p>${noteSections(note)}${note.audioObject?`<audio controls preload="none" src="/api/visit-notes/${encodeURIComponent(note.id)}/audio?patientId=${encodeURIComponent(state.patientId)}"></audio>`:""}${actions?`<div class="saved-actions"><button type="button" data-action="edit" data-id="${escapeHtml(note.id)}"><span class="material-symbols-outlined">edit</span>編集</button><button type="button" class="delete" data-action="delete" data-id="${escapeHtml(note.id)}"><span class="material-symbols-outlined">delete</span>削除</button></div>`:""}</article>`; }
+    function renderResult(note){ $("result-area").innerHTML=noteHtml(note,"保存しました",false); }
+    function renderSavedNotes(){ $("saved-list").innerHTML=state.notes.length?state.notes.map((note)=>noteHtml(note,formatDate(note.visitDate),true)).join(""):'<div class="panel empty">まだ保存した診察メモはありません。<br>上の録音ボタンから始められます。</div>'; }
+
+    function handleNoteAction(event){ const button=event.target.closest("button[data-action]"); if(!button)return; const note=state.notes.find((item)=>item.id===button.dataset.id); if(!note)return; if(button.dataset.action==="edit")startEdit(note); else deleteNote(note); }
+    function startEdit(note){ state.editingId=note.id; $("visit-date").value=note.visitDate||""; $("clinic-name").value=note.clinicName||""; $("department").value=note.department||""; $("doctor-note").value=note.transcript||(note.doctorSaid||[]).join("\n"); $("question-note").value=(note.nextQuestions||[]).join("\n"); $("family-note").value=note.familyMemo||""; $("optional-fields").open=true; $("save-ai-label").textContent="変更を整理して保存"; $("optional-fields").scrollIntoView({behavior:"smooth"}); }
+    async function deleteNote(note){ if(state.tutorial){state.notes=state.notes.filter((item)=>item.id!==note.id);renderSavedNotes();showToast("お試し記録を削除しました。実際の記録には影響しません");return;} if(!confirm(`${formatDate(note.visitDate)}を削除しますか？\n録音と文字起こしも削除され、元に戻せません。`))return; try{ const response=await fetch(`/api/visit-notes/${encodeURIComponent(note.id)}?patientId=${encodeURIComponent(state.patientId)}`,{method:"DELETE"}); if(!response.ok)throw new Error(); await loadNotes(); showToast("診察メモを削除しました"); }catch{ showToast("削除できませんでした",true); } }
+
+    function startRecordTutorial(){
+      state.tutorial=true;state.tutorialRecording=false;
+      state.notes=[{id:"tutorial-visit-old",visitDate:"2026-06-24",clinicName:"よりそいこども病院（架空）",department:"小児肝臓外来",summary:"検査結果とお薬について確認しました。",doctorSaid:["検査結果を次回も確認します。"],nextQuestions:["次回の採血前に気をつけることはありますか？"],medicationChanges:[],labAndTestTopics:["ALTとビリルビンについて説明がありました。"],growthNutritionTopics:[],dailyLifeTopics:[],familyMemo:"",transcript:"",isTutorial:true}];
+      $("record-tutorial-banner").hidden=false;$("start-record-tutorial").hidden=true;
+      $("visit-date").value="2026-07-13";$("clinic-name").value="よりそいこども病院（架空）";$("department").value="小児肝臓外来";
+      $("doctor-note").value="検査結果を確認し、お薬は今の量を続けると説明がありました。";$("question-note").value="次回の採血前に気をつけることはありますか？";$("family-note").value="夜のかゆみについても相談しました。";
+      $("voice-status").textContent="架空の診察で試せます。録音ボタンを押すと、保存までの流れを再現します。";renderSavedNotes();
+    }
+
+    function finishRecordTutorial(){
+      state.tutorial=false;state.tutorialRecording=false;state.isRecording=false;state.notes=state.realNotes;
+      $("record-tutorial-banner").hidden=true;$("start-record-tutorial").hidden=false;$("voice-button").classList.remove("recording");$("voice-button").innerHTML='<span class="material-symbols-outlined">mic</span>';$("voice-button").setAttribute("aria-label","録音を開始");
+      clearForm();$("clinic-name").value="";$("department").value="";$("result-area").replaceChildren();$("voice-status").textContent="お試しを終了しました。実際の記録には何も追加されていません。";renderSavedNotes();
+    }
+
+    function toggleTutorialRecording(){
+      if(!state.tutorialRecording){state.tutorialRecording=true;$("voice-button").classList.add("recording");$("voice-button").innerHTML='<span class="material-symbols-outlined">stop</span>';$("voice-button").setAttribute("aria-label","お試し録音を停止");$("voice-status").textContent="お試し録音中です。もう一度押すと、文字起こし・整理・保存の例を表示します。";return;}
+      state.tutorialRecording=false;$("voice-button").classList.remove("recording");$("voice-button").innerHTML='<span class="material-symbols-outlined">mic</span>';$("voice-button").setAttribute("aria-label","録音を開始");
+      const note={id:`tutorial-recording-${Date.now()}`,visitDate:$("visit-date").value,clinicName:$("clinic-name").value,department:$("department").value,summary:"検査結果とお薬、夜のかゆみについて話しました。",doctorSaid:["お薬は今の量を続けます。"],nextQuestions:["次回の採血前に気をつけることはありますか？"],medicationChanges:[],labAndTestTopics:["検査結果を確認しました。"],growthNutritionTopics:[],dailyLifeTopics:["夜のかゆみについて相談しました。"],familyMemo:$("family-note").value,transcript:"架空の文字起こしです。",isTutorial:true};
+      state.notes=[note,...state.notes];renderResult(note);renderSavedNotes();$("voice-status").textContent="お試しの文字起こしと整理が完了しました。実際の記録には保存されていません。";showToast("お試しが完了しました");
+    }
+
+    function clearForm(){ state.editingId=null; $("doctor-note").value=""; $("question-note").value=""; $("family-note").value=""; $("save-ai-label").textContent="整理して保存"; }
+    function setBusy(busy){ $("save-ai").disabled=busy; $("save-plain").disabled=busy; }
+    function formatDate(value){ if(!value)return"診察メモ"; const [,m,d]=value.split("-"); return `${Number(m)}/${Number(d)} のメモ`; }
+    function escapeHtml(value){ const div=document.createElement("div"); div.textContent=String(value||""); return div.innerHTML; }
+    function showToast(message,error=false){ const toast=$("toast"); toast.textContent=message; toast.classList.toggle("error",error); toast.classList.add("show"); setTimeout(()=>toast.classList.remove("show"),2800); }
+  </script>
+</body>
+</html>

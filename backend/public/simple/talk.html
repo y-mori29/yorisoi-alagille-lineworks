@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>ひとりごと - よりそい</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" />
+  <style>
+    body { background: #fafaf9; padding: 0; min-height: 100vh; display: flex; flex-direction: column; }
+
+    .page-header {
+      padding: 14px 20px;
+      background: linear-gradient(135deg, #94a3b8, #64748b);
+      color: var(--white);
+      display: flex; align-items: center; gap: 12px;
+    }
+    .back-btn { background: none; border: none; color: var(--white); font-size: 20px; cursor: pointer; padding: 4px 8px; }
+    .page-header h1 { font-size: 17px; font-weight: 700; letter-spacing: 1px; }
+    .page-header .sub { font-size: 11px; opacity: 0.85; margin-left: 8px; }
+
+    .intro-card {
+      margin: 14px 16px 8px; padding: 14px 16px;
+      background: #fff; border: 1px solid #e7e5e4; border-radius: 14px;
+      font-size: 12.5px; line-height: 1.65; color: var(--gray-700);
+    }
+    .intro-card strong { color: var(--gray-800); }
+
+    .chat-area {
+      flex: 1; padding: 8px 16px 120px;
+      overflow-y: auto;
+    }
+    .msg {
+      max-width: 85%; padding: 11px 14px; border-radius: 18px;
+      margin-bottom: 8px; font-size: 14px; line-height: 1.6;
+      animation: msg-in 0.25s ease-out;
+    }
+    @keyframes msg-in {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .msg.ai {
+      background: #fff; color: var(--gray-800);
+      border: 1px solid #e7e5e4; border-bottom-left-radius: 6px;
+    }
+    .msg.me {
+      background: #94a3b8; color: #fff;
+      margin-left: auto; border-bottom-right-radius: 6px;
+    }
+    .msg.typing {
+      display: inline-flex; align-items: center; gap: 4px; padding: 14px 16px;
+      background: #fff; border: 1px solid #e7e5e4;
+    }
+    .msg.typing .dot {
+      width: 6px; height: 6px; border-radius: 50%; background: #94a3b8;
+      animation: typing-bounce 1.2s infinite ease-in-out;
+    }
+    .msg.typing .dot:nth-child(2) { animation-delay: 0.15s; }
+    .msg.typing .dot:nth-child(3) { animation-delay: 0.3s; }
+    @keyframes typing-bounce {
+      0%, 80%, 100% { transform: translateY(0); opacity: 0.4; }
+      40% { transform: translateY(-4px); opacity: 1; }
+    }
+
+    .input-bar {
+      position: fixed; bottom: 0; left: 50%; transform: translateX(-50%);
+      width: 100%; max-width: 460px;
+      background: #fff; border-top: 1px solid #e7e5e4;
+      padding: 10px 14px 14px;
+      display: flex; flex-direction: column; gap: 8px;
+    }
+    .input-row { display: flex; gap: 8px; }
+    .input-row input {
+      flex: 1; padding: 12px 14px;
+      border: 1.5px solid var(--gray-300); border-radius: 22px;
+      font-size: 14px; font-family: inherit;
+    }
+    .input-row input:focus { outline: none; border-color: #94a3b8; }
+    .input-row button {
+      padding: 12px 18px; background: #64748b; color: #fff;
+      border: none; border-radius: 22px;
+      font-weight: 700; font-size: 13px; cursor: pointer;
+    }
+    .input-row button:disabled { opacity: 0.5; cursor: not-allowed; }
+    .footer-actions {
+      display: flex; gap: 10px; justify-content: center;
+    }
+    .footer-btn {
+      padding: 8px 16px; background: #f5f5f4; color: var(--gray-700);
+      border: 1px solid var(--gray-200); border-radius: 18px;
+      font-size: 12px; font-weight: 600; cursor: pointer;
+      text-decoration: none;
+    }
+    .footer-btn .material-symbols-outlined { font-size: 14px; vertical-align: -2px; margin-right: 2px; }
+    .footer-btn:hover { background: #e7e5e4; }
+  </style>
+</head>
+<body>
+  <div class="page-header">
+    <button class="back-btn" onclick="location.href='/' + (location.search || '')">&larr;</button>
+    <h1>ひとりごと</h1>
+    <span class="sub">聞く専門のAI</span>
+  </div>
+
+  <div class="intro-card">
+    <strong>ここで話したことは、保存されません。</strong><br>
+    質問もアドバイスもしません。聞き役のAIが、ただ受け止めます。<br>
+    気持ちが整理できなくても、まとまっていなくても大丈夫です。
+  </div>
+
+  <div class="chat-area" id="chat-area"></div>
+
+  <div class="input-bar">
+    <div class="input-row">
+      <input type="text" id="chat-input" placeholder="今、感じていることを書いてみる…">
+      <button id="chat-send-btn">話す</button>
+    </div>
+    <div class="footer-actions">
+      <a class="footer-btn" id="memo-link" href="#">
+        <span class="material-symbols-outlined">edit_note</span>残したくなったら「はなす」へ
+      </a>
+      <button class="footer-btn" id="end-btn">
+        <span class="material-symbols-outlined">close</span>終わる
+      </button>
+    </div>
+  </div>
+
+  <script src="https://static.line-scdn.net/liff/edge/2/sdk.js" defer></script>
+  <script src="/js/liff-init.js"></script>
+  <script>
+    let messages = []; // {role, text}
+    let typing = false;
+    let diseaseId = "uc";
+
+    function welcomeMsg() {
+      const h = new Date().getHours();
+      const candidates = h >= 5 && h < 10
+        ? [
+            "おはようございます。今朝、心の中にあること、よかったらここに置いてみてください。",
+            "ここにいますよ。眠れましたか。話したいこと、なんとなくでも大丈夫です。",
+          ]
+        : h >= 10 && h < 17
+        ? [
+            "ここにいます。何でも書いてくださいね。聞くだけが私の仕事です。",
+            "今日はどんな一日ですか。話の途中で止まっても大丈夫ですよ。",
+          ]
+        : h >= 17 && h < 20
+        ? [
+            "お疲れさまです。今日感じたこと、よければ少しだけ聞かせてください。",
+            "ここにいます。重い話でも軽い話でも、まとまっていなくても大丈夫です。",
+          ]
+        : [
+            "こんばんは。一日の終わりに、心の中にあるものを置いていきませんか。",
+            "夜は気持ちが大きく感じられますよね。よければ、ここに流してみてください。",
+          ];
+      return candidates[Math.floor(Math.random() * candidates.length)];
+    }
+
+    document.addEventListener("DOMContentLoaded", async () => {
+      try {
+        const ctx = await initLiff();
+        diseaseId = ctx.diseaseId || "uc";
+      } catch (_) {}
+
+      messages.push({ role: "ai", text: welcomeMsg() });
+      render();
+      bind();
+    });
+
+    function bind() {
+      document.getElementById("chat-send-btn").addEventListener("click", send);
+      document.getElementById("chat-input").addEventListener("keypress", (e) => {
+        if (e.key === "Enter") send();
+      });
+      document.getElementById("end-btn").addEventListener("click", () => {
+        if (messages.length > 1 && !confirm("ここでの会話は保存されません。本当に終わりますか？")) return;
+        location.href = "/" + (location.search || "");
+      });
+      document.getElementById("memo-link").href = "/simple/record.html" + (location.search || "");
+    }
+
+    function render() {
+      const wrap = document.getElementById("chat-area");
+      const html = messages.map(m =>
+        `<div class="msg ${m.role === "ai" ? "ai" : "me"}">${escHTML(m.text)}</div>`
+      ).join("");
+      const tHtml = typing
+        ? '<div class="msg ai typing"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>'
+        : "";
+      wrap.innerHTML = html + tHtml;
+      wrap.scrollTop = wrap.scrollHeight;
+    }
+
+    function escHTML(s) {
+      const d = document.createElement("div");
+      d.textContent = s || "";
+      return d.innerHTML;
+    }
+
+    async function send() {
+      const input = document.getElementById("chat-input");
+      const sendBtn = document.getElementById("chat-send-btn");
+      const text = input.value.trim();
+      if (!text || typing) return;
+
+      messages.push({ role: "me", text });
+      input.value = "";
+      typing = true;
+      sendBtn.disabled = true;
+      render();
+
+      try {
+        const apiMessages = messages.map(m => ({
+          role: m.role === "ai" ? "assistant" : "user",
+          content: m.text,
+        }));
+        const res = await fetch("/api/ai/listen", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ messages: apiMessages, diseaseId }),
+        });
+        if (!res.ok) throw new Error("HTTP " + res.status);
+        const data = await res.json();
+        typing = false;
+        sendBtn.disabled = false;
+        messages.push({ role: "ai", text: data.reply || "うん、聞いていますよ。" });
+        render();
+      } catch (err) {
+        typing = false;
+        sendBtn.disabled = false;
+        messages.push({ role: "ai", text: "（うまくお返しできませんでした：" + (err.message || err) + "）" });
+        render();
+      }
+    }
+  </script>
+</body>
+</html>

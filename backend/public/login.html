@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ログイン | よりそい アラジール</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700;900&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined">
+  <link rel="stylesheet" href="/css/alagille-auth.css">
+</head>
+<body>
+  <main class="auth-shell">
+    <a class="auth-brand" href="/login.html" aria-label="よりそい アラジール">
+      <img src="/assets/alagille-brand/generated/home-title-art-v1.png" alt="よりそい アラジール">
+    </a>
+    <section class="auth-panel" aria-labelledby="auth-title">
+      <h1 id="auth-title">家族ノートを開く</h1>
+      <p class="auth-lead">ご本人とご家族の記録を、アカウントごとに安全に管理します。</p>
+      <div class="auth-tabs" role="tablist" aria-label="ログイン方法">
+        <button id="login-tab" type="button" role="tab" aria-selected="true">ログイン</button>
+        <button id="register-tab" type="button" role="tab" aria-selected="false">新規登録</button>
+      </div>
+
+      <form id="login-form" class="auth-form">
+        <label class="auth-field">メールアドレス<input id="login-email" type="email" autocomplete="email" required></label>
+        <label class="auth-field">パスワード<input id="login-password" type="password" autocomplete="current-password" minlength="8" required></label>
+        <button class="auth-primary" type="submit">ログイン</button>
+        <button id="reset-password" class="auth-text-button" type="button">パスワードを忘れた方</button>
+      </form>
+
+      <form id="register-form" class="auth-form" hidden>
+        <label class="auth-field">メールアドレス<input id="register-email" type="email" autocomplete="email" required></label>
+        <label class="auth-field">パスワード<small>8文字以上</small><input id="register-password" type="password" autocomplete="new-password" minlength="8" required></label>
+        <h2 class="auth-section-title">このアプリを使う方</h2>
+        <p class="auth-field-note">ログインや家族共有で表示する、あなたのお名前です。</p>
+        <label class="auth-field">あなたのお名前<input id="display-name" type="text" maxlength="80" autocomplete="name" required></label>
+        <fieldset id="record-target-choice" class="auth-field record-target-choice" data-patient-setup><legend>どなたの健康記録をつけますか？</legend>
+          <label><input type="radio" name="recordTarget" value="self"><span><strong>自分の記録</strong><small>ご本人として使う</small></span></label>
+          <label><input type="radio" name="recordTarget" value="family" checked><span><strong>家族の記録</strong><small>お子さん・ご家族を支える</small></span></label>
+        </fieldset>
+        <label id="relationship-field" class="auth-field">健康記録の対象となる方との関係<select id="relationship"><option value="mother">母</option><option value="father">父</option><option value="self">本人</option><option value="grandparent">祖父母</option><option value="other">その他</option></select></label>
+        <h2 class="auth-section-title" data-patient-setup>健康記録の対象となる方</h2>
+        <p class="auth-field-note" data-patient-setup>診察・検査・薬・成長などを記録するご本人です。ご自身の記録の場合も入力してください。</p>
+        <label id="patient-name-field" class="auth-field" data-patient-setup>お名前・呼び名<input id="patient-name" type="text" maxlength="80" required></label>
+        <label class="auth-field" data-patient-setup>生年月日<small>任意</small><input id="birth-date" type="date"></label>
+        <fieldset class="auth-field" data-patient-setup><legend>アバター</legend><div class="avatar-options">
+          <label class="avatar-option"><input type="radio" name="avatar" value="child-boy" checked><span><img src="/assets/alagille-brand/avatars/avatar-child-boy-v1.png" alt="男の子"></span></label>
+          <label class="avatar-option"><input type="radio" name="avatar" value="child-girl"><span><img src="/assets/alagille-brand/avatars/avatar-child-girl-v1.png" alt="女の子"></span></label>
+          <label class="avatar-option"><input type="radio" name="avatar" value="adult-man"><span><img src="/assets/alagille-brand/avatars/avatar-adult-man-v1.png" alt="成人男性"></span></label>
+          <label class="avatar-option"><input type="radio" name="avatar" value="adult-woman"><span><img src="/assets/alagille-brand/avatars/avatar-adult-woman-v1.png" alt="成人女性"></span></label>
+        </div></fieldset>
+        <button id="register-submit" class="auth-primary" type="submit">アカウントと家族ノートを作る</button>
+      </form>
+      <p id="auth-message" class="auth-message" role="alert" aria-live="polite"></p>
+    </section>
+    <p class="auth-privacy"><span class="material-symbols-outlined">lock</span><span>検査結果やお薬の記録は、参加している家族アカウントだけが確認できます。</span></p>
+  </main>
+
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/12.15.0/firebase-app.js';
+    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, setPersistence, inMemoryPersistence, signOut } from 'https://www.gstatic.com/firebasejs/12.15.0/firebase-auth.js';
+
+    const firebaseConfig = {
+      projectId: 'yorisoi-dev-477515',
+      appId: '1:450637239907:web:e39acc4cbbe7197647ca56',
+      storageBucket: 'yorisoi-dev-477515.firebasestorage.app',
+      apiKey: 'AIzaSyAXaAZXL1SPv0rxtxpowlLO15CbaEoIFG0',
+      authDomain: 'yorisoi-dev-477515.firebaseapp.com',
+      messagingSenderId: '450637239907'
+    };
+    const auth = getAuth(initializeApp(firebaseConfig));
+    await setPersistence(auth, inMemoryPersistence);
+    const $ = (id) => document.getElementById(id);
+    const params = new URLSearchParams(location.search);
+    const inviteToken = params.get('invite') || '';
+    let hasServerSession = false;
+    const nextPath = (() => { const value = params.get('next') || '/?disease=alagille'; return value.startsWith('/') && !value.startsWith('//') ? value : '/?disease=alagille'; })();
+
+    function showMode(mode) {
+      const login = mode === 'login';
+      $('login-form').hidden = !login;
+      $('register-form').hidden = login;
+      $('login-tab').setAttribute('aria-selected', String(login));
+      $('register-tab').setAttribute('aria-selected', String(!login));
+      $('auth-message').textContent = '';
+    }
+
+    function syncRecordTarget() {
+      if (inviteToken) return;
+      const self = document.querySelector('input[name="recordTarget"]:checked')?.value === 'self';
+      $('relationship-field').hidden = self;
+      $('patient-name-field').hidden = self;
+      $('patient-name').required = !self;
+      if (self) $('relationship').value = 'self';
+      else if ($('relationship').value === 'self') $('relationship').value = 'mother';
+    }
+
+    function friendlyError(error) {
+      const messages = {
+        'auth/email-already-in-use': 'このメールアドレスは登録済みです。ログインしてください。',
+        'auth/invalid-credential': 'メールアドレスまたはパスワードを確認してください。',
+        'auth/invalid-email': 'メールアドレスの形式を確認してください。',
+        'auth/weak-password': 'パスワードは8文字以上にしてください。',
+        'auth/too-many-requests': '操作が続いたため一時停止しています。少し待ってからお試しください。'
+      };
+      return messages[error.code] || error.message || '処理を完了できませんでした。';
+    }
+
+    async function createServerSession(user) {
+      const idToken = await user.getIdToken(true);
+      const response = await fetch('/api/account/session', { method: 'POST', headers: { Authorization: `Bearer ${idToken}` } });
+      if (!response.ok) throw new Error('ログイン状態を保存できませんでした。');
+      hasServerSession = true;
+    }
+
+    async function acceptInvitation() {
+      const response = await fetch(`/api/family/invitations/${encodeURIComponent(inviteToken)}/accept`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ displayName: $('display-name').value, relationship: $('relationship').value })
+      });
+      const result = await response.json();
+      if (!response.ok) throw new Error(result.error || '家族ノートに参加できませんでした。');
+    }
+
+    async function withBusy(form, task) {
+      const button = form.querySelector('button[type="submit"]');
+      button.disabled = true;
+      $('auth-message').textContent = '';
+      try { await task(); } catch (error) { $('auth-message').textContent = friendlyError(error); button.disabled = false; }
+    }
+
+    $('login-tab').addEventListener('click', () => showMode('login'));
+    $('register-tab').addEventListener('click', () => showMode('register'));
+    document.querySelectorAll('input[name="recordTarget"]').forEach((input) => input.addEventListener('change', syncRecordTarget));
+
+    $('login-form').addEventListener('submit', (event) => {
+      event.preventDefault();
+      withBusy(event.currentTarget, async () => {
+        const credential = await signInWithEmailAndPassword(auth, $('login-email').value, $('login-password').value);
+        await createServerSession(credential.user);
+        const me = await fetch('/api/account/me').then((response) => response.json());
+        if (inviteToken && !me.needsOnboarding) { await acceptInvitation(); await signOut(auth); location.replace(nextPath); return; }
+        if (me.needsOnboarding) { showMode('register'); $('register-email').value = credential.user.email || ''; $('register-email').disabled = true; $('register-password').closest('label').hidden = true; return; }
+        await signOut(auth);
+        location.replace(nextPath);
+      });
+    });
+
+    $('register-form').addEventListener('submit', (event) => {
+      event.preventDefault();
+      withBusy(event.currentTarget, async () => {
+        let user = auth.currentUser;
+        if (!user && !hasServerSession) {
+          const credential = await createUserWithEmailAndPassword(auth, $('register-email').value, $('register-password').value);
+          user = credential.user;
+          await createServerSession(user);
+        }
+        if (inviteToken) {
+          await acceptInvitation();
+          if (auth.currentUser) await signOut(auth);
+          location.replace(nextPath);
+          return;
+        }
+        const response = await fetch('/api/account/bootstrap', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            displayName: $('display-name').value,
+            relationship: $('relationship').value,
+            patientName: document.querySelector('input[name="recordTarget"]:checked')?.value === 'self' ? $('display-name').value : $('patient-name').value,
+            birthDate: $('birth-date').value,
+            avatarKey: document.querySelector('input[name="avatar"]:checked').value
+          })
+        });
+        const result = await response.json();
+        if (!response.ok) throw new Error(result.error || '家族ノートを作成できませんでした。');
+        if (result.patientId) localStorage.setItem('alagille-current-patient-id', result.patientId);
+        if (auth.currentUser) await signOut(auth);
+        location.replace(nextPath);
+      });
+    });
+
+    $('reset-password').addEventListener('click', async () => {
+      const email = $('login-email').value.trim();
+      if (!email) { $('auth-message').textContent = 'メールアドレスを入力してください。'; return; }
+      try { await sendPasswordResetEmail(auth, email); $('auth-message').style.color = '#28745f'; $('auth-message').textContent = '再設定用メールを送信しました。'; }
+      catch (error) { $('auth-message').textContent = friendlyError(error); }
+    });
+
+    if (params.get('setup') === '1') showMode('register');
+    syncRecordTarget();
+    if (inviteToken) {
+      document.querySelector('.auth-lead').textContent = '招待された家族ノートへ参加します。';
+      $('register-submit').textContent = '家族ノートに参加する';
+      document.querySelectorAll('[data-patient-setup]').forEach((element) => { element.hidden = true; });
+      $('patient-name').required = false;
+    }
+
+    try {
+      const response = await fetch('/api/account/me');
+      if (response.ok) {
+        const me = await response.json();
+        hasServerSession = true;
+        if (!me.needsOnboarding && !inviteToken) {
+          location.replace(nextPath);
+        } else {
+          showMode('register');
+          $('register-email').value = me.user?.email || '';
+          $('register-email').disabled = true;
+          $('register-password').required = false;
+          $('register-password').closest('label').hidden = true;
+          $('display-name').value = me.account?.displayName || '';
+        }
+      }
+    } catch {
+      // No server session yet; continue with the selected login mode.
+    }
+  </script>
+</body>
+</html>

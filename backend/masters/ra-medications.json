@@ -1,0 +1,38 @@
+{
+  "categories": [
+    { "id": "csdmard", "name": "従来型抗リウマチ薬（csDMARDs）", "description": "基本治療薬", "step": 1 },
+    { "id": "steroid", "name": "ステロイド", "description": "急性期・疾患活動性高い時", "step": 2 },
+    { "id": "biologic_tnf", "name": "生物学的製剤（抗TNF）", "description": "難治例・進行例", "step": 3 },
+    { "id": "biologic_other", "name": "生物学的製剤（その他）", "description": "IL-6阻害・T細胞阻害", "step": 3 },
+    { "id": "jak_inhibitor", "name": "JAK阻害薬", "description": "経口の分子標的薬", "step": 3 },
+    { "id": "nsaid", "name": "消炎鎮痛薬（NSAIDs）", "description": "対症療法", "step": 1 },
+    { "id": "other", "name": "その他", "description": "骨粗鬆症治療など", "step": 4 }
+  ],
+  "medications": [
+    { "genericName": "メトトレキサート", "brandNames": ["リウマトレックス", "メトレート"], "category": "csdmard", "dosageForms": ["経口", "皮下注射"], "notes": "RAのアンカードラッグ" },
+    { "genericName": "レフルノミド", "brandNames": ["アラバ"], "category": "csdmard", "dosageForms": ["経口"] },
+    { "genericName": "サラゾスルファピリジン", "brandNames": ["アザルフィジン"], "category": "csdmard", "dosageForms": ["経口"] },
+    { "genericName": "タクロリムス", "brandNames": ["プログラフ"], "category": "csdmard", "dosageForms": ["経口"] },
+    { "genericName": "ブシラミン", "brandNames": ["リマチル"], "category": "csdmard", "dosageForms": ["経口"] },
+    { "genericName": "イグラチモド", "brandNames": ["ケアラム", "コルベット"], "category": "csdmard", "dosageForms": ["経口"], "notes": "日本発csDMARD・MTX不可例で使用" },
+    { "genericName": "プレドニゾロン", "brandNames": ["プレドニン"], "category": "steroid", "dosageForms": ["経口", "点滴"] },
+    { "genericName": "メチルプレドニゾロン", "brandNames": ["メドロール"], "category": "steroid", "dosageForms": ["経口"] },
+    { "genericName": "インフリキシマブ", "brandNames": ["レミケード"], "category": "biologic_tnf", "dosageForms": ["点滴"], "mechanism": "抗TNFα抗体" },
+    { "genericName": "エタネルセプト", "brandNames": ["エンブレル"], "category": "biologic_tnf", "dosageForms": ["皮下注射"], "mechanism": "TNF受容体融合蛋白" },
+    { "genericName": "アダリムマブ", "brandNames": ["ヒュミラ"], "category": "biologic_tnf", "dosageForms": ["皮下注射"], "mechanism": "抗TNFα抗体" },
+    { "genericName": "ゴリムマブ", "brandNames": ["シンポニー"], "category": "biologic_tnf", "dosageForms": ["皮下注射"], "mechanism": "抗TNFα抗体" },
+    { "genericName": "セルトリズマブペゴル", "brandNames": ["シムジア"], "category": "biologic_tnf", "dosageForms": ["皮下注射"], "mechanism": "PEG化抗TNFα抗体" },
+    { "genericName": "オゾラリズマブ", "brandNames": ["ナノゾラ"], "category": "biologic_tnf", "dosageForms": ["皮下注射"], "mechanism": "抗TNFαナノボディ製剤", "notes": "日本発・4週間隔・2022年9月承認" },
+    { "genericName": "トシリズマブ", "brandNames": ["アクテムラ"], "category": "biologic_other", "dosageForms": ["点滴", "皮下注射"], "mechanism": "抗IL-6受容体抗体" },
+    { "genericName": "アバタセプト", "brandNames": ["オレンシア"], "category": "biologic_other", "dosageForms": ["点滴", "皮下注射"], "mechanism": "T細胞共刺激阻害" },
+    { "genericName": "サリルマブ", "brandNames": ["ケブザラ"], "category": "biologic_other", "dosageForms": ["皮下注射"], "mechanism": "抗IL-6受容体抗体" },
+    { "genericName": "トファシチニブ", "brandNames": ["ゼルヤンツ"], "category": "jak_inhibitor", "dosageForms": ["経口"] },
+    { "genericName": "バリシチニブ", "brandNames": ["オルミエント"], "category": "jak_inhibitor", "dosageForms": ["経口"] },
+    { "genericName": "ウパダシチニブ", "brandNames": ["リンヴォック"], "category": "jak_inhibitor", "dosageForms": ["経口"], "notes": "選択的JAK1阻害" },
+    { "genericName": "ペフィシチニブ", "brandNames": ["スマイラフ"], "category": "jak_inhibitor", "dosageForms": ["経口"] },
+    { "genericName": "ロキソプロフェン", "brandNames": ["ロキソニン"], "category": "nsaid", "dosageForms": ["経口", "外用"] },
+    { "genericName": "セレコキシブ", "brandNames": ["セレコックス"], "category": "nsaid", "dosageForms": ["経口"], "notes": "COX-2選択的" },
+    { "genericName": "ナプロキセン", "brandNames": ["ナイキサン"], "category": "nsaid", "dosageForms": ["経口"] },
+    { "genericName": "デノスマブ", "brandNames": ["プラリア"], "category": "other", "dosageForms": ["皮下注射"], "notes": "骨破壊抑制・骨粗鬆症" }
+  ]
+}

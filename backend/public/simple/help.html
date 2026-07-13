@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>よくある質問 - よりそい アラジール</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined">
+  <link rel="stylesheet" href="/css/alagille-family.css">
+  <script src="/js/account-guard.js"></script>
+  <style>
+    .help-page{padding-bottom:96px}.screen-title{color:var(--sage)}
+    .help-intro{margin-bottom:14px;padding:14px;display:grid;grid-template-columns:44px 1fr;gap:10px;align-items:center;border:1px solid rgba(190,214,180,.78);border-radius:8px;background:linear-gradient(135deg,#f1faed,#fffaf3)}.help-intro .material-symbols-outlined{width:44px;height:44px;border-radius:8px;display:grid;place-items:center;background:#fff;color:var(--mint);font-size:27px}.help-intro h2{margin:0 0 4px;color:var(--ink);font-size:17px}.help-intro p{margin:0;color:var(--ink-soft);font-size:11px;line-height:1.65;font-weight:760}
+    .help-section{margin:18px 0 8px;color:var(--ink);font-size:14px}.faq-list{display:grid;gap:8px}.faq-item{border:1px solid var(--line);border-radius:8px;background:rgba(255,255,255,.92);overflow:hidden}.faq-item summary{min-height:58px;padding:12px 46px 12px 13px;position:relative;display:flex;align-items:center;color:var(--ink);font-size:13px;line-height:1.5;font-weight:900;cursor:pointer;list-style:none}.faq-item summary::-webkit-details-marker{display:none}.faq-item summary::after{content:"expand_more";position:absolute;right:13px;font-family:"Material Symbols Outlined";font-size:22px;color:var(--mint);transition:transform .18s ease}.faq-item[open] summary::after{transform:rotate(180deg)}.faq-answer{padding:0 13px 14px;border-top:1px solid rgba(232,222,209,.7);color:var(--ink-soft);font-size:12px;line-height:1.8;font-weight:730}.faq-answer p{margin:11px 0 0}.faq-answer strong{color:var(--ink)}.faq-link{min-height:44px;margin-top:10px;padding:0 12px;border:1.5px solid rgba(34,140,104,.32);border-radius:8px;display:flex;align-items:center;justify-content:center;gap:6px;color:var(--mint);text-decoration:none;font-size:12px;font-weight:900}
+    .policy-note{margin-top:16px;padding:13px;border-left:4px solid var(--sun);background:#fffaf0;color:#75685e;font-size:10px;line-height:1.75;font-weight:760}.policy-note strong{display:block;margin-bottom:3px;color:var(--ink);font-size:12px}
+  </style>
+</head>
+<body>
+  <main class="app help-page">
+    <header class="screen-head"><a class="round" href="/?disease=alagille" aria-label="ホームへ戻る"><span class="material-symbols-outlined">arrow_back</span></a><h1 class="screen-title">よくある質問</h1><span class="round" aria-hidden="true"><span class="material-symbols-outlined">help</span></span></header>
+    <section class="help-intro"><span class="material-symbols-outlined">support_agent</span><span><h2>安心して使うために</h2><p>保存場所、家族共有、費用、医療上の位置づけなど、使い始める前に気になることをまとめています。</p></span></section>
+
+    <h2 class="help-section">保存とデータ</h2>
+    <section class="faq-list">
+      <details class="faq-item"><summary>記録はどこに保存されますか？</summary><div class="faq-answer"><p>記録は、よりそいが利用する<strong>Google Cloud上の専用環境</strong>に保存されます。ログインしたアカウント、参加している家族、健康記録の対象に結び付けて管理します。</p><p>写真や音声も同じ家族・健康記録の対象にひもづき、参加していない人からは開けない設計です。</p></div></details>
+      <details class="faq-item"><summary>スマホの容量は使いますか？</summary><div class="faq-answer"><p>保存した記録やアップロード済みの写真・動画はクラウド側に置くため、アプリが同じファイルをスマホ内へ追加保存し続ける仕組みではありません。</p><p>ただし、撮影した元の写真や動画がスマホの写真アプリに残っている場合、その元ファイル分の容量は使います。</p></div></details>
+      <details class="faq-item"><summary>記録はどれくらい残りますか？</summary><div class="faq-answer"><p>現在の開発環境では、通常の記録に自動削除期限を設定していません。不要になった記録は各画面から削除できます。</p><p><strong>正式な保存期間と退会時の扱いは、本運用を始める前に運用規約として確定します。</strong></p></div></details>
+      <details class="faq-item"><summary>費用はかかりますか？</summary><div class="faq-answer"><p>現在の開発・確認段階では、利用者ごとのアプリ内課金はありません。将来の正式提供時の費用や利用条件はまだ確定していません。</p><p>費用が決まった場合は、利用を始める前に分かる形でお知らせします。</p></div></details>
+    </section>
+
+    <h2 class="help-section">共有と使い方</h2>
+    <section class="faq-list">
+      <details class="faq-item"><summary>家族で同じ記録を見られますか？</summary><div class="faq-answer"><p>はい。管理者が招待リンクを作り、共有したい家族へLINEやメールで送れます。招待時に「見るだけ」または「記録できる」を選べます。</p><p>招待リンクは7日間有効で、一度参加に使うと再利用できません。</p><a class="faq-link" href="/?disease=alagille#family"><span class="material-symbols-outlined">group</span>ホームから家族共有を開く</a></div></details>
+      <details class="faq-item"><summary>先生に見せてもよいですか？</summary><div class="faq-answer"><p>はい。「先生に見せる」画面で、診察メモ、検査、成長、お薬、日々の様子、次に聞くことから必要な項目だけをまとめられます。</p><p>スマホ画面を見せるほか、コピーや印刷もできます。見せる前に内容を確認してください。</p><a class="faq-link" href="/simple/show.html?disease=alagille"><span class="material-symbols-outlined">clinical_notes</span>先生に見せる画面を開く</a></div></details>
+      <details class="faq-item"><summary>LINE WORKS以外からも使えますか？</summary><div class="faq-answer"><p>現在は、案内されたURLをChromeなどのブラウザで開き、アカウントへログインして使うWebアプリです。LINE WORKSからリンクを開くことも、URLをブラウザで直接開くこともできます。</p><p>LINEやLINE WORKSのアカウントと自動で結び付ける機能、Bot、通知はまだ接続していません。</p></div></details>
+    </section>
+
+    <h2 class="help-section">医療と安全性</h2>
+    <section class="faq-list">
+      <details class="faq-item"><summary>このアプリが医学的な判断をしますか？</summary><div class="faq-answer"><p><strong>いいえ。診断、正常・異常、改善・悪化、治療の判断をするアプリではありません。</strong></p><p>家族が残した事実を見返し、診察で先生へ伝えやすくするための記録補助です。症状や治療については主治医へご相談ください。</p></div></details>
+      <details class="faq-item"><summary>誰でも記録を見られますか？</summary><div class="faq-answer"><p>いいえ。ログインに加え、その家族ノートへ参加していることを確認してから記録を表示します。健康記録の対象ごとにデータを分け、他の家族の記録を同じ画面へ混ぜない設計です。</p><p>共有したくない相手には招待リンクを送らず、不要な招待は家族共有画面から取り消してください。</p></div></details>
+    </section>
+
+    <aside class="policy-note"><strong>現在は開発・確認中です</strong>保存期間、正式提供時の費用、問い合わせ窓口、退会時のデータ処理は、本運用前に規約と運用手順を確定します。未確定の内容を「永久」「無料」「完全に安全」とは案内しません。</aside>
+  </main>
+
+  <nav class="bottom-nav" aria-label="下部メニュー"><a href="/?disease=alagille"><span class="material-symbols-outlined">home</span><span>ホーム</span></a><a href="/simple/calendar.html?disease=alagille"><span class="material-symbols-outlined">calendar_month</span><span>カレンダー</span></a><a href="/simple/album.html?disease=alagille"><span class="material-symbols-outlined">photo_library</span><span>写真</span></a><a class="active" href="/simple/settings.html?disease=alagille"><span class="material-symbols-outlined">clinical_notes</span><span>家族ノート</span></a></nav>
+</body>
+</html>

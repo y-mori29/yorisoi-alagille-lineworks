@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>最近の記録 - よりそい アラジール</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined">
+  <link rel="stylesheet" href="/css/alagille-family.css">
+  <link rel="stylesheet" href="/css/alagille-planning.css">
+  <script src="/js/account-guard.js"></script>
+  <style>
+    .recent-intro{padding:14px;margin-bottom:12px;background:linear-gradient(135deg,#fffaf0,#f0fbf8)}
+    .recent-intro h2{margin:0 0 5px;color:var(--ink);font-size:18px}.recent-intro p{margin:0;color:var(--ink-soft);font-size:12px;line-height:1.7;font-weight:760}
+    .recent-list{display:grid;gap:9px}.recent-link{padding:13px;display:grid;grid-template-columns:42px 1fr 24px;gap:9px;align-items:center;color:var(--ink);text-decoration:none}
+    .recent-icon{width:42px;height:42px;border-radius:8px;display:grid;place-items:center;background:#edf8f3;color:var(--mint);font-weight:900}.recent-link strong,.recent-link small,.recent-link span{display:block}.recent-link strong{font-size:14px;line-height:1.5}.recent-link small{margin-top:2px;color:var(--muted);font-size:10px;font-weight:850}.recent-detail{margin-top:2px;color:var(--ink-soft);font-size:11px;font-weight:760}.recent-empty{padding:24px;text-align:center;color:var(--muted);font-size:13px;line-height:1.7;font-weight:780}.recent-note{padding:12px;margin-top:12px;text-align:center;color:#6e827d;font-size:11px;line-height:1.7;font-weight:800}
+  </style>
+</head>
+<body>
+  <main class="app no-tabbar planning-page">
+    <header class="screen-head"><a class="round" href="/?disease=alagille" aria-label="ホームへ戻る"><span class="material-symbols-outlined">arrow_back</span></a><h1 class="screen-title">最近の記録</h1><a class="round" href="/simple/show.html?disease=alagille" aria-label="先生に見せる"><span class="material-symbols-outlined">clinical_notes</span></a></header>
+    <section class="planning-patient"><img id="patient-avatar" src="/assets/alagille-brand/avatars/avatar-child-boy-v1.png" alt=""><span><small>健康記録の対象</small><strong id="patient-name">読み込み中</strong></span></section>
+    <section class="panel recent-intro"><h2>最近残した記録</h2><p>診察メモ、日々の様子、検査、お薬、成長を新しい順に確認できます。改善・悪化の判定はしません。</p></section>
+    <section class="recent-list" id="recent-list" aria-live="polite"></section>
+    <section class="panel recent-note">記録した事実を見返す画面です。医学的な判断は主治医へご相談ください。</section>
+  </main>
+  <script>
+    const avatars={"adult-man":"/assets/alagille-brand/avatars/avatar-adult-man-v1.png","adult-woman":"/assets/alagille-brand/avatars/avatar-adult-woman-v1.png","child-boy":"/assets/alagille-brand/avatars/avatar-child-boy-v1.png","child-girl":"/assets/alagille-brand/avatars/avatar-child-girl-v1.png"};
+    const icons={visit:"診",daily:"日",lab:"検",medication:"薬",growth:"育"};
+    document.addEventListener("DOMContentLoaded",async()=>{const response=await fetch("/api/family/patients");if(!response.ok)return;const result=await response.json();const saved=localStorage.getItem("alagille-current-patient-id");const patient=result.patients.find((item)=>item.id===saved)||result.patients[0];if(!patient)return;document.getElementById("patient-name").textContent=patient.displayName;document.getElementById("patient-avatar").src=avatars[patient.avatarKey]||avatars["child-boy"];await loadRecent(patient.id);});
+    async function loadRecent(patientId){const root=document.getElementById("recent-list");try{const response=await fetch(`/api/recent-changes?patientId=${encodeURIComponent(patientId)}`);const result=await response.json();if(!response.ok)throw new Error(result.error);root.replaceChildren();if(!result.items.length){const empty=document.createElement("div");empty.className="panel recent-empty";empty.textContent="まだ記録はありません。ホームから記録を始められます。";root.append(empty);return;}result.items.forEach((item)=>{const link=document.createElement("a");link.className="panel recent-link";link.href=item.href;const icon=document.createElement("span");icon.className="recent-icon";icon.textContent=icons[item.type]||"記";const copy=document.createElement("span");const title=document.createElement("strong");title.textContent=`${item.label}：${item.title}`;const date=document.createElement("small");date.textContent=formatDate(item.date);copy.append(title,date);if(item.detail){const detail=document.createElement("span");detail.className="recent-detail";detail.textContent=item.detail;copy.append(detail);}const chevron=document.createElement("span");chevron.className="material-symbols-outlined";chevron.textContent="chevron_right";link.append(icon,copy,chevron);root.append(link);});}catch{root.innerHTML='<div class="panel recent-empty">最近の記録を読み込めませんでした。</div>';}}
+    function formatDate(value){return new Intl.DateTimeFormat("ja-JP",{year:"numeric",month:"numeric",day:"numeric"}).format(new Date(value));}
+  </script>
+</body>
+</html>

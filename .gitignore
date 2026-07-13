@@ -1,0 +1,52 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+dist/
+.next/
+out/
+build/
+
+# Environment variables and Keys (CRITICAL)
+.env
+.env.local
+.env*
+.env.*.local
+!.env.example
+!backend/.env.example
+secure/
+sa-key.json
+backend/sa-key.json
+deploy_env.yaml
+deploy_env.yaml.bak-*
+backend/deploy_env.yaml
+backend/deploy_env.yaml.bak-*
+env_dump.txt
+*.pem
+*.key
+*.bak
+
+# Data & Logs
+backend/data/
+data/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+logs.txt
+logs*.txt
+recent_logs*.txt
+backend-crash.txt
+patients.json
+images/output/
+output/
+
+# IDE / Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db

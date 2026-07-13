@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>次回の受診 - よりそい アラジール</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined">
+  <link rel="stylesheet" href="/css/alagille-family.css">
+  <link rel="stylesheet" href="/css/alagille-planning.css">
+  <script src="/js/account-guard.js"></script>
+</head>
+<body>
+  <main class="app no-tabbar planning-page">
+    <header class="screen-head">
+      <a class="round" href="/?disease=alagille" aria-label="ホームへ戻る"><span class="material-symbols-outlined">arrow_back</span></a>
+      <h1 class="screen-title">次回の受診</h1>
+      <a class="round" href="/questions.html?disease=alagille" aria-label="次に聞くこと"><span class="material-symbols-outlined">contact_support</span></a>
+    </header>
+
+    <section class="planning-patient" aria-label="健康記録の対象">
+      <img id="patient-avatar" src="/assets/alagille-brand/avatars/avatar-child-boy-v1.png" alt="">
+      <span><small>健康記録の対象</small><strong id="patient-name">読み込み中</strong></span>
+    </section>
+
+    <section class="panel next-appointment" id="next-appointment">
+      <img src="/assets/alagille-brand/generated/next-visit-plant-clean-v2.png" alt="鉢植えの水彩イラスト">
+      <div><small>いちばん近い受診予定</small><strong id="next-date">予定を読み込み中</strong><span id="next-detail">病院や診療科がここに表示されます</span></div>
+    </section>
+
+    <section class="panel planning-form" aria-label="受診予定を追加">
+      <h2><span class="material-symbols-outlined">event_upcoming</span><span id="appointment-form-title">受診予定を登録する</span></h2>
+      <label class="planning-field">日時<input id="appointment-date" type="datetime-local"></label>
+      <label class="planning-field">病院・クリニック<input id="clinic-name" type="text" maxlength="120" placeholder="例：○○こどもクリニック"></label>
+      <label class="planning-field">診療科<input id="department" type="text" maxlength="80" placeholder="例：小児肝臓外来"></label>
+      <label class="planning-field">場所（任意）<input id="location" type="text" maxlength="160" placeholder="例：本館2階 受付"></label>
+      <label class="planning-field">持ち物・メモ<textarea id="appointment-memo" maxlength="1000" placeholder="例：採血結果、お薬手帳、聞きたいことを持参"></textarea></label>
+      <label class="planning-field" id="status-field" hidden>状態<select id="appointment-status"><option value="scheduled">予定</option><option value="completed">受診済み</option><option value="cancelled">取消</option></select></label>
+      <p class="planning-status" id="appointment-message" role="status"></p>
+      <div class="planning-actions"><button class="planning-cancel" id="cancel-appointment" type="button" hidden>編集をやめる</button><button class="planning-save" id="save-appointment" type="button"><span class="material-symbols-outlined">save</span><span id="appointment-save-label">登録する</span></button></div>
+    </section>
+
+    <section class="panel month-card">
+      <div class="month-head"><button class="month-btn" id="prev-month" type="button" aria-label="前の月"><span class="material-symbols-outlined">chevron_left</span></button><h2 id="month-title"></h2><button class="month-btn" id="next-month" type="button" aria-label="次の月"><span class="material-symbols-outlined">chevron_right</span></button></div>
+      <div class="calendar-grid" id="calendar-grid" aria-label="受診予定カレンダー"></div>
+    </section>
+
+    <div class="section-row"><h2>受診予定</h2><a href="/questions.html?disease=alagille">次に聞くことを見る</a></div>
+    <section class="planning-list" id="appointment-list" aria-live="polite"></section>
+    <section class="panel notification-note">LINE WORKSへの受診通知はまだ接続していません。ここでは家族で予定を共有できます。</section>
+  </main>
+
+  <script>
+    const avatarArtwork = { "adult-man":"/assets/alagille-brand/avatars/avatar-adult-man-v1.png", "adult-woman":"/assets/alagille-brand/avatars/avatar-adult-woman-v1.png", "child-boy":"/assets/alagille-brand/avatars/avatar-child-boy-v1.png", "child-girl":"/assets/alagille-brand/avatars/avatar-child-girl-v1.png" };
+    const statusLabels = { scheduled:"予定", completed:"受診済み", cancelled:"取消" };
+    const state = { patientId:"", appointments:[], editingId:null, month:new Date() };
+    const $ = (id) => document.getElementById(id);
+
+    document.addEventListener("DOMContentLoaded", async () => {
+      $("appointment-date").value = localDateTimeValue(nextHour());
+      $("save-appointment").addEventListener("click", saveAppointment);
+      $("cancel-appointment").addEventListener("click", resetForm);
+      $("appointment-list").addEventListener("click", handleAction);
+      $("prev-month").addEventListener("click", () => { state.month.setMonth(state.month.getMonth()-1); renderCalendar(); });
+      $("next-month").addEventListener("click", () => { state.month.setMonth(state.month.getMonth()+1); renderCalendar(); });
+      await loadPatient(); await loadAppointments();
+    });
+
+    async function loadPatient() {
+      const response = await fetch("/api/family/patients"); if (!response.ok) throw new Error("patient load failed");
+      const result = await response.json(); const savedId = localStorage.getItem("alagille-current-patient-id");
+      const patient = result.patients.find((item) => item.id === savedId) || result.patients[0]; if (!patient) throw new Error("patient missing");
+      state.patientId = patient.id; $("patient-name").textContent = patient.displayName; $("patient-avatar").src = avatarArtwork[patient.avatarKey] || avatarArtwork["child-boy"];
+    }
+
+    async function loadAppointments() {
+      $("appointment-message").textContent = "予定を読み込んでいます…";
+      try {
+        const response = await fetch(`/api/appointments?patientId=${encodeURIComponent(state.patientId)}`); const result = await response.json();
+        if (!response.ok) throw new Error(result.error || "load failed"); state.appointments = result.appointments || []; $("appointment-message").textContent = ""; renderAll();
+      } catch { $("appointment-message").textContent = "予定を読み込めませんでした。時間をおいてお試しください。"; }
+    }
+
+    async function saveAppointment() {
+      if (!$("appointment-date").value) { $("appointment-message").textContent = "受診日時を入力してください。"; return; }
+      const payload = { patientId:state.patientId, scheduledAt:new Date($("appointment-date").value).toISOString(), clinicName:$("clinic-name").value.trim(), department:$("department").value.trim(), location:$("location").value.trim(), memo:$("appointment-memo").value.trim(), status:$("appointment-status").value };
+      const editing = Boolean(state.editingId); const button = $("save-appointment"); button.disabled = true; $("appointment-message").textContent = "保存しています…";
+      try {
+        const response = await fetch(editing ? `/api/appointments/${encodeURIComponent(state.editingId)}` : "/api/appointments", { method:editing ? "PATCH" : "POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify(payload) });
+        const result = await response.json(); if (!response.ok) throw new Error(result.error || "save failed"); resetForm(); await loadAppointments(); $("appointment-message").textContent = editing ? "変更を保存しました。" : "受診予定を登録しました。";
+      } catch { $("appointment-message").textContent = "保存できませんでした。入力内容を確認してください。"; } finally { button.disabled = false; }
+    }
+
+    function renderAll() { renderNext(); renderCalendar(); renderList(); }
+    function renderNext() {
+      const next = state.appointments.filter((item) => item.status === "scheduled" && new Date(item.scheduledAt) >= new Date()).sort((a,b) => a.scheduledAt.localeCompare(b.scheduledAt))[0];
+      $("next-date").textContent = next ? formatFull(next.scheduledAt) : "次の予定はまだありません";
+      $("next-detail").textContent = next ? [next.clinicName,next.department].filter(Boolean).join("・") || "病院・診療科は未入力です" : "下のフォームから登録できます";
+    }
+
+    function renderCalendar() {
+      const y=state.month.getFullYear(),m=state.month.getMonth(); $("month-title").textContent=`${y}年${m+1}月`; const grid=$("calendar-grid"); grid.replaceChildren();
+      ["日","月","火","水","木","金","土"].forEach((label)=>{const el=document.createElement("div");el.className="dow";el.textContent=label;grid.append(el);});
+      const first=new Date(y,m,1),last=new Date(y,m+1,0),prevLast=new Date(y,m,0).getDate(),today=dateKey(new Date());
+      const visitDates=new Set(state.appointments.filter((item)=>item.status==="scheduled").map((item)=>dateKey(new Date(item.scheduledAt))));
+      for(let i=first.getDay()-1;i>=0;i--) grid.append(dayCell(prevLast-i,true,false,false));
+      for(let d=1;d<=last.getDate();d++){const key=`${y}-${String(m+1).padStart(2,"0")}-${String(d).padStart(2,"0")}`;grid.append(dayCell(d,false,key===today,visitDates.has(key)));}
+      const trail=(7-((first.getDay()+last.getDate())%7))%7;for(let d=1;d<=trail;d++)grid.append(dayCell(d,true,false,false));
+    }
+
+    function dayCell(day,outside,today,hasVisit){const el=document.createElement("div");el.className=["day",outside?"outside":"",today?"today":"",hasVisit?"has-visit":""].filter(Boolean).join(" ");el.textContent=day;return el;}
+    function renderList() {
+      const root=$("appointment-list");root.replaceChildren();const sorted=[...state.appointments].sort((a,b)=>a.scheduledAt.localeCompare(b.scheduledAt));
+      if(!sorted.length){const empty=document.createElement("div");empty.className="panel planning-empty";empty.textContent="受診予定はまだありません。日時だけでも登録できます。";root.append(empty);return;}
+      sorted.forEach((item)=>root.append(appointmentCard(item)));
+    }
+
+    function appointmentCard(item){const card=document.createElement("article");card.className="panel appointment-card";const head=document.createElement("div");head.className="appointment-head";const copy=document.createElement("div");const time=document.createElement("time");time.dateTime=item.scheduledAt;time.textContent=formatFull(item.scheduledAt);const title=document.createElement("h3");title.textContent=[item.clinicName,item.department].filter(Boolean).join("・")||"受診予定";copy.append(time,title);const actions=document.createElement("span");actions.className="card-actions";actions.append(actionButton("edit","編集",item.id),actionButton("delete","削除",item.id));head.append(copy,actions);card.append(head);if(item.location){const p=document.createElement("p");p.textContent=`場所：${item.location}`;card.append(p);}if(item.memo){const p=document.createElement("p");p.textContent=item.memo;card.append(p);}const status=document.createElement("span");status.className="appointment-status";status.textContent=statusLabels[item.status]||"予定";card.append(status);return card;}
+    function actionButton(action,label,id){const button=document.createElement("button");button.type="button";button.dataset.action=action;button.dataset.id=id;button.setAttribute("aria-label",label);const icon=document.createElement("span");icon.className="material-symbols-outlined";icon.textContent=action;button.append(icon);return button;}
+
+    async function handleAction(event){const button=event.target.closest("button[data-action]");if(!button)return;const item=state.appointments.find((record)=>record.id===button.dataset.id);if(!item)return;if(button.dataset.action==="edit")startEdit(item);else await deleteAppointment(item);}
+    function startEdit(item){state.editingId=item.id;$("appointment-date").value=localDateTimeValue(new Date(item.scheduledAt));$("clinic-name").value=item.clinicName||"";$("department").value=item.department||"";$("location").value=item.location||"";$("appointment-memo").value=item.memo||"";$("appointment-status").value=item.status;$("status-field").hidden=false;$("appointment-form-title").textContent="受診予定を編集する";$("appointment-save-label").textContent="変更を保存";$("cancel-appointment").hidden=false;window.scrollTo({top:0,behavior:"smooth"});}
+    async function deleteAppointment(item){if(!confirm(`${formatFull(item.scheduledAt)}の受診予定を削除しますか？`))return;try{const response=await fetch(`/api/appointments/${encodeURIComponent(item.id)}?patientId=${encodeURIComponent(state.patientId)}`,{method:"DELETE"});const result=await response.json();if(!response.ok)throw new Error(result.error);await loadAppointments();$("appointment-message").textContent="受診予定を削除しました。";}catch{$("appointment-message").textContent="削除できませんでした。";}}
+    function resetForm(){state.editingId=null;$("appointment-date").value=localDateTimeValue(nextHour());["clinic-name","department","location","appointment-memo"].forEach((id)=>$(id).value="");$("appointment-status").value="scheduled";$("status-field").hidden=true;$("appointment-form-title").textContent="受診予定を登録する";$("appointment-save-label").textContent="登録する";$("cancel-appointment").hidden=true;}
+    function nextHour(){const date=new Date();date.setMinutes(0,0,0);date.setHours(date.getHours()+1);return date;}
+    function localDateTimeValue(date){const local=new Date(date.getTime()-date.getTimezoneOffset()*60000);return local.toISOString().slice(0,16);}
+    function dateKey(date){const local=new Date(date.getTime()-date.getTimezoneOffset()*60000);return local.toISOString().slice(0,10);}
+    function formatFull(value){return new Intl.DateTimeFormat("ja-JP",{year:"numeric",month:"numeric",day:"numeric",weekday:"short",hour:"2-digit",minute:"2-digit"}).format(new Date(value));}
+  </script>
+</body>
+</html>

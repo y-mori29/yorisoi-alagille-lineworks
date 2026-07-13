@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>はじめての設定 - よりそい アラジール</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined" />
+  <style>
+    :root {
+      --ink: #24313d;
+      --muted: #647482;
+      --line: #dce8e5;
+      --mint: #6fc7b2;
+      --coral: #ef7d73;
+      --sky: #68a8e6;
+      --paper: #fff;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: linear-gradient(180deg, #f4fbfb 0%, #fbfaf6 100%);
+      color: var(--ink);
+      font-family: "Hiragino Sans", "Yu Gothic", system-ui, sans-serif;
+    }
+
+    .setup-page {
+      width: 100%;
+      max-width: 480px;
+      min-height: 100vh;
+      margin: 0 auto;
+      padding: 22px 16px 92px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .hero {
+      padding: 22px 18px;
+      border-radius: 22px;
+      border: 1px solid rgba(111, 199, 178, 0.34);
+      background: linear-gradient(135deg, rgba(233, 248, 244, 0.96), rgba(255, 240, 238, 0.86));
+      box-shadow: 0 12px 28px rgba(53, 94, 92, 0.10);
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      min-height: 30px;
+      padding: 0 10px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.76);
+      color: #3b776a;
+      font-size: 12px;
+      font-weight: 850;
+    }
+
+    .eyebrow .material-symbols-outlined { font-size: 17px; }
+    h1 { margin: 14px 0 8px; font-size: 29px; line-height: 1.18; font-weight: 900; letter-spacing: 0; }
+    .lead { margin: 0; color: #526675; font-size: 15px; line-height: 1.65; font-weight: 720; }
+
+    .setup-choice {
+      display: grid;
+      grid-template-columns: 48px minmax(0, 1fr);
+      align-items: center;
+      gap: 12px;
+      padding: 15px;
+      border-radius: 18px;
+      border: 2px solid rgba(111, 199, 178, 0.46);
+      background: #fff;
+      box-shadow: 0 8px 22px rgba(44, 64, 72, 0.08);
+    }
+
+    .choice-icon {
+      width: 48px;
+      height: 48px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 16px;
+      background: #fff0ee;
+      color: var(--coral);
+    }
+
+    .choice-icon .material-symbols-outlined { font-size: 29px; }
+    .choice-title { display: block; font-size: 17px; line-height: 1.35; font-weight: 900; }
+    .choice-desc { display: block; margin-top: 3px; color: var(--muted); font-size: 12px; line-height: 1.45; font-weight: 700; }
+
+    .what-starts {
+      display: grid;
+      gap: 9px;
+      margin-top: 2px;
+    }
+
+    .what-row {
+      display: grid;
+      grid-template-columns: 38px minmax(0, 1fr);
+      align-items: center;
+      gap: 10px;
+      min-height: 54px;
+      padding: 10px 12px;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: rgba(255,255,255,0.78);
+      color: var(--ink);
+    }
+
+    .what-row .material-symbols-outlined {
+      width: 38px;
+      height: 38px;
+      border-radius: 13px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: #edf6ff;
+      color: var(--sky);
+      font-size: 23px;
+    }
+
+    .what-row strong {
+      display: block;
+      font-size: 14px;
+      line-height: 1.3;
+    }
+
+    .what-row span:last-child {
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.4;
+      font-weight: 680;
+    }
+
+    .setup-footer {
+      position: fixed;
+      left: 50%;
+      bottom: 0;
+      transform: translateX(-50%);
+      width: 100%;
+      max-width: 480px;
+      padding: 12px 16px 16px;
+      background: rgba(246, 251, 249, 0.96);
+      border-top: 1px solid var(--line);
+      backdrop-filter: blur(10px);
+    }
+
+    .start-button {
+      width: 100%;
+      min-height: 52px;
+      border: 0;
+      border-radius: 16px;
+      background: #ef7d73;
+      color: #fff;
+      font-size: 16px;
+      font-weight: 900;
+    }
+  </style>
+</head>
+<body>
+  <main class="setup-page">
+    <section class="hero">
+      <span class="eyebrow"><span class="material-symbols-outlined">diversity_1</span>家族で使う準備</span>
+      <h1>お子さんの記録を、今日からひとつに</h1>
+      <p class="lead">アラジール症候群の受診メモ、成長、写真を、お母さんがあとから見返しやすい形で残します。</p>
+    </section>
+
+    <section class="setup-choice" aria-label="選択中の記録タイプ">
+      <span class="choice-icon"><span class="material-symbols-outlined">family_restroom</span></span>
+      <span>
+        <span class="choice-title">アラジール症候群の記録</span>
+        <span class="choice-desc">複数の診療科で聞いたことを、家族で共有しやすくします</span>
+      </span>
+    </section>
+
+    <section class="what-starts" aria-label="始められること">
+      <div class="what-row">
+        <span class="material-symbols-outlined">clinical_notes</span>
+        <span><strong>診察メモ</strong><span>先生の説明を、家族に伝えやすく整理します</span></span>
+      </div>
+      <div class="what-row">
+        <span class="material-symbols-outlined">monitoring</span>
+        <span><strong>成長曲線</strong><span>身長・体重の変化を、受診記録と一緒に見ます</span></span>
+      </div>
+      <div class="what-row">
+        <span class="material-symbols-outlined">photo_library</span>
+        <span><strong>写真アルバム</strong><span>写真や資料を、横3枚で見返せるようにします</span></span>
+      </div>
+    </section>
+  </main>
+
+  <div class="setup-footer">
+    <button class="start-button" id="next-btn">家族ノートをはじめる</button>
+  </div>
+
+  <script>
+    document.getElementById("next-btn").addEventListener("click", () => {
+      localStorage.setItem("yorisoi_disease", "alagille");
+      localStorage.removeItem("yorisoi_modules");
+      localStorage.setItem("yorisoi_setup_done", "1");
+      localStorage.setItem("yorisoi_mode", "simple");
+      location.href = "/?disease=alagille";
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,124 @@
+{
+  "id": "mg",
+  "name": "重症筋無力症",
+  "shortName": "MG",
+  "description": "重症筋無力症（Myasthenia Gravis）の治療歴・薬・症状を管理",
+  "color": "#0891b2",
+  "icon": "accessibility_new",
+
+  "modules": [
+    { "id": "timeline", "label": "治療タイムライン", "description": "治療経歴を時系列で管理", "icon": "timeline", "page": "timeline.html", "enabled": true, "core": true },
+    { "id": "medications", "label": "おくすり管理", "description": "処方薬と変更履歴", "icon": "medication", "page": "medications.html", "enabled": true, "core": true },
+    { "id": "symptom-log", "label": "症状きろく", "description": "筋力低下・日内変動を記録", "icon": "edit_note", "page": "symptom-log.html", "enabled": true },
+    { "id": "restroom", "label": "トイレさがし", "description": "近くのトイレをマップで表示", "icon": "wc", "page": "restroom.html", "enabled": false },
+    { "id": "emergency-card", "label": "緊急カード", "description": "救急時に見せる情報カード", "icon": "emergency", "page": "emergency-card.html", "enabled": true, "core": true },
+    { "id": "lab-tracker", "label": "検査値きろく", "description": "血液検査の推移をグラフ表示", "icon": "science", "page": "lab-tracker.html", "enabled": true, "core": true },
+    { "id": "summary", "label": "診察用サマリー", "description": "診察時に医師に見せる画面", "icon": "description", "page": "summary.html", "enabled": true, "core": true, "fullWidth": true },
+    { "id": "resources", "label": "患者会・支援情報", "description": "患者会・医療費助成・診療拠点情報", "icon": "groups", "page": "resources.html", "enabled": true, "core": true, "fullWidth": true }
+  ],
+
+  "medicationMaster": "mg-medications.json",
+
+  "resourcesConfig": {
+    "title": "患者会・支援情報",
+    "intro": "重症筋無力症（MG）は神経筋接合部の自己免疫疾患で、指定難病11に指定されています。国内患者数は約2万9千人で、眼瞼下垂や易疲労性が特徴です。難病医療費助成や同じ疾患の仲間との情報交換が、治療の長い道のりを支えてくれます ── そんな時に役立つ情報をまとめました。",
+    "sections": [
+      {
+        "heading": "患者会・ピアサポート",
+        "icon": "groups",
+        "items": [
+          { "name": "難病情報センター 患者団体一覧", "url": "https://www.nanbyou.or.jp/entry/1364", "note": "重症筋無力症の全国・地域患者会の連絡先を確認できます。最新の活動先を探す入口として活用してください。" }
+        ]
+      },
+      {
+        "heading": "公的支援・医療費助成",
+        "icon": "account_balance",
+        "items": [
+          { "name": "難病情報センター 重症筋無力症（指定難病11）", "url": "https://www.nanbyou.or.jp/entry/120", "note": "疾患概要、診断基準、医療費助成の対象基準（重症度分類）を確認できます。" },
+          { "name": "難病情報センター 医療費助成制度", "url": "https://www.nanbyou.or.jp/entry/5460", "note": "指定難病の医療費助成の申請手順・自己負担上限額・申請窓口を解説しています。" }
+        ]
+      },
+      {
+        "heading": "医療情報・診療拠点",
+        "icon": "local_hospital",
+        "items": [
+          { "name": "日本神経免疫学会", "url": "https://neuroimmunology.jp/", "note": "重症筋無力症の診療ガイドラインを策定する学会。市民向け疾患情報も提供しています。" },
+          { "name": "日本神経学会", "url": "https://www.neurology-jp.org/", "note": "神経内科専門医の検索や、重症筋無力症を含む神経疾患の市民向け解説資料が利用できます。" }
+        ]
+      }
+    ],
+    "footer": "掲載情報は執筆時点のものです。手続き・治療方針の最新情報は各公式サイト・主治医にご確認ください。"
+  },
+
+  "symptomConfig": {
+    "title": "症状きろく",
+    "metrics": [
+      { "id": "muscleWeakness", "label": "筋力低下", "type": "scale", "min": 0, "max": 5, "description": "0=なし ← → 5=動かせない" },
+      { "id": "ptosis", "label": "眼瞼下垂（まぶたが下がる）", "type": "toggle" },
+      { "id": "diplopia", "label": "複視（物が二重に見える）", "type": "toggle" },
+      { "id": "dysphagia", "label": "嚥下困難（飲み込みづらい）", "type": "toggle" },
+      { "id": "mastication", "label": "咀嚼困難（噛みづらい）", "type": "toggle", "description": "MG-ADL球症状の重要項目" },
+      { "id": "dysarthria", "label": "構音障害（話しづらい）", "type": "toggle" },
+      { "id": "dyspnea", "label": "呼吸困難", "type": "toggle", "dangerColor": true, "description": "クリーゼの徴候として緊急受診を検討" },
+      { "id": "dailyFluctuation", "label": "日内変動の差", "type": "scale", "min": 0, "max": 5, "description": "朝と夕方の症状差" }
+    ],
+    "summaryMetrics": [
+      { "id": "muscleWeakness", "label": "平均筋力低下", "aggregate": "avg" },
+      { "id": "ptosis", "label": "眼瞼下垂日数", "aggregate": "countTrue" },
+      { "id": "diplopia", "label": "複視日数", "aggregate": "countTrue" },
+      { "id": "dysphagia", "label": "嚥下困難日数", "aggregate": "countTrue" },
+      { "id": "mastication", "label": "咀嚼困難日数", "aggregate": "countTrue" },
+      { "id": "dyspnea", "label": "呼吸困難日数", "aggregate": "countTrue" }
+    ]
+  },
+
+  "labConfig": {
+    "items": [
+      { "id": "achr", "label": "抗AChR抗体", "unit": "nmol/L", "normalRange": [0, 0.2], "warnHigh": 0.5, "note": "≥0.2で陽性。2023年日本神経免疫学会 希釈法標準化手引き" },
+      { "id": "musk", "label": "抗MuSK抗体", "unit": "nmol/L", "normalRange": [0, 0.05] },
+      { "id": "ck", "label": "CK（クレアチンキナーゼ）", "unit": "U/L", "normalRange": [40, 200], "warnHigh": 300 },
+      { "id": "tsh", "label": "甲状腺TSH", "unit": "μIU/mL", "normalRange": [0.4, 4.0] },
+      { "id": "ft4", "label": "FT4", "unit": "ng/dL", "normalRange": [0.9, 1.7] },
+      { "id": "wbc", "label": "白血球数", "unit": "/μL", "normalRange": [3500, 9000] },
+      { "id": "lymph", "label": "リンパ球数", "unit": "/μL", "normalRange": [1000, 4000] },
+      { "id": "igg", "label": "IgG", "unit": "mg/dL", "normalRange": [870, 1700] },
+      { "id": "hbv_dna", "label": "HBV-DNA", "unit": "LogIU/mL", "normalRange": [0, 1.3], "note": "免疫抑制療法前必須" }
+    ]
+  },
+
+  "scoringTools": [
+    { "id": "mg_adl", "label": "MG-ADL", "range": "0-24", "note": "MG診療ガイドライン2022+2025追補で主要評価項目。患者記入可能" },
+    { "id": "qmg", "label": "QMG（Quantitative MG Score）", "range": "0-39", "note": "医師評価の定量的スコア" },
+    { "id": "mgc", "label": "MGC（MG Composite Scale）", "range": "0-50" },
+    { "id": "mg_qol15", "label": "MG-QOL15", "range": "0-60", "note": "QOL評価" },
+    { "id": "mgfa", "label": "MGFA臨床分類", "range": "Class I-V", "note": "I=眼筋型, II-IV=全身型, V=挿管" }
+  ],
+
+  "emergencyConfig": {
+    "title": "緊急情報カード",
+    "subtitle": "重症筋無力症",
+    "fields": [
+      { "id": "mgType", "label": "病型", "placeholder": "例: 全身型/眼筋型" },
+      { "id": "mgfa", "label": "MGFA分類", "placeholder": "例: IIa" }
+    ],
+    "warnings": [
+      "⚠️ クリーゼ（呼吸不全）は緊急搬送が必要",
+      "禁忌薬剤: アミノグリコシド系/キノロン系抗菌薬、βブロッカー、マグネシウム製剤",
+      "手術時は筋弛緩薬の選択に注意（主治医連絡必須）",
+      "発熱・感染はクリーゼのトリガーになる",
+      "ステロイド急な中断は副腎不全のリスク"
+    ]
+  },
+
+  "timelineCategories": [
+    { "id": "diagnosis", "label": "診断", "color": "#dbeafe" },
+    { "id": "crisis", "label": "クリーゼ", "color": "#fca5a5" },
+    { "id": "medication_change", "label": "薬変更", "color": "#d1fae5" },
+    { "id": "plasma_exchange", "label": "血漿交換", "color": "#c7d2fe" },
+    { "id": "ivig", "label": "IVIG", "color": "#bae6fd" },
+    { "id": "thymectomy", "label": "胸腺摘出", "color": "#fecaca" },
+    { "id": "exam", "label": "検査", "color": "#e9d5ff" },
+    { "id": "self-log", "label": "じぶんメモ", "color": "#e0f2fe" },
+    { "id": "other", "label": "その他", "color": "#e5e5e5" }
+  ]
+}

@@ -1,0 +1,123 @@
+{
+  "id": "ms",
+  "name": "多発性硬化症",
+  "shortName": "MS",
+  "description": "多発性硬化症（Multiple Sclerosis）の治療歴・薬・症状を管理",
+  "color": "#8b5cf6",
+  "icon": "neurology",
+
+  "modules": [
+    { "id": "timeline", "label": "治療タイムライン", "description": "治療経歴を時系列で管理", "icon": "timeline", "page": "timeline.html", "enabled": true, "core": true },
+    { "id": "medications", "label": "おくすり管理", "description": "処方薬と変更履歴", "icon": "medication", "page": "medications.html", "enabled": true, "core": true },
+    { "id": "symptom-log", "label": "症状きろく", "description": "神経症状をかんたん記録", "icon": "edit_note", "page": "symptom-log.html", "enabled": true },
+    { "id": "restroom", "label": "トイレさがし", "description": "近くのトイレをマップで表示", "icon": "wc", "page": "restroom.html", "enabled": false },
+    { "id": "emergency-card", "label": "緊急カード", "description": "救急時に見せる情報カード", "icon": "emergency", "page": "emergency-card.html", "enabled": true, "core": true },
+    { "id": "lab-tracker", "label": "検査値きろく", "description": "血液検査の推移をグラフ表示", "icon": "science", "page": "lab-tracker.html", "enabled": true, "core": true },
+    { "id": "summary", "label": "診察用サマリー", "description": "診察時に医師に見せる画面", "icon": "description", "page": "summary.html", "enabled": true, "core": true, "fullWidth": true },
+    { "id": "resources", "label": "患者会・支援情報", "description": "患者会・医療費助成・診療拠点情報", "icon": "groups", "page": "resources.html", "enabled": true, "core": true, "fullWidth": true }
+  ],
+
+  "medicationMaster": "ms-medications.json",
+
+  "resourcesConfig": {
+    "title": "患者会・支援情報",
+    "intro": "多発性硬化症（MS）は中枢神経の脱髄を起こす自己免疫疾患で、指定難病13に指定されています。国内患者数は約2万人とされ、再発寛解を繰り返す経過が特徴です。難病医療費助成や仲間との情報交換が長い経過を支えてくれます ── そんな時に役立つ情報をまとめました。",
+    "sections": [
+      {
+        "heading": "患者会・ピアサポート",
+        "icon": "groups",
+        "items": [
+          { "name": "MSキャビン", "url": "https://mscabin.org/", "note": "多発性硬化症・視神経脊髄炎の患者支援NPO。会報『キャビンレター』、相談事業、患者向けセミナーを展開しています。" },
+          { "name": "難病情報センター 患者団体一覧", "url": "https://www.nanbyou.or.jp/entry/1364", "note": "全国の難病患者団体の連絡先一覧。地域のMS患者会・交流会を探す入口として利用できます。" }
+        ]
+      },
+      {
+        "heading": "公的支援・医療費助成",
+        "icon": "account_balance",
+        "items": [
+          { "name": "難病情報センター 多発性硬化症／視神経脊髄炎（指定難病13）", "url": "https://www.nanbyou.or.jp/entry/3806", "note": "疾患概要、診断基準、医療費助成の対象基準（重症度分類）を確認できます。" },
+          { "name": "難病情報センター 医療費助成制度", "url": "https://www.nanbyou.or.jp/entry/5460", "note": "指定難病の医療費助成の申請手順・自己負担上限額・申請窓口を解説しています。" }
+        ]
+      },
+      {
+        "heading": "医療情報・診療拠点",
+        "icon": "local_hospital",
+        "items": [
+          { "name": "日本神経免疫学会", "url": "https://neuroimmunology.jp/", "note": "MS・NMOSDの研究と診療を担う学会。診療ガイドラインや市民向けの疾患情報を発信しています。" },
+          { "name": "日本神経学会", "url": "https://www.neurology-jp.org/", "note": "神経内科専門医の検索や、MSを含む神経疾患の市民向け解説資料が利用できます。" }
+        ]
+      }
+    ],
+    "footer": "掲載情報は執筆時点のものです。手続き・治療方針の最新情報は各公式サイト・主治医にご確認ください。"
+  },
+
+  "symptomConfig": {
+    "title": "症状きろく",
+    "metrics": [
+      { "id": "fatigue", "label": "疲労感", "type": "scale", "min": 0, "max": 5 },
+      { "id": "walkingDistance", "label": "歩ける距離", "type": "scale", "min": 0, "max": 5, "labels": ["寝たきり", "数m", "屋内", "100m", "500m", "1km以上"] },
+      { "id": "visionChange", "label": "視力変化あり", "type": "toggle", "dangerColor": true },
+      { "id": "numbness", "label": "しびれ・感覚異常", "type": "toggle" },
+      { "id": "bladderIssue", "label": "排尿トラブル", "type": "toggle" },
+      { "id": "cognitiveIssue", "label": "集中困難", "type": "toggle" },
+      { "id": "uhthoff", "label": "ウートフ現象（体温上昇で悪化）", "type": "toggle", "description": "入浴・運動・気温で症状一過性悪化" },
+      { "id": "painScore", "label": "痛み", "type": "scale", "min": 0, "max": 5 }
+    ],
+    "summaryMetrics": [
+      { "id": "fatigue", "label": "平均疲労", "aggregate": "avg" },
+      { "id": "walkingDistance", "label": "平均歩行", "aggregate": "avg" },
+      { "id": "visionChange", "label": "視力変化日数", "aggregate": "countTrue" },
+      { "id": "bladderIssue", "label": "排尿トラブル日数", "aggregate": "countTrue" },
+      { "id": "uhthoff", "label": "ウートフ日数", "aggregate": "countTrue" }
+    ]
+  },
+
+  "labConfig": {
+    "items": [
+      { "id": "wbc", "label": "白血球数", "unit": "/μL", "normalRange": [3500, 9000] },
+      { "id": "lymph", "label": "リンパ球数", "unit": "/μL", "normalRange": [1000, 4000], "warnLow": 500, "note": "S1P薬使用時<200/μLで休薬検討" },
+      { "id": "cd19", "label": "CD19+ B細胞", "unit": "%", "normalRange": [5, 20], "note": "抗CD20抗体（オクレリズマブ/オファツムマブ）使用時のモニタリング" },
+      { "id": "jcv", "label": "JCV抗体指数", "unit": "index", "normalRange": [0, 0.9], "warnHigh": 1.5, "note": "ナタリズマブ使用時PMLリスク層別化。>1.5で高リスク" },
+      { "id": "igg", "label": "IgG", "unit": "mg/dL", "normalRange": [870, 1700], "warnLow": 600, "note": "B細胞標的薬長期使用時の低γグロブリン血症" },
+      { "id": "alt", "label": "ALT", "unit": "U/L", "normalRange": [5, 40], "warnHigh": 80 },
+      { "id": "ast", "label": "AST", "unit": "U/L", "normalRange": [10, 40], "warnHigh": 80 },
+      { "id": "cre", "label": "クレアチニン", "unit": "mg/dL", "normalRange": [0.5, 1.0], "warnHigh": 1.3 },
+      { "id": "vitd", "label": "ビタミンD", "unit": "ng/mL", "normalRange": [30, 100], "warnLow": 20 },
+      { "id": "hbv_dna", "label": "HBV-DNA", "unit": "LogIU/mL", "normalRange": [0, 1.3], "note": "免疫抑制療法前必須" }
+    ]
+  },
+
+  "scoringTools": [
+    { "id": "edss", "label": "EDSS（Expanded Disability Status Scale）", "range": "0-10", "note": "国際標準の身体障害度スケール。日本GLでも評価必須" },
+    { "id": "sdmt", "label": "SDMT（Symbol Digit Modalities Test）", "note": "認知機能の標準評価。MS患者の43-70%に認知機能障害" },
+    { "id": "msfc", "label": "MSFC（Multiple Sclerosis Functional Composite）", "note": "歩行・上肢機能・認知の複合評価" }
+  ],
+
+  "emergencyConfig": {
+    "title": "緊急情報カード",
+    "subtitle": "多発性硬化症",
+    "fields": [
+      { "id": "msType", "label": "病型", "placeholder": "例: 再発寛解型(RRMS)" },
+      { "id": "edss", "label": "EDSS", "placeholder": "例: 2.5" }
+    ],
+    "warnings": [
+      "免疫調節薬（DMT）使用中",
+      "ナタリズマブ使用時は進行性多巣性白質脳症(PML)リスク",
+      "ステロイドパルス療法の既往あり",
+      "発熱時は再発症状との鑑別が必要",
+      "MRIコントラスト造影剤使用時は主治医確認"
+    ]
+  },
+
+  "timelineCategories": [
+    { "id": "diagnosis", "label": "診断", "color": "#dbeafe" },
+    { "id": "relapse", "label": "再発", "color": "#fca5a5" },
+    { "id": "medication_change", "label": "薬変更", "color": "#d1fae5" },
+    { "id": "exam", "label": "検査", "color": "#e9d5ff" },
+    { "id": "mri", "label": "MRI", "color": "#c7d2fe" },
+    { "id": "hospitalization", "label": "入院", "color": "#fde68a" },
+    { "id": "rehabilitation", "label": "リハビリ", "color": "#fed7aa" },
+    { "id": "self-log", "label": "じぶんメモ", "color": "#e0f2fe" },
+    { "id": "other", "label": "その他", "color": "#e5e5e5" }
+  ]
+}

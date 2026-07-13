@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>よりそい アラジール症候群版 インフォグラフィック</title>
+  <style>
+    :root {
+      --paper: #fffdf6;
+      --mint: #1da99d;
+      --mint2: #dff6ef;
+      --coral: #ff746b;
+      --coral2: #fff0ee;
+      --sky: #4ba7dc;
+      --sky2: #edf8ff;
+      --honey: #e5aa22;
+      --honey2: #fff7df;
+      --ink: #49372f;
+      --soft: #75675f;
+      --line: #e8ded1;
+      --green: #6fb973;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: #eee; font-family: "Yu Gothic", "Hiragino Maru Gothic ProN", "Meiryo", sans-serif; color: var(--ink); }
+    .slide {
+      width: 1920px;
+      height: 1080px;
+      overflow: hidden;
+      position: relative;
+      background:
+        radial-gradient(circle at 10% 8%, rgba(255, 116, 107, .12), transparent 24%),
+        radial-gradient(circle at 88% 4%, rgba(29, 169, 157, .16), transparent 28%),
+        linear-gradient(180deg, #fffdf6 0%, #f4fbf8 100%);
+      padding: 72px 92px;
+    }
+    .slide:before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(73,55,47,.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(73,55,47,.025) 1px, transparent 1px);
+      background-size: 26px 26px;
+      opacity: .5;
+      pointer-events: none;
+    }
+    .top { position: relative; z-index: 1; display: flex; justify-content: space-between; align-items: flex-start; gap: 36px; }
+    .kicker { font-size: 28px; font-weight: 900; color: var(--mint); letter-spacing: .08em; margin-bottom: 18px; }
+    h1 { margin: 0; font-size: 72px; line-height: 1.18; letter-spacing: .02em; font-weight: 900; color: var(--ink); }
+    h1 .accent { color: var(--coral); }
+    .lead { margin: 24px 0 0; max-width: 980px; font-size: 30px; line-height: 1.65; font-weight: 700; color: var(--soft); }
+    .brand { font-size: 38px; color: var(--mint); font-weight: 900; letter-spacing: .12em; white-space: nowrap; }
+    .brand:after { content: "。"; color: var(--coral); letter-spacing: 0; }
+    .content { position: relative; z-index: 1; margin-top: 44px; display: grid; gap: 26px; }
+    .grid-4 { grid-template-columns: repeat(4, 1fr); }
+    .grid-3 { grid-template-columns: repeat(3, 1fr); }
+    .grid-2 { grid-template-columns: 1fr 1fr; }
+    .card {
+      background: rgba(255,255,255,.86);
+      border: 2px solid rgba(232,222,209,.95);
+      border-radius: 28px;
+      padding: 30px;
+      min-height: 260px;
+      box-shadow: 0 18px 38px rgba(93,73,58,.08);
+    }
+    .card.mint { border-color: #90dcd2; background: linear-gradient(145deg, #f0fbf8, rgba(255,255,255,.9)); }
+    .card.coral { border-color: #ffaaa3; background: linear-gradient(145deg, #fff1ee, rgba(255,255,255,.9)); }
+    .card.sky { border-color: #9bd1ef; background: linear-gradient(145deg, #edf8ff, rgba(255,255,255,.9)); }
+    .card.honey { border-color: #efc659; background: linear-gradient(145deg, #fff7df, rgba(255,255,255,.9)); }
+    .num { width: 58px; height: 58px; border-radius: 19px; display: grid; place-items: center; background: #fff; color: var(--mint); font-size: 26px; font-weight: 900; box-shadow: inset 0 0 0 2px rgba(29,169,157,.16); }
+    .card h2 { margin: 18px 0 12px; font-size: 36px; line-height: 1.25; font-weight: 900; }
+    .card p { margin: 0; font-size: 24px; line-height: 1.58; color: var(--soft); font-weight: 700; }
+    .asset { object-fit: contain; display: block; }
+    .hero-family { position: absolute; right: 128px; bottom: 74px; width: 430px; filter: drop-shadow(0 18px 18px rgba(89,70,56,.10)); }
+    .corner-plant { position: absolute; right: 80px; bottom: 48px; width: 180px; opacity: .95; }
+    .flow { display: grid; grid-template-columns: repeat(5, 1fr); align-items: stretch; gap: 22px; margin-top: 24px; }
+    .flow-card { min-height: 220px; position: relative; padding: 26px; border-radius: 26px; background: rgba(255,255,255,.88); border: 2px solid var(--line); box-shadow: 0 14px 30px rgba(93,73,58,.07); }
+    .flow-card:after { content: "→"; position: absolute; right: -27px; top: 50%; transform: translateY(-50%); color: var(--mint); font-size: 42px; font-weight: 900; }
+    .flow-card:last-child:after { display: none; }
+    .flow-card img { height: 86px; max-width: 130px; margin-bottom: 16px; }
+    .flow-card h3 { margin: 0 0 8px; font-size: 28px; line-height: 1.3; }
+    .flow-card p { margin: 0; font-size: 20px; line-height: 1.45; color: var(--soft); font-weight: 700; }
+    .feature { display: grid; grid-template-columns: 600px 1fr; gap: 64px; align-items: center; margin-top: 32px; }
+    .feature-art { width: 520px; max-height: 560px; margin: 0 auto; filter: drop-shadow(0 20px 22px rgba(89,70,56,.10)); }
+    .bullets { display: grid; gap: 18px; }
+    .bullet { display: grid; grid-template-columns: 58px 1fr; align-items: start; gap: 18px; padding: 22px 26px; border-radius: 24px; background: rgba(255,255,255,.88); border: 2px solid rgba(232,222,209,.9); box-shadow: 0 12px 26px rgba(93,73,58,.06); }
+    .bullet .icon { width: 58px; height: 58px; border-radius: 18px; display: grid; place-items: center; color: #fff; background: var(--mint); font-size: 31px; font-weight: 900; }
+    .bullet h3 { margin: 0 0 5px; font-size: 31px; line-height: 1.25; }
+    .bullet p { margin: 0; font-size: 23px; line-height: 1.5; color: var(--soft); font-weight: 700; }
+    .chart-box { height: 390px; border-radius: 30px; background: rgba(255,255,255,.9); border: 2px solid #9bdcd3; padding: 34px; box-shadow: 0 16px 34px rgba(93,73,58,.08); position: relative; }
+    .chart-axis { position: absolute; left: 82px; right: 54px; top: 70px; bottom: 76px; border-left: 3px solid #c8d4cf; border-bottom: 3px solid #c8d4cf; background: repeating-linear-gradient(to top, transparent 0 68px, rgba(120,135,128,.15) 70px); }
+    .curve { position: absolute; left: 82px; right: 54px; top: 90px; height: 210px; }
+    .dot-big { position: absolute; right: 260px; top: 172px; width: 34px; height: 34px; border-radius: 50%; background: var(--mint); border: 8px solid #fff; box-shadow: 0 8px 18px rgba(29,169,157,.28); }
+    .caption { position: absolute; right: 120px; top: 96px; padding: 18px 24px; border-radius: 22px; background: var(--mint); color: white; font-size: 25px; line-height: 1.25; font-weight: 900; text-align: center; }
+    .photo-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+    .photo-tile { height: 210px; border-radius: 24px; background: rgba(255,255,255,.9); border: 2px solid var(--line); display: grid; place-items: center; padding: 18px; box-shadow: 0 12px 26px rgba(93,73,58,.06); }
+    .photo-tile img { max-width: 100%; max-height: 150px; object-fit: contain; }
+    .tagline { display: inline-flex; align-items: center; gap: 12px; margin-top: 22px; padding: 16px 24px; border-radius: 999px; background: rgba(255,255,255,.82); border: 2px solid rgba(29,169,157,.24); font-size: 24px; font-weight: 900; color: var(--mint); }
+    .roadmap { display: grid; grid-template-columns: 1.1fr 1fr; gap: 32px; margin-top: 30px; }
+    .road-list { display: grid; gap: 16px; }
+    .road-item { display: grid; grid-template-columns: 160px 1fr; gap: 20px; align-items: start; padding: 22px 26px; background: rgba(255,255,255,.88); border: 2px solid var(--line); border-radius: 24px; box-shadow: 0 10px 22px rgba(93,73,58,.055); }
+    .status { display: inline-grid; place-items: center; min-height: 48px; border-radius: 999px; font-size: 22px; font-weight: 900; color: #fff; background: var(--mint); }
+    .status.next { background: var(--coral); }
+    .status.later { background: var(--honey); }
+    .road-item h3 { margin: 0 0 5px; font-size: 29px; }
+    .road-item p { margin: 0; font-size: 22px; line-height: 1.45; color: var(--soft); font-weight: 700; }
+    .footer { position: absolute; left: 92px; right: 92px; bottom: 42px; z-index: 1; display: flex; justify-content: space-between; align-items: center; color: #9a8d83; font-size: 20px; font-weight: 800; }
+    .small-note { font-size: 20px; line-height: 1.5; color: #8c8077; font-weight: 800; margin-top: 16px; }
+    .slide:not(.active) { display: none; }
+  </style>
+</head>
+<body>
+  <section class="slide" data-slide="1">
+    <div class="top">
+      <div><div class="kicker">よりそい アラジール症候群版</div><h1>お子さんの<span class="accent">今日</span>を、<br>診察につなぐ家族ノート</h1><p class="lead">診察で聞いたこと、成長の変化、写真や資料を、保護者が続けやすい形で残し、次の受診や複数診療科への共有につなげます。</p></div>
+      <div class="brand">よりそい</div>
+    </div>
+    <div class="content grid-4">
+      <div class="card mint"><div class="num">1</div><h2>診察メモ</h2><p>先生に言われたことと、次に聞きたいことを整理します。</p></div>
+      <div class="card sky"><div class="num">2</div><h2>成長のきろく</h2><p>身長・体重を続けて見返し、小さな変化に気づけます。</p></div>
+      <div class="card coral"><div class="num">3</div><h2>写真アルバム</h2><p>外来資料、食事、日常の様子を一か所にまとめます。</p></div>
+      <div class="card honey"><div class="num">4</div><h2>先生に見せる</h2><p>必要な記録をまとめ、他科・他院にも共有しやすくします。</p></div>
+    </div>
+    <img class="asset hero-family" src="/assets/alagille-brand/generated/home-family-clean-v2.png" alt="">
+    <div class="footer"><span>家族の記録を、次の診察へ。</span><span>01 / 06</span></div>
+  </section>
+
+  <section class="slide" data-slide="2">
+    <div class="top"><div><div class="kicker">機能 1</div><h1>診察メモ：<span class="accent">先生の説明</span>を<br>家族で見返せる形に</h1><p class="lead">受診後に忘れやすい説明を、家族が理解しやすいメモとして残します。</p></div><div class="brand">よりそい</div></div>
+    <div class="feature">
+      <img class="asset feature-art" src="/assets/alagille-brand/trimmed/06-visit-notebook.png" alt="">
+      <div class="bullets">
+        <div class="bullet"><div class="icon">聞</div><div><h3>先生に言われたこと</h3><p>検査結果、薬の変更、次回予定などを、あとで読める言葉に整理。</p></div></div>
+        <div class="bullet"><div class="icon">問</div><div><h3>次に聞くこと</h3><p>かゆみ、食事、保育園、検査など、次回相談したいことを残せます。</p></div></div>
+        <div class="bullet"><div class="icon">診</div><div><h3>多診療科の説明をつなぐ</h3><p>肝臓・心臓・腎臓・眼・栄養など、複数の説明が散らばりにくくなります。</p></div></div>
+      </div>
+    </div>
+    <div class="footer"><span>「言われたこと」と「聞きたいこと」を分けて残す。</span><span>02 / 06</span></div>
+  </section>
+
+  <section class="slide" data-slide="3">
+    <div class="top"><div><div class="kicker">機能 2</div><h1>成長のきろく：<span class="accent">身長・体重</span>を<br>続けて見える化</h1><p class="lead">医学的な判定ではなく、家族が変化を見返すための記録として、成長の流れをやさしく表示します。</p></div><div class="brand">よりそい</div></div>
+    <div class="feature">
+      <div>
+        <div class="chart-box">
+          <div class="chart-axis"></div>
+          <svg class="curve" viewBox="0 0 720 240" preserveAspectRatio="none"><path d="M0 190 C120 125,220 110,320 88 S520 52,720 20 L720 102 C520 140,310 165,0 232Z" fill="rgba(29,169,157,.14)"/><path d="M10 178 C135 116,230 103,330 82 S520 50,710 28" fill="none" stroke="#55c7b8" stroke-width="9" stroke-linecap="round"/><path d="M10 135 C145 80,245 62,350 45 S540 20,710 4" fill="none" stroke="#b7d5ee" stroke-width="4" stroke-dasharray="14 16"/><path d="M10 218 C145 158,245 142,350 120 S540 92,710 70" fill="none" stroke="#b7d5ee" stroke-width="4" stroke-dasharray="14 16"/></svg>
+          <div class="caption">2025/6/1<br>102.3 cm</div><div class="dot-big"></div>
+        </div>
+        <p class="small-note">※診断ではなく、受診時に家族と医療者が見返すための記録補助です。</p>
+      </div>
+      <div class="bullets">
+        <div class="bullet"><div class="icon">身</div><div><h3>身長・体重を記録</h3><p>受診時や家庭で測った値を、日付と一緒に残します。</p></div></div>
+        <div class="bullet"><div class="icon">変</div><div><h3>変化が見える</h3><p>前回との差分や、ゆっくり増えている様子を確認できます。</p></div></div>
+        <div class="bullet"><div class="icon">話</div><div><h3>相談のきっかけに</h3><p>食事、栄養、かゆみ、薬の影響などを相談しやすくします。</p></div></div>
+      </div>
+    </div>
+    <img class="asset corner-plant" src="/assets/alagille-brand/trimmed/05-growth-child-ruler.png" alt="">
+    <div class="footer"><span>成長は「判定」ではなく、家族で見返す記録に。</span><span>03 / 06</span></div>
+  </section>
+
+  <section class="slide" data-slide="4">
+    <div class="top"><div><div class="kicker">機能 3</div><h1>写真アルバム：<span class="accent">資料・食事・日常</span>を<br>ひとつの場所へ</h1><p class="lead">紙の外来資料や食事の様子、日々の変化を、あとから探しやすい形で残します。</p></div><div class="brand">よりそい</div></div>
+    <div class="feature">
+      <div class="photo-grid">
+        <div class="photo-tile"><img src="/assets/alagille-brand/trimmed/03-medical-document.png" alt=""></div>
+        <div class="photo-tile"><img src="/assets/alagille-brand/trimmed/04-meal-plate.png" alt=""></div>
+        <div class="photo-tile"><img src="/assets/alagille-brand/trimmed/05-growth-child-ruler.png" alt=""></div>
+        <div class="photo-tile"><img src="/assets/alagille-brand/trimmed/08-checkup-document.png" alt=""></div>
+        <div class="photo-tile"><img src="/assets/alagille-brand/trimmed/07-medicine-bottle.png" alt=""></div>
+        <div class="photo-tile"><img src="/assets/alagille-brand/trimmed/12-family-group.png" alt=""></div>
+      </div>
+      <div class="bullets">
+        <div class="bullet"><div class="icon">資</div><div><h3>外来資料を整理</h3><p>紙の説明資料や検査結果を、受診記録と一緒に見返せます。</p></div></div>
+        <div class="bullet"><div class="icon">食</div><div><h3>食事・栄養の相談に</h3><p>食べられたものや気になった様子を写真で残せます。</p></div></div>
+        <div class="bullet"><div class="icon">日</div><div><h3>日常の変化も残す</h3><p>元気な日、かゆみが強い日、園での様子も後から確認できます。</p></div></div>
+      </div>
+    </div>
+    <div class="footer"><span>写真は、診察で話すための小さな証拠にもなる。</span><span>04 / 06</span></div>
+  </section>
+
+  <section class="slide" data-slide="5">
+    <div class="top"><div><div class="kicker">共有導線</div><h1>先生に見せる・LINE WORKSから開く</h1><p class="lead">患者会や家族の入口から開き、必要な記録だけを診察の場へつなぎます。</p></div><div class="brand">よりそい</div></div>
+    <div class="flow">
+      <div class="flow-card"><img src="/assets/alagille-brand/trimmed/12-family-group.png" alt=""><h3>患者会・家族</h3><p>LINE WORKSの案内から開く</p></div>
+      <div class="flow-card"><img src="/assets/alagille-brand/generated/home-family-clean-v2.png" alt=""><h3>家族ノート</h3><p>診察・成長・写真を残す</p></div>
+      <div class="flow-card"><img src="/assets/alagille-brand/trimmed/06-visit-notebook.png" alt=""><h3>受診前に確認</h3><p>聞きたいことを整理</p></div>
+      <div class="flow-card"><img src="/assets/alagille-brand/trimmed/08-checkup-document.png" alt=""><h3>先生に見せる</h3><p>必要な記録だけまとめる</p></div>
+      <div class="flow-card"><img src="/assets/alagille-brand/trimmed/10-leaf-sprout.png" alt=""><h3>次の記録へ</h3><p>説明をまた家族で見返す</p></div>
+    </div>
+    <div class="tagline">トーク本文に要配慮情報を出しすぎず、Webアプリ内で安全に確認する設計</div>
+    <div class="footer"><span>初期MVPはリンク起動。次段階でBot/メニュー連携へ。</span><span>05 / 06</span></div>
+  </section>
+
+  <section class="slide" data-slide="6">
+    <div class="top"><div><div class="kicker">残っていること</div><h1>6/24提示前の<span class="accent">次の一手</span>と<br>本実装ロードマップ</h1><p class="lead">画面の具体像はできているため、次は説明順・要約プロンプト・本番接続の準備に進みます。</p></div><div class="brand">よりそい</div></div>
+    <div class="roadmap">
+      <div class="road-list">
+        <div class="road-item"><div class="status next">次にやる</div><div><h3>見せる順番の整理</h3><p>ホーム→診察メモ→成長→写真→先生に見せる→LINE WORKS導線。</p></div></div>
+        <div class="road-item"><div class="status next">次にやる</div><div><h3>summaryHints 注入</h3><p>肝臓、かゆみ、栄養、成長、多診療科、薬の変更を見落としにくくする。</p></div></div>
+        <div class="road-item"><div class="status next">次にやる</div><div><h3>UI微調整</h3><p>余白、文字サイズ、カード密度、イラストの見え方を実ブラウザで調整。</p></div></div>
+      </div>
+      <div class="road-list">
+        <div class="road-item"><div class="status later">本実装</div><div><h3>成長・写真API</h3><p>成長記録、写真保存、サムネイル、診察メモとの紐づけ。</p></div></div>
+        <div class="road-item"><div class="status later">本実装</div><div><h3>親から子への引き継ぎ</h3><p>保護者管理から本人アカウントへ移すためのデータ設計と同意フロー。</p></div></div>
+        <div class="road-item"><div class="status later">本実装</div><div><h3>LINE WORKS接続</h3><p>リンク起動から始め、Bot/固定メニュー/ユーザーID連携へ進める。</p></div></div>
+      </div>
+    </div>
+    <img class="asset corner-plant" src="/assets/alagille-brand/generated/next-visit-plant-clean-v2.png" alt="">
+    <div class="footer"><span>6/24は「具体像が伝わること」を優先。本番運用は段階的に。</span><span>06 / 06</span></div>
+  </section>
+
+  <script>
+    const params = new URLSearchParams(location.search);
+    const slide = params.get('slide') || '1';
+    document.querySelectorAll('.slide').forEach((el) => {
+      el.classList.toggle('active', el.dataset.slide === slide);
+    });
+  </script>
+</body>
+</html>

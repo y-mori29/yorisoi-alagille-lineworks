@@ -1,0 +1,56 @@
+:root {
+  color-scheme: light;
+  font-family: "Zen Maru Gothic", "Yu Gothic", sans-serif;
+  color: #49352b;
+  background: #fffdf8;
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; min-height: 100vh; background: linear-gradient(120deg, #fff5ef 0%, #fffdf8 48%, #eff8f4 100%); }
+button, input, select { font: inherit; letter-spacing: 0; }
+button { cursor: pointer; }
+
+.auth-shell { width: min(100%, 520px); margin: 0 auto; padding: 28px 22px 48px; }
+.auth-brand { display: flex; justify-content: center; margin: 0 0 20px; }
+.auth-brand img { width: min(290px, 78vw); height: auto; object-fit: contain; }
+.auth-panel { border: 1px solid #d8dfcf; border-radius: 8px; background: rgba(255, 255, 255, .92); box-shadow: 0 12px 28px rgba(85, 70, 53, .08); padding: 24px; }
+.auth-panel h1 { margin: 0; font-size: 25px; line-height: 1.4; text-align: center; }
+.auth-lead { margin: 8px 0 20px; color: #74675f; font-size: 14px; line-height: 1.7; text-align: center; }
+.auth-tabs { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; min-height: 46px; margin-bottom: 22px; padding: 4px; border-radius: 8px; background: #f1f3ed; }
+.auth-tabs button { border: 0; border-radius: 6px; background: transparent; color: #6c716b; font-weight: 700; }
+.auth-tabs button[aria-selected="true"] { background: #fff; color: #147c73; box-shadow: 0 1px 5px rgba(63, 80, 69, .12); }
+.auth-form { display: grid; gap: 15px; }
+.auth-form[hidden] { display: none; }
+.auth-field { display: grid; gap: 7px; font-size: 14px; font-weight: 700; }
+.auth-field small { color: #85776e; font-weight: 500; }
+.auth-field input, .auth-field select { width: 100%; min-height: 48px; border: 1px solid #cfd7cd; border-radius: 6px; padding: 10px 12px; background: #fff; color: #49352b; }
+.auth-field input:focus, .auth-field select:focus { outline: 3px solid rgba(24, 157, 145, .16); border-color: #189d91; }
+.auth-section-title { margin: 8px 0 -3px; padding-top: 14px; border-top: 1px solid #e6e2da; font-size: 16px; }
+.auth-field-note { margin: 0; color: #766b63; font-size: 12px; line-height: 1.65; font-weight: 600; }
+.record-target-choice { margin: 0; padding: 0; border: 0; }
+.record-target-choice legend { margin-bottom: 7px; }
+.record-target-choice > label { min-height: 58px; display: grid; grid-template-columns: 22px 1fr; align-items: center; gap: 9px; padding: 9px 11px; border: 1px solid #d8d5ce; border-radius: 6px; background: #fff; }
+.record-target-choice > label:has(input:checked) { border-color: #189d91; background: #edf9f6; }
+.record-target-choice input { width: 18px; height: 18px; accent-color: #189d91; }
+.record-target-choice strong, .record-target-choice small { display: block; }
+.record-target-choice small { margin-top: 2px; color: #766b63; font-size: 11px; font-weight: 500; }
+.avatar-options { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.avatar-option { position: relative; }
+.avatar-option input { position: absolute; opacity: 0; pointer-events: none; }
+.avatar-option span { display: grid; place-items: center; min-height: 82px; border: 2px solid transparent; border-radius: 8px; background: #f7faf5; }
+.avatar-option img { width: 58px; height: 58px; object-fit: contain; }
+.avatar-option input:checked + span { border-color: #19a99d; background: #edf9f5; }
+.auth-primary { min-height: 50px; border: 0; border-radius: 7px; background: #159f93; color: #fff; font-weight: 900; box-shadow: 0 5px 12px rgba(21, 159, 147, .2); }
+.auth-primary:disabled { cursor: wait; opacity: .58; }
+.auth-text-button { border: 0; background: transparent; color: #247b73; font-size: 13px; font-weight: 700; text-decoration: underline; }
+.auth-message { min-height: 22px; margin: 0; color: #b4473c; font-size: 13px; line-height: 1.6; text-align: center; }
+.auth-privacy { display: flex; gap: 8px; margin: 18px 2px 0; color: #736a63; font-size: 12px; line-height: 1.6; }
+.auth-privacy .material-symbols-outlined { color: #3d8b64; font-size: 19px; }
+
+@media (max-width: 420px) {
+  .auth-shell { padding: 20px 14px 38px; }
+  .auth-panel { padding: 20px 16px; }
+  .avatar-options { gap: 5px; }
+  .avatar-option span { min-height: 72px; }
+  .avatar-option img { width: 50px; height: 50px; }
+}

@@ -1,0 +1,28 @@
+{
+  "categories": [
+    { "id": "cholinesterase_inhibitor", "name": "抗コリンエステラーゼ薬", "description": "症状改善の基本治療", "step": 1 },
+    { "id": "steroid", "name": "ステロイド", "description": "免疫抑制", "step": 2 },
+    { "id": "immunosuppressant", "name": "免疫抑制薬", "description": "ステロイド減量・維持", "step": 3 },
+    { "id": "biologic", "name": "分子標的薬", "description": "補体阻害・FcRn阻害", "step": 4 },
+    { "id": "ivig", "name": "免疫グロブリン療法", "description": "IVIG", "step": 4 },
+    { "id": "other", "name": "その他", "description": "血漿交換など", "step": 5 }
+  ],
+  "medications": [
+    { "genericName": "ピリドスチグミン", "brandNames": ["メスチノン"], "category": "cholinesterase_inhibitor", "dosageForms": ["経口"], "notes": "第一選択" },
+    { "genericName": "アンベノニウム", "brandNames": ["マイテラーゼ"], "category": "cholinesterase_inhibitor", "dosageForms": ["経口"] },
+    { "genericName": "プレドニゾロン", "brandNames": ["プレドニン"], "category": "steroid", "dosageForms": ["経口"] },
+    { "genericName": "メチルプレドニゾロン", "brandNames": ["ソル・メドロール"], "category": "steroid", "dosageForms": ["点滴"], "notes": "ステロイドパルス療法" },
+    { "genericName": "タクロリムス", "brandNames": ["プログラフ"], "category": "immunosuppressant", "dosageForms": ["経口"] },
+    { "genericName": "シクロスポリン", "brandNames": ["ネオーラル"], "category": "immunosuppressant", "dosageForms": ["経口"] },
+    { "genericName": "アザチオプリン", "brandNames": ["イムラン"], "category": "immunosuppressant", "dosageForms": ["経口"] },
+    { "genericName": "シクロホスファミド", "brandNames": ["エンドキサン"], "category": "immunosuppressant", "dosageForms": ["経口", "点滴"] },
+    { "genericName": "ミコフェノール酸モフェチル", "brandNames": ["セルセプト"], "category": "immunosuppressant", "dosageForms": ["経口"] },
+    { "genericName": "エクリズマブ", "brandNames": ["ソリリス"], "category": "biologic", "dosageForms": ["点滴"], "mechanism": "抗C5補体抗体", "notes": "髄膜炎菌ワクチン接種必須" },
+    { "genericName": "ラブリズマブ", "brandNames": ["ユルトミリス"], "category": "biologic", "dosageForms": ["点滴"], "mechanism": "長時間作用型抗C5抗体" },
+    { "genericName": "エフガルチギモド", "brandNames": ["ヴィブガート"], "category": "biologic", "dosageForms": ["点滴", "皮下注射"], "mechanism": "FcRn阻害", "notes": "2024年皮下注製剤承認" },
+    { "genericName": "ロザノリキシズマブ", "brandNames": ["リスティーゴ"], "category": "biologic", "dosageForms": ["皮下注射"], "mechanism": "FcRn阻害", "notes": "2023年11月同時承認" },
+    { "genericName": "ジルコプラン", "brandNames": ["ジルビスク"], "category": "biologic", "dosageForms": ["皮下注射"], "mechanism": "C5補体阻害ペプチド", "notes": "2023年9月承認・自己注射可" },
+    { "genericName": "免疫グロブリン", "brandNames": ["献血ヴェノグロブリンIH"], "category": "ivig", "dosageForms": ["点滴"], "notes": "クリーゼ・周術期" },
+    { "genericName": "血漿交換療法", "brandNames": ["PE/DFPP"], "category": "other", "dosageForms": ["処置"], "notes": "クリーゼ・ステロイド効果不十分時" }
+  ]
+}

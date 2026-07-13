@@ -1,0 +1,24 @@
+{
+  "categories": [
+    { "id": "ert", "name": "酵素補充療法（ERT）", "description": "根本治療", "step": 1 },
+    { "id": "chaperone", "name": "シャペロン療法", "description": "経口の分子治療", "step": 1 },
+    { "id": "pain", "name": "疼痛治療", "description": "神経障害性疼痛", "step": 2 },
+    { "id": "cardiac", "name": "心保護薬", "description": "心肥大・不整脈対応", "step": 3 },
+    { "id": "renal", "name": "腎保護薬", "description": "ACE阻害薬・ARB", "step": 3 },
+    { "id": "other", "name": "その他", "description": "抗血小板薬など", "step": 4 }
+  ],
+  "medications": [
+    { "genericName": "アガルシダーゼα", "brandNames": ["リプレガル"], "category": "ert", "dosageForms": ["点滴"], "notes": "隔週投与" },
+    { "genericName": "アガルシダーゼβ", "brandNames": ["ファブラザイム"], "category": "ert", "dosageForms": ["点滴"], "notes": "隔週投与・より高用量" },
+    { "genericName": "ミガーラスタット", "brandNames": ["ガラフォルド"], "category": "chaperone", "dosageForms": ["経口"], "notes": "感受性変異患者のみ適応" },
+    { "genericName": "カルバマゼピン", "brandNames": ["テグレトール"], "category": "pain", "dosageForms": ["経口"], "notes": "第一選択" },
+    { "genericName": "ガバペンチン", "brandNames": ["ガバペン"], "category": "pain", "dosageForms": ["経口"] },
+    { "genericName": "プレガバリン", "brandNames": ["リリカ"], "category": "pain", "dosageForms": ["経口"] },
+    { "genericName": "カルベジロール", "brandNames": ["アーチスト"], "category": "cardiac", "dosageForms": ["経口"], "notes": "β遮断薬" },
+    { "genericName": "ビソプロロール", "brandNames": ["メインテート"], "category": "cardiac", "dosageForms": ["経口"], "notes": "β遮断薬" },
+    { "genericName": "エナラプリル", "brandNames": ["レニベース"], "category": "renal", "dosageForms": ["経口"], "notes": "ACE阻害薬" },
+    { "genericName": "ロサルタン", "brandNames": ["ニューロタン"], "category": "renal", "dosageForms": ["経口"], "notes": "ARB" },
+    { "genericName": "カンデサルタン", "brandNames": ["ブロプレス"], "category": "renal", "dosageForms": ["経口"], "notes": "ARB" },
+    { "genericName": "アスピリン", "brandNames": ["バイアスピリン"], "category": "other", "dosageForms": ["経口"], "notes": "脳血管障害予防" }
+  ]
+}

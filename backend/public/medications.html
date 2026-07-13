@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>お薬メモ - よりそい アラジール</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@500;700;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined">
+  <link rel="stylesheet" href="/css/alagille-family.css">
+  <link rel="stylesheet" href="/css/alagille-medications.css">
+  <script src="/js/account-guard.js"></script>
+</head>
+<body class="medication-page">
+  <main class="app medication-shell no-tabbar">
+    <header class="medication-header">
+      <a class="round" href="/?disease=alagille" aria-label="ホームへ戻る"><span class="material-symbols-outlined">arrow_back</span></a>
+      <img class="medication-wordmark" src="/assets/alagille-brand/ui-extracted/wordmark-alagille-v1.png" alt="よりそい アラジール">
+      <a class="round" href="/?disease=alagille" aria-label="ホーム"><span class="material-symbols-outlined">home</span></a>
+    </header>
+
+    <section class="medication-patient" aria-label="健康記録の対象">
+      <img id="patient-avatar" src="/assets/alagille-brand/avatars/avatar-child-boy-v1.png" alt="">
+      <span><small>健康記録の対象</small><strong id="patient-name">読み込み中</strong></span>
+      <a href="/?patient=change" aria-label="健康記録の対象を切り替える">切り替え</a>
+    </section>
+
+    <div class="medication-title-row">
+      <img src="/assets/alagille-brand/trimmed/07-medicine-bottle.png" alt="">
+      <div><h1>お薬メモ</h1><p>今飲んでいるお薬と、変更した内容を家族で見返せます</p></div>
+    </div>
+
+    <nav class="medication-tabs" aria-label="お薬メモの表示">
+      <button class="active" type="button" data-view="current" aria-selected="true">現在のお薬</button>
+      <button type="button" data-view="history" aria-selected="false">変更履歴</button>
+    </nav>
+
+    <aside id="medication-tutorial-banner" class="medication-tutorial-banner" hidden>
+      <span class="material-symbols-outlined">school</span>
+      <p><strong>使い方のお試し中</strong><br>この内容は実際の記録には保存されません。</p>
+      <button id="exit-medication-tutorial" type="button">終了</button>
+    </aside>
+
+    <button id="add-medication" class="medication-action" type="button"><span class="material-symbols-outlined">add_circle</span>お薬を追加する</button>
+    <button id="try-medication" class="medication-action secondary" type="button"><span class="material-symbols-outlined">school</span>使い方をお試しする</button>
+    <p id="page-message" class="medication-message" role="status"></p>
+    <section id="medication-list" class="medication-list" aria-live="polite"></section>
+    <p class="medication-disclaimer">処方内容の控えとしてお使いください。お薬の変更や中止は、医師・薬剤師にご確認ください。</p>
+  </main>
+
+  <dialog id="medication-dialog" class="medication-dialog" aria-labelledby="form-title">
+    <form id="medication-form" class="medication-form">
+      <div class="medication-form-head">
+        <h2 id="form-title">お薬を追加</h2>
+        <button id="dialog-close" class="dialog-close" type="button" aria-label="閉じる"><span class="material-symbols-outlined">close</span></button>
+      </div>
+      <section class="medication-photo-section" aria-labelledby="medication-photo-title">
+        <div class="medication-photo-copy">
+          <div><h3 id="medication-photo-title">薬袋・お薬手帳の写真</h3><p>写真から薬名や飲み方を読み取れます</p></div>
+          <label class="medication-photo-select"><span class="material-symbols-outlined">add_a_photo</span><span>写真を選ぶ</span><input id="medication-photo-input" type="file" accept="image/jpeg,image/png,image/webp"></label>
+        </div>
+        <button id="medication-photo-preview-button" class="medication-photo-preview" type="button" hidden aria-label="選んだ写真を拡大して確認">
+          <img id="medication-photo-preview" alt="選んだ薬の写真">
+          <span><span class="material-symbols-outlined">zoom_in</span>拡大</span>
+        </button>
+        <button id="medication-ocr-button" class="medication-ocr-button" type="button" hidden><span class="material-symbols-outlined">document_scanner</span>写真から読み取る</button>
+        <p id="medication-ocr-status" class="medication-ocr-status" role="status"></p>
+      </section>
+      <label class="medication-field">お薬の名前<input id="medication-name" name="name" type="text" maxlength="120" autocomplete="off" required placeholder="薬袋やお薬手帳のとおりに入力"></label>
+      <label class="medication-field">1回の量<small>分かる範囲で構いません</small><input id="dosage-text" name="dosageText" type="text" maxlength="160" placeholder="例：1回1錠、2.5mL"></label>
+      <label class="medication-field">飲むタイミング<small>回数や食前・食後など</small><input id="timing-text" name="timingText" type="text" maxlength="160" placeholder="例：朝・夕食後"></label>
+      <div class="form-grid">
+        <label class="medication-field">状態<select id="medication-status" name="status"><option value="active">服用中</option><option value="stopped">中止・終了</option><option value="unknown">確認中</option></select></label>
+        <label class="medication-field">開始日<input id="started-at" name="startedAt" type="date"></label>
+      </div>
+      <label id="stopped-field" class="medication-field" hidden>中止・終了日<input id="stopped-at" name="stoppedAt" type="date"></label>
+      <label class="medication-field">メモ<textarea id="medication-memo" name="memo" maxlength="500" placeholder="変更理由や飲みにくさなど、伝えたいこと"></textarea></label>
+      <p id="form-status" class="form-status" role="alert"></p>
+      <div class="form-buttons">
+        <button id="form-cancel" class="form-cancel" type="button">キャンセル</button>
+        <button id="form-save" class="form-save" type="submit">保存する</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="medication-photo-dialog" class="medication-photo-dialog" aria-label="薬の写真を拡大表示">
+    <div class="medication-photo-dialog-panel">
+      <button id="medication-photo-dialog-close" class="medication-photo-dialog-close" type="button" aria-label="拡大表示を閉じる"><span class="material-symbols-outlined">close</span></button>
+      <img id="medication-photo-dialog-image" alt="薬の写真">
+    </div>
+  </dialog>
+
+  <script>
+    const avatarArtwork = {
+      "adult-man": "/assets/alagille-brand/avatars/avatar-adult-man-v1.png",
+      "adult-woman": "/assets/alagille-brand/avatars/avatar-adult-woman-v1.png",
+      "child-boy": "/assets/alagille-brand/avatars/avatar-child-boy-v1.png",
+      "child-girl": "/assets/alagille-brand/avatars/avatar-child-girl-v1.png"
+    };
+    const state = { patientId: "", medications: [], realMedications: [], view: "current", editingId: null, photoDataUrl: null, photoSourceUrl: "", photoName: "", rawOcrText: "", tutorial: false };
+    const $ = (id) => document.getElementById(id);
+
+    document.addEventListener("DOMContentLoaded", async () => {
+      bindEvents();
+      await loadPatient();
+      await loadMedications();
+    });
+
+    function bindEvents() {
+      document.querySelectorAll("[data-view]").forEach((button) => button.addEventListener("click", () => setView(button.dataset.view)));
+      $("add-medication").addEventListener("click", () => openForm());
+      $("try-medication").addEventListener("click", startMedicationTutorial);
+      $("exit-medication-tutorial").addEventListener("click", exitMedicationTutorial);
+      $("dialog-close").addEventListener("click", closeForm);
+      $("form-cancel").addEventListener("click", closeForm);
+      $("medication-form").addEventListener("submit", saveMedication);
+      $("medication-status").addEventListener("change", updateStoppedField);
+      $("medication-photo-input").addEventListener("change", handleMedicationPhoto);
+      $("medication-ocr-button").addEventListener("click", readMedicationPhoto);
+      $("medication-photo-preview-button").addEventListener("click", openPhotoDialog);
+      $("medication-photo-dialog-close").addEventListener("click", () => $("medication-photo-dialog").close());
+      $("medication-photo-dialog").addEventListener("click", (event) => { if (event.target === $("medication-photo-dialog")) $("medication-photo-dialog").close(); });
+      $("medication-list").addEventListener("click", handleListAction);
+      $("medication-dialog").addEventListener("click", (event) => { if (event.target === $("medication-dialog")) closeForm(); });
+    }
+
+    async function loadPatient() {
+      try {
+        const response = await fetch("/api/family/patients");
+        if (!response.ok) throw new Error();
+        const result = await response.json();
+        const savedId = localStorage.getItem("alagille-current-patient-id");
+        const patient = result.patients.find((item) => item.id === savedId) || result.patients[0];
+        if (!patient) throw new Error();
+        state.patientId = patient.id;
+        $("patient-name").textContent = patient.displayName;
+        $("patient-avatar").src = avatarArtwork[patient.avatarKey] || avatarArtwork["child-boy"];
+      } catch {
+        $("patient-name").textContent = "健康記録の対象";
+      }
+    }
+
+    async function loadMedications() {
+      setPageMessage("お薬を読み込んでいます…");
+      try {
+        const response = await fetch(`/api/medications?patientId=${encodeURIComponent(state.patientId)}`);
+        if (!response.ok) throw new Error();
+        const result = await response.json();
+        state.realMedications = result.medications || [];
+        state.medications = state.tutorial ? state.medications : state.realMedications;
+        setPageMessage("");
+      } catch {
+        state.medications = [];
+        setPageMessage("お薬を読み込めませんでした。時間をおいてお試しください。");
+      }
+      renderList();
+    }
+
+    function setView(view) {
+      state.view = view;
+      document.querySelectorAll("[data-view]").forEach((button) => {
+        const active = button.dataset.view === view;
+        button.classList.toggle("active", active);
+        button.setAttribute("aria-selected", String(active));
+      });
+      renderList();
+    }
+
+    function startMedicationTutorial() {
+      state.tutorial = true;
+      state.realMedications = [...state.medications];
+      state.medications = [{
+        id: "tutorial-medication-history",
+        name: "かゆみのお薬（お試し）",
+        dosageText: "1回1錠",
+        timingText: "寝る前",
+        status: "stopped",
+        startedAt: "2026-05-10",
+        stoppedAt: "2026-06-20",
+        memo: "お試し用の変更履歴です"
+      }];
+      $("medication-tutorial-banner").hidden = false;
+      $("try-medication").hidden = true;
+      setView("current");
+      openForm();
+      state.photoDataUrl = createMedicationTutorialImage();
+      state.photoSourceUrl = state.photoDataUrl;
+      state.photoName = "medication-tutorial-sample.jpg";
+      updatePhotoPreview();
+      $("medication-ocr-status").textContent = "架空のお薬手帳です。「写真から読み取る」を押してお試しください。";
+    }
+
+    function exitMedicationTutorial() {
+      if ($("medication-dialog").open) closeForm();
+      state.tutorial = false;
+      state.medications = [...state.realMedications];
+      state.editingId = null;
+      $("medication-tutorial-banner").hidden = true;
+      $("try-medication").hidden = false;
+      setView("current");
+      setPageMessage("お試しを終了しました。実際の記録には何も追加されていません。");
+    }
+
+    function createMedicationTutorialImage() {
+      const canvas = document.createElement("canvas");
+      canvas.width = 900;
+      canvas.height = 1180;
+      const ctx = canvas.getContext("2d");
+      ctx.fillStyle = "#e9e4dc";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = "#fffef9";
+      ctx.fillRect(72, 48, 756, 1084);
+      ctx.strokeStyle = "#d5cec3";
+      ctx.lineWidth = 3;
+      ctx.strokeRect(72, 48, 756, 1084);
+      ctx.fillStyle = "#4d4036";
+      ctx.textAlign = "center";
+      ctx.font = "700 38px sans-serif";
+      ctx.fillText("お薬手帳（お試し）", 450, 120);
+      ctx.font = "24px sans-serif";
+      ctx.fillStyle = "#76695e";
+      ctx.fillText("2026年7月13日", 450, 165);
+      ctx.strokeStyle = "#9dbb9d";
+      ctx.lineWidth = 2;
+      ctx.beginPath(); ctx.moveTo(110, 205); ctx.lineTo(790, 205); ctx.stroke();
+      ctx.textAlign = "left";
+      ctx.fillStyle = "#37765b";
+      ctx.font = "700 28px sans-serif";
+      ctx.fillText("内服薬", 118, 270);
+      ctx.fillStyle = "#3f332b";
+      ctx.font = "700 32px sans-serif";
+      ctx.fillText("ウルソデオキシコール酸錠 100mg", 118, 340);
+      ctx.font = "26px sans-serif";
+      ctx.fillText("1回 1錠", 145, 420);
+      ctx.fillText("1日 2回　朝・夕食後", 145, 475);
+      ctx.fillText("14日分", 145, 530);
+      ctx.strokeStyle = "#ded7cb";
+      ctx.beginPath(); ctx.moveTo(110, 580); ctx.lineTo(790, 580); ctx.stroke();
+      ctx.fillStyle = "#76695e";
+      ctx.font = "23px sans-serif";
+      ctx.fillText("薬袋・お薬手帳に書かれている内容を", 118, 655);
+      ctx.fillText("写真と見比べて確認してください。", 118, 700);
+      ctx.fillStyle = "#f5edd6";
+      ctx.fillRect(110, 770, 680, 180);
+      ctx.fillStyle = "#6d5b42";
+      ctx.font = "700 24px sans-serif";
+      ctx.fillText("これは使い方確認用の架空画像です", 150, 840);
+      ctx.font = "22px sans-serif";
+      ctx.fillText("実際の記録には保存されません", 150, 895);
+      return canvas.toDataURL("image/jpeg", 0.9);
+    }
+
+    function renderList() {
+      const items = state.medications.filter((item) => state.view === "history" ? item.status === "stopped" : item.status !== "stopped");
+      const list = $("medication-list");
+      list.replaceChildren();
+      if (!items.length) {
+        const empty = element("section", "panel medication-empty");
+        const image = element("img");
+        image.src = "/assets/alagille-brand/trimmed/07-medicine-bottle.png";
+        image.alt = "";
+        const title = element("h2", "", state.view === "history" ? "変更履歴はまだありません" : "お薬はまだ登録されていません");
+        const copy = element("p", "", state.view === "history" ? "中止・終了に変更したお薬が、ここに残ります。" : "薬袋やお薬手帳を見ながら、分かる範囲で追加できます。");
+        empty.append(image, title, copy);
+        list.append(empty);
+        return;
+      }
+      items.forEach((item) => list.append(createMedicationCard(item)));
+    }
+
+    function createMedicationCard(item) {
+      const card = element("article", "panel medication-card");
+      const head = element("div", "medication-card-head");
+      const image = element("img", "medication-card-art");
+      image.src = medicationPhotoUrl(item) || "/assets/alagille-brand/trimmed/07-medicine-bottle.png";
+      image.alt = item.photoObject || item.photoDataUrl ? `${item.name}の記録写真` : "";
+      image.onerror = () => { image.onerror = null; image.src = "/assets/alagille-brand/trimmed/07-medicine-bottle.png"; image.alt = ""; };
+      const copy = element("div");
+      copy.append(element("h2", "", item.name));
+      const summary = [item.dosageText, item.timingText].filter(Boolean).join("・") || "量・タイミングは未登録";
+      copy.append(element("p", "dose", summary));
+      const status = element("span", `status-pill ${item.status === "stopped" ? "stopped" : ""}`, statusLabel(item.status));
+      head.append(image, copy, status);
+      card.append(head);
+
+      const meta = element("div", "medication-meta");
+      if (item.startedAt) meta.append(metaLine("開始日", formatDate(item.startedAt)));
+      if (item.stoppedAt) meta.append(metaLine("中止・終了日", formatDate(item.stoppedAt)));
+      if (item.memo) meta.append(metaLine("メモ", item.memo));
+      if (meta.childElementCount) card.append(meta);
+
+      const lastCheck = item.lastCheck || item.checks?.[0];
+      if (lastCheck) card.append(element("p", "last-check", `${formatDateTime(lastCheck.checkedAt)}に「飲めた」を記録`));
+      const actions = element("div", "medication-card-actions");
+      if (item.status !== "stopped") actions.append(actionButton("taken", "check_circle", "飲めた", item.id, "check"));
+      else actions.classList.add("history-actions");
+      actions.append(actionButton("icon-only", "edit", "編集", item.id, "edit"));
+      actions.append(actionButton("icon-only delete", "delete", "削除", item.id, "delete"));
+      card.append(actions);
+      return card;
+    }
+
+    function actionButton(className, icon, label, id, action, disabled = false) {
+      const button = element("button", className);
+      button.type = "button";
+      button.dataset.action = action;
+      button.dataset.id = id;
+      button.disabled = disabled;
+      button.setAttribute("aria-label", label);
+      button.append(element("span", "material-symbols-outlined", icon));
+      if (!className.includes("icon-only")) button.append(document.createTextNode(label));
+      return button;
+    }
+
+    async function handleListAction(event) {
+      const button = event.target.closest("button[data-action]");
+      if (!button || button.dataset.action === "noop") return;
+      const item = state.medications.find((medication) => medication.id === button.dataset.id);
+      if (!item) return;
+      if (button.dataset.action === "edit") openForm(item);
+      if (button.dataset.action === "delete") await deleteMedication(item);
+      if (button.dataset.action === "check") await addCheck(item, button);
+    }
+
+    function openForm(item = null) {
+      state.editingId = item?.id || null;
+      $("form-title").textContent = item ? "お薬を編集" : "お薬を追加";
+      $("medication-name").value = item?.name || "";
+      $("dosage-text").value = item?.dosageText || "";
+      $("timing-text").value = item?.timingText || "";
+      $("medication-status").value = item?.status || "active";
+      $("started-at").value = item?.startedAt || "";
+      $("stopped-at").value = item?.stoppedAt || "";
+      $("medication-memo").value = item?.memo || "";
+      state.photoDataUrl = null;
+      state.photoSourceUrl = item ? medicationPhotoUrl(item) : "";
+      state.photoName = item?.photoName || "";
+      state.rawOcrText = item?.rawOcrText || "";
+      $("medication-photo-input").value = "";
+      updatePhotoPreview();
+      $("medication-ocr-status").textContent = "";
+      $("form-status").textContent = "";
+      updateStoppedField();
+      $("medication-dialog").showModal();
+      window.setTimeout(() => $("medication-name").focus(), 50);
+    }
+
+    function closeForm() {
+      $("medication-dialog").close();
+      state.editingId = null;
+      state.photoDataUrl = null;
+      state.photoSourceUrl = "";
+      state.photoName = "";
+      state.rawOcrText = "";
+    }
+
+    async function handleMedicationPhoto(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      if (!/^image\/(jpeg|png|webp)$/.test(file.type)) {
+        $("medication-ocr-status").textContent = "JPEG、PNG、WebPの写真を選んでください。";
+        return;
+      }
+      try {
+        state.photoDataUrl = await resizeImage(file, 1800, 0.88);
+        state.photoSourceUrl = state.photoDataUrl;
+        state.photoName = file.name;
+        state.rawOcrText = "";
+        updatePhotoPreview();
+        $("medication-ocr-status").textContent = "写真を確認して「写真から読み取る」を押してください。";
+      } catch {
+        $("medication-ocr-status").textContent = "写真を読み込めませんでした。別の写真をお試しください。";
+      }
+    }
+
+    function resizeImage(file, maxSize, quality) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onerror = reject;
+        reader.onload = () => {
+          const image = new Image();
+          image.onerror = reject;
+          image.onload = () => {
+            const scale = Math.min(1, maxSize / Math.max(image.width, image.height));
+            const canvas = document.createElement("canvas");
+            canvas.width = Math.max(1, Math.round(image.width * scale));
+            canvas.height = Math.max(1, Math.round(image.height * scale));
+            canvas.getContext("2d").drawImage(image, 0, 0, canvas.width, canvas.height);
+            resolve(canvas.toDataURL("image/jpeg", quality));
+          };
+          image.src = reader.result;
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+
+    async function readMedicationPhoto() {
+      if (!state.photoDataUrl) return;
+      const button = $("medication-ocr-button");
+      button.disabled = true;
+      $("medication-ocr-status").textContent = "写真を読み取っています…";
+      if (state.tutorial) {
+        await new Promise((resolve) => window.setTimeout(resolve, 650));
+        $("medication-name").value = "ウルソデオキシコール酸錠 100mg";
+        $("dosage-text").value = "1回1錠";
+        $("timing-text").value = "朝・夕食後";
+        state.rawOcrText = "ウルソデオキシコール酸錠 100mg / 1回1錠 / 1日2回 朝・夕食後 / 14日分";
+        $("medication-ocr-status").textContent = "読み取りました。写真と入力内容が合っているか確認してから保存してください。";
+        button.disabled = false;
+        $("medication-name").focus();
+        return;
+      }
+      try {
+        const response = await fetch("/api/medications/ocr", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ patientId: state.patientId, photoDataUrl: state.photoDataUrl })
+        });
+        const result = await response.json();
+        if (!response.ok) throw new Error(result.error || "OCR failed");
+        $("medication-name").value = result.name || "";
+        $("dosage-text").value = result.dosageText || "";
+        $("timing-text").value = result.timingText || "";
+        state.rawOcrText = result.rawText || "";
+        const partial = result.imageQuality === "partially_readable" || (result.warnings || []).length > 0;
+        $("medication-ocr-status").textContent = partial
+          ? "一部読み取れない可能性があります。写真と入力内容を照らし合わせてください。"
+          : "読み取りました。写真と入力内容が合っているか確認してください。";
+        $("medication-name").focus();
+      } catch (error) {
+        $("medication-ocr-status").textContent = error.message || "読み取れませんでした。写真を確認して、もう一度お試しください。";
+      } finally {
+        button.disabled = false;
+      }
+    }
+
+    function updatePhotoPreview() {
+      const source = state.photoSourceUrl || state.photoDataUrl;
+      $("medication-photo-preview-button").hidden = !source;
+      $("medication-ocr-button").hidden = !state.photoDataUrl;
+      if (source) $("medication-photo-preview").src = source;
+    }
+
+    function openPhotoDialog() {
+      const source = state.photoSourceUrl || state.photoDataUrl;
+      if (!source) return;
+      $("medication-photo-dialog-image").src = source;
+      $("medication-photo-dialog").showModal();
+    }
+
+    function updateStoppedField() {
+      $("stopped-field").hidden = $("medication-status").value !== "stopped";
+      if ($("stopped-field").hidden) $("stopped-at").value = "";
+    }
+
+    async function saveMedication(event) {
+      event.preventDefault();
+      const saveButton = $("form-save");
+      saveButton.disabled = true;
+      $("form-status").textContent = "保存しています…";
+      const payload = {
+        patientId: state.patientId,
+        name: $("medication-name").value.trim(),
+        dosageText: $("dosage-text").value.trim(),
+        timingText: $("timing-text").value.trim(),
+        status: $("medication-status").value,
+        startedAt: $("started-at").value,
+        stoppedAt: $("stopped-at").value,
+        memo: $("medication-memo").value.trim(),
+        ...(state.photoDataUrl ? { photoDataUrl: state.photoDataUrl, photoName: state.photoName } : {}),
+        ...(state.rawOcrText ? { rawOcrText: state.rawOcrText } : {})
+      };
+      if (state.tutorial) {
+        const editing = Boolean(state.editingId);
+        const tutorialItem = {
+          id: editing ? state.editingId : `tutorial-medication-${Date.now()}`,
+          ...payload,
+          photoDataUrl: state.photoDataUrl || state.photoSourceUrl,
+          source: state.rawOcrText ? "photo_ocr" : "manual",
+          checks: [],
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
+        };
+        if (editing) state.medications = state.medications.map((item) => item.id === state.editingId ? { ...item, ...tutorialItem } : item);
+        else state.medications = [tutorialItem, ...state.medications];
+        closeForm();
+        renderList();
+        setPageMessage("お試しが完了しました。この内容は実際の記録には保存されていません。");
+        saveButton.disabled = false;
+        return;
+      }
+      try {
+        const editing = Boolean(state.editingId);
+        const response = await fetch(editing ? `/api/medications/${encodeURIComponent(state.editingId)}` : "/api/medications", {
+          method: editing ? "PATCH" : "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload)
+        });
+        if (!response.ok) throw new Error();
+        closeForm();
+        await loadMedications();
+        setPageMessage(editing ? "変更を保存しました。" : "お薬を追加しました。");
+      } catch {
+        $("form-status").textContent = "保存できませんでした。入力内容を確認して、もう一度お試しください。";
+      } finally {
+        saveButton.disabled = false;
+      }
+    }
+
+    async function deleteMedication(item) {
+      if (!window.confirm(`「${item.name}」を削除しますか？\nこの操作は元に戻せません。`)) return;
+      if (state.tutorial) {
+        state.medications = state.medications.filter((medication) => medication.id !== item.id);
+        renderList();
+        setPageMessage("お試し記録を削除しました。実際の記録には影響しません。");
+        return;
+      }
+      try {
+        const response = await fetch(`/api/medications/${encodeURIComponent(item.id)}?patientId=${encodeURIComponent(state.patientId)}`, { method: "DELETE" });
+        if (!response.ok) throw new Error();
+        await loadMedications();
+        setPageMessage("お薬の記録を削除しました。");
+      } catch {
+        setPageMessage("削除できませんでした。時間をおいてお試しください。");
+      }
+    }
+
+    async function addCheck(item, button) {
+      button.disabled = true;
+      if (state.tutorial) {
+        item.lastCheck = { status: "taken", checkedAt: new Date().toISOString() };
+        renderList();
+        setPageMessage("お試しで「飲めた」を記録しました。実際の記録には保存されません。");
+        return;
+      }
+      try {
+        const response = await fetch(`/api/medications/${encodeURIComponent(item.id)}/checks`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ patientId: state.patientId, status: "taken" })
+        });
+        if (!response.ok) throw new Error();
+        await loadMedications();
+        setPageMessage("「飲めた」を記録しました。");
+      } catch {
+        setPageMessage("服用を記録できませんでした。時間をおいてお試しください。");
+        button.disabled = false;
+      }
+    }
+
+    function element(tag, className = "", text = "") {
+      const node = document.createElement(tag);
+      if (className) node.className = className;
+      if (text) node.textContent = text;
+      return node;
+    }
+
+    function metaLine(label, value) {
+      const line = element("p");
+      line.append(element("strong", "", `${label}：`), document.createTextNode(value));
+      return line;
+    }
+
+    function statusLabel(status) {
+      if (status === "stopped") return "中止・終了";
+      if (status === "unknown") return "確認中";
+      return "服用中";
+    }
+
+    function medicationPhotoUrl(item) {
+      if (item.photoDataUrl) return item.photoDataUrl;
+      if (item.photoObject) return `/api/medications/${encodeURIComponent(item.id)}/photo?patientId=${encodeURIComponent(state.patientId)}`;
+      return "";
+    }
+
+    function formatDate(value) {
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(value || "")) return value || "";
+      const [year, month, day] = value.split("-");
+      return `${year}年${Number(month)}月${Number(day)}日`;
+    }
+
+    function formatDateTime(value) {
+      const date = new Date(value);
+      if (Number.isNaN(date.getTime())) return "最近";
+      return new Intl.DateTimeFormat("ja-JP", { month: "numeric", day: "numeric", hour: "2-digit", minute: "2-digit" }).format(date);
+    }
+
+    function setPageMessage(message) { $("page-message").textContent = message; }
+  </script>
+</body>
+</html>

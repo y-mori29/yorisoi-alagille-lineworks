@@ -1,0 +1,385 @@
+{
+  "id": "poems",
+  "name": "POEMS症候群",
+  "shortName": "POEMS",
+  "description": "POEMS症候群（クロウ・深瀬症候群、指定難病16）の治療歴・症状・検査値を管理",
+  "color": "#7c3aed",
+  "icon": "neurology",
+
+  "modules": [
+    {
+      "id": "timeline",
+      "label": "治療タイムライン",
+      "description": "診断・治療・検査を時系列で管理",
+      "icon": "timeline",
+      "page": "timeline.html",
+      "enabled": true,
+      "core": true
+    },
+    {
+      "id": "medications",
+      "label": "おくすり管理",
+      "description": "処方薬と変更履歴",
+      "icon": "medication",
+      "page": "medications.html",
+      "enabled": true,
+      "core": true
+    },
+    {
+      "id": "symptom-log",
+      "label": "症状きろく",
+      "description": "しびれ・握力・浮腫・歩行を記録",
+      "icon": "edit_note",
+      "page": "symptom-log.html",
+      "enabled": true
+    },
+    {
+      "id": "restroom",
+      "label": "トイレさがし",
+      "description": "近くのトイレをマップで表示",
+      "icon": "wc",
+      "page": "restroom.html",
+      "enabled": false
+    },
+    {
+      "id": "emergency-card",
+      "label": "緊急カード",
+      "description": "救急時に見せる情報カード",
+      "icon": "emergency",
+      "page": "emergency-card.html",
+      "enabled": true,
+      "core": true
+    },
+    {
+      "id": "lab-tracker",
+      "label": "検査値きろく",
+      "description": "VEGF・M蛋白などの推移をグラフ表示",
+      "icon": "science",
+      "page": "lab-tracker.html",
+      "enabled": true,
+      "core": true
+    },
+    {
+      "id": "summary",
+      "label": "診察用サマリー",
+      "description": "診察時に医師に見せる画面（多科併診対応）",
+      "icon": "description",
+      "page": "summary.html",
+      "enabled": true,
+      "core": true,
+      "fullWidth": true
+    },
+    {
+      "id": "resources",
+      "label": "患者会・支援情報",
+      "description": "患者会・医療費助成・診療拠点情報",
+      "icon": "groups",
+      "page": "resources.html",
+      "enabled": true,
+      "core": true,
+      "fullWidth": true
+    }
+  ],
+
+  "medicationMaster": "poems-medications.json",
+
+  "resourcesConfig": {
+    "title": "患者会・支援情報",
+    "intro": "POEMS症候群は患者数約400人の希少難病です。同じ経験を持つ仲間と繋がる、公的支援を使う、診療拠点を知る ── そんな時に役立つ情報をまとめました。",
+    "sections": [
+      {
+        "heading": "患者会・ピアサポート",
+        "icon": "groups",
+        "items": [
+          {
+            "name": "POEMS症候群サポートグループ",
+            "url": "https://poems.jp/",
+            "note": "2014年設立・会員約50名。掲示板・Zoom交流会・医療学会ブース出展。診療ガイドライン委員会へ患者代表として参画。"
+          },
+          {
+            "name": "RareS. POEMS症候群サポートグループ取材記事",
+            "url": "https://raresnet.com/poemssg2025/",
+            "note": "患者会の活動や想いを紹介した取材記事（2025）。"
+          }
+        ]
+      },
+      {
+        "heading": "公的支援・医療費助成",
+        "icon": "account_balance",
+        "items": [
+          {
+            "name": "難病情報センター：クロウ・深瀬症候群（指定難病16）",
+            "url": "https://www.nanbyou.or.jp/entry/241",
+            "note": "疾患解説・重症度分類・医療費助成の要件・申請手続きを網羅した公式ページ。"
+          },
+          {
+            "name": "日本難病・疾病団体協議会（JPA）サポート",
+            "url": "https://nanbyo.jp/support/",
+            "note": "難病相談・支援センター／難病患者就職サポーター制度の案内。"
+          }
+        ]
+      },
+      {
+        "heading": "医療情報・診療拠点",
+        "icon": "local_hospital",
+        "items": [
+          {
+            "name": "千葉大学 クロウ・深瀬症候群センター",
+            "url": "https://www.m.chiba-u.ac.jp/dept/neurol/crowe/about/",
+            "note": "国内の診療・研究拠点。セカンドオピニオン・紹介受診の相談窓口。"
+          },
+          {
+            "name": "POEMS症候群サポートグループ：治療情報",
+            "url": "https://poems.jp/about-poems/treatment/",
+            "note": "患者会による標準治療の平易な解説。受診前の予習に。"
+          },
+          {
+            "name": "日本血液学会 造血器腫瘍診療ガイドライン（POEMS）",
+            "url": "https://www.jshem.or.jp/gui-hemali/3_2_3.html",
+            "note": "医療者向けの最新ガイドライン。治療方針の根拠を確認したい時に。"
+          }
+        ]
+      }
+    ],
+    "footer": "掲載情報は執筆時点のものです。手続き・治療方針の最新情報は各公式サイト・主治医にご確認ください。"
+  },
+
+  "symptomConfig": {
+    "title": "症状きろく",
+    "metrics": [
+      {
+        "id": "numbness",
+        "label": "手足のしびれ",
+        "type": "scale",
+        "min": 0,
+        "max": 5,
+        "description": "0=なし ← → 5=強い"
+      },
+      {
+        "id": "allodynia",
+        "label": "触れると痛い（アロディニア）",
+        "type": "toggle"
+      },
+      {
+        "id": "gripR",
+        "label": "握力（右）",
+        "type": "counter",
+        "min": 0,
+        "max": 80,
+        "default": 20,
+        "unit": "kg",
+        "description": "握力計がある場合のみ記録"
+      },
+      {
+        "id": "gripL",
+        "label": "握力（左）",
+        "type": "counter",
+        "min": 0,
+        "max": 80,
+        "default": 20,
+        "unit": "kg"
+      },
+      {
+        "id": "walk10m",
+        "label": "10m歩行にかかる秒数",
+        "type": "counter",
+        "min": 0,
+        "max": 120,
+        "default": 10,
+        "unit": "秒",
+        "description": "計測した場合のみ"
+      },
+      {
+        "id": "weight",
+        "label": "体重",
+        "type": "counter",
+        "min": 20,
+        "max": 200,
+        "default": 60,
+        "unit": "kg",
+        "description": "浮腫・胸腹水の経過観察に重要"
+      },
+      {
+        "id": "edema",
+        "label": "むくみ",
+        "type": "scale",
+        "min": 0,
+        "max": 3,
+        "labels": ["なし", "軽度", "中等度", "高度"]
+      },
+      {
+        "id": "dyspnea",
+        "label": "息苦しさ・腹部の張り",
+        "type": "scale",
+        "min": 0,
+        "max": 5,
+        "description": "0=なし ← → 5=とてもつらい"
+      },
+      {
+        "id": "calfPain",
+        "label": "ふくらはぎの痛み・腫れ",
+        "type": "toggle",
+        "dangerColor": true,
+        "description": "血栓症の疑い、早めの受診を"
+      },
+      {
+        "id": "chestPain",
+        "label": "急な胸痛・息切れ",
+        "type": "toggle",
+        "dangerColor": true,
+        "description": "肺塞栓の疑い、緊急受診を検討"
+      },
+      {
+        "id": "visionChange",
+        "label": "視界の変化（ぼやけ・欠け）",
+        "type": "toggle",
+        "description": "乳頭浮腫の可能性、眼科相談を"
+      },
+      {
+        "id": "fatigue",
+        "label": "疲労感",
+        "type": "scale",
+        "min": 0,
+        "max": 5
+      }
+    ],
+    "summaryMetrics": [
+      { "id": "numbness", "label": "平均しびれ", "aggregate": "avg" },
+      { "id": "gripR", "label": "平均握力（右）", "aggregate": "avg" },
+      { "id": "walk10m", "label": "平均10m歩行秒数", "aggregate": "avg" },
+      { "id": "edema", "label": "平均むくみ", "aggregate": "avg" },
+      { "id": "calfPain", "label": "ふくらはぎ痛日数", "aggregate": "countTrue" },
+      { "id": "chestPain", "label": "胸痛日数", "aggregate": "countTrue" }
+    ]
+  },
+
+  "labConfig": {
+    "items": [
+      {
+        "id": "vegf",
+        "label": "血清VEGF",
+        "unit": "pg/mL",
+        "normalRange": [0, 1040],
+        "warnHigh": 1040,
+        "note": "POEMSの病勢マーカー。2021年6月保険適用"
+      },
+      {
+        "id": "mprotein",
+        "label": "M蛋白量",
+        "unit": "g/dL",
+        "normalRange": [0, 0],
+        "warnHigh": 0.1,
+        "note": "免疫電気泳動で確認。減少が寛解指標"
+      },
+      {
+        "id": "plt",
+        "label": "血小板",
+        "unit": "万/μL",
+        "normalRange": [15, 35],
+        "warnHigh": 60,
+        "note": "POEMSでは増多傾向（血栓リスクにも関連）"
+      },
+      {
+        "id": "hb",
+        "label": "Hb（ヘモグロビン）",
+        "unit": "g/dL",
+        "normalRange": [12, 17]
+      },
+      {
+        "id": "alb",
+        "label": "アルブミン",
+        "unit": "g/dL",
+        "normalRange": [3.8, 5.2],
+        "warnLow": 3.0
+      },
+      {
+        "id": "ddimer",
+        "label": "D-ダイマー",
+        "unit": "μg/mL",
+        "normalRange": [0, 1],
+        "warnHigh": 1,
+        "note": "血栓症スクリーニング"
+      },
+      {
+        "id": "hba1c",
+        "label": "HbA1c",
+        "unit": "%",
+        "normalRange": [4.6, 6.2],
+        "warnHigh": 6.5,
+        "note": "POEMSに糖尿病が合併しやすい"
+      },
+      {
+        "id": "tsh",
+        "label": "TSH",
+        "unit": "μIU/mL",
+        "normalRange": [0.4, 4.0],
+        "note": "甲状腺機能（内分泌症状の評価）"
+      },
+      {
+        "id": "ft4",
+        "label": "FT4",
+        "unit": "ng/dL",
+        "normalRange": [0.9, 1.7]
+      },
+      {
+        "id": "testosterone",
+        "label": "テストステロン（男性）",
+        "unit": "ng/mL",
+        "normalRange": [2.5, 11],
+        "warnLow": 2.5,
+        "note": "性腺機能低下の評価"
+      },
+      {
+        "id": "cre",
+        "label": "クレアチニン",
+        "unit": "mg/dL",
+        "normalRange": [0.5, 1.0]
+      },
+      {
+        "id": "egfr",
+        "label": "eGFR",
+        "unit": "mL/min",
+        "normalRange": [60, 150],
+        "warnLow": 45
+      }
+    ]
+  },
+
+  "scoringTools": [
+    { "id": "onls", "label": "ONLS（Overall Neuropathy Limitations Scale）", "range": "0-12", "note": "末梢神経障害の日常生活制限" },
+    { "id": "iRods", "label": "I-RODS", "range": "0-48", "note": "炎症性ニューロパチーの日常生活活動評価" }
+  ],
+
+  "emergencyConfig": {
+    "title": "緊急情報カード",
+    "subtitle": "POEMS症候群（指定難病16）",
+    "fields": [
+      { "id": "therapyStage", "label": "治療段階", "placeholder": "例: 移植後寛解維持期" },
+      { "id": "mainDoctors", "label": "主治医（多科併診）", "placeholder": "例: 血液内科 〇〇医師 / 脳神経内科 △△医師" }
+    ],
+    "warnings": [
+      "⚠️ サリドマイド／レナリドミド服用中は妊娠・献血禁忌（TERMS/RevMate登録確認）",
+      "ふくらはぎの痛み・腫れ → 深部静脈血栓症の疑い、早めの受診を",
+      "急激な呼吸苦・胸痛 → 肺塞栓の疑い、救急受診を検討",
+      "視界のぼやけ・視野欠け → 乳頭浮腫の可能性、眼科へ",
+      "末梢神経障害による転倒リスク：段差・浴室などに注意",
+      "多科併診：血液内科・脳神経内科・眼科・内分泌科・循環器内科",
+      "希少難病のため受診時は診断書・紹介状を携行するとスムーズ"
+    ]
+  },
+
+  "timelineCategories": [
+    { "id": "diagnosis", "label": "診断", "color": "#ede9fe" },
+    { "id": "medication_change", "label": "薬変更", "color": "#d1fae5" },
+    { "id": "asct", "label": "自家移植（ASCT）", "color": "#fbcfe8" },
+    { "id": "plasmapheresis", "label": "血漿交換", "color": "#bfdbfe" },
+    { "id": "radiation", "label": "放射線治療", "color": "#fef3c7" },
+    { "id": "hospitalization", "label": "入院", "color": "#fde68a" },
+    { "id": "exam", "label": "検査", "color": "#e9d5ff" },
+    { "id": "thrombosis", "label": "血栓イベント", "color": "#fca5a5" },
+    { "id": "remission", "label": "寛解判定", "color": "#bbf7d0" },
+    { "id": "relapse", "label": "再発", "color": "#fca5a5" },
+    { "id": "self-log", "label": "じぶんメモ", "color": "#e0f2fe" },
+    { "id": "other", "label": "その他", "color": "#e5e5e5" }
+  ]
+}

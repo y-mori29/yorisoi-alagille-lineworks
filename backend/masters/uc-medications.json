@@ -1,0 +1,200 @@
+{
+  "categories": [
+    {
+      "id": "5-ASA",
+      "name": "5-ASA製剤（アミノサリチル酸製剤）",
+      "description": "軽症〜中等症の基本治療薬",
+      "step": 1
+    },
+    {
+      "id": "steroid",
+      "name": "ステロイド",
+      "description": "中等症〜重症・急性増悪期",
+      "step": 2
+    },
+    {
+      "id": "immunomodulator",
+      "name": "免疫調節薬",
+      "description": "ステロイド依存・難治例",
+      "step": 3
+    },
+    {
+      "id": "biologic",
+      "name": "生物学的製剤（バイオ製剤）",
+      "description": "中等症〜重症・難治例",
+      "step": 4
+    },
+    {
+      "id": "jak_inhibitor",
+      "name": "JAK阻害薬（低分子製剤）",
+      "description": "中等症〜重症・難治例",
+      "step": 4
+    },
+    {
+      "id": "s1p_modulator",
+      "name": "S1P受容体調節薬",
+      "description": "経口の新規作用機序薬",
+      "step": 4
+    },
+    {
+      "id": "other",
+      "name": "その他",
+      "description": "血球成分除去療法・抗菌薬など",
+      "step": 5
+    }
+  ],
+  "medications": [
+    {
+      "genericName": "メサラジン",
+      "brandNames": ["ペンタサ", "アサコール", "リアルダ"],
+      "category": "5-ASA",
+      "dosageForms": ["経口", "注腸", "坐剤"]
+    },
+    {
+      "genericName": "サラゾスルファピリジン",
+      "brandNames": ["サラゾピリン"],
+      "category": "5-ASA",
+      "dosageForms": ["経口"]
+    },
+    {
+      "genericName": "プレドニゾロン",
+      "brandNames": ["プレドニン"],
+      "category": "steroid",
+      "dosageForms": ["経口", "点滴"]
+    },
+    {
+      "genericName": "ブデソニド",
+      "brandNames": ["ゼンタコート", "レクタブル"],
+      "category": "steroid",
+      "dosageForms": ["経口", "注腸フォーム"]
+    },
+    {
+      "genericName": "ベタメタゾン",
+      "brandNames": ["ベタメサゾン注腸"],
+      "category": "steroid",
+      "dosageForms": ["注腸"]
+    },
+    {
+      "genericName": "アザチオプリン",
+      "brandNames": ["イムラン", "アザニン"],
+      "category": "immunomodulator",
+      "dosageForms": ["経口"],
+      "notes": "効果発現まで3〜6ヶ月"
+    },
+    {
+      "genericName": "6-メルカプトプリン",
+      "brandNames": ["ロイケリン"],
+      "category": "immunomodulator",
+      "dosageForms": ["経口"],
+      "notes": "アザチオプリンの代謝産物"
+    },
+    {
+      "genericName": "タクロリムス",
+      "brandNames": ["プログラフ"],
+      "category": "immunomodulator",
+      "dosageForms": ["経口"],
+      "notes": "重症例・入院管理"
+    },
+    {
+      "genericName": "シクロスポリン",
+      "brandNames": ["サンディミュン"],
+      "category": "immunomodulator",
+      "dosageForms": ["経口", "点滴"],
+      "notes": "重症例・短期使用"
+    },
+    {
+      "genericName": "インフリキシマブ",
+      "brandNames": ["レミケード"],
+      "category": "biologic",
+      "dosageForms": ["点滴"],
+      "mechanism": "抗TNFα抗体"
+    },
+    {
+      "genericName": "アダリムマブ",
+      "brandNames": ["ヒュミラ"],
+      "category": "biologic",
+      "dosageForms": ["皮下注射"],
+      "mechanism": "抗TNFα抗体",
+      "notes": "自己注射可"
+    },
+    {
+      "genericName": "ゴリムマブ",
+      "brandNames": ["シンポニー"],
+      "category": "biologic",
+      "dosageForms": ["皮下注射"],
+      "mechanism": "抗TNFα抗体",
+      "notes": "自己注射可"
+    },
+    {
+      "genericName": "ベドリズマブ",
+      "brandNames": ["エンタイビオ"],
+      "category": "biologic",
+      "dosageForms": ["点滴"],
+      "mechanism": "抗α4β7インテグリン抗体"
+    },
+    {
+      "genericName": "ウステキヌマブ",
+      "brandNames": ["ステラーラ"],
+      "category": "biologic",
+      "dosageForms": ["点滴", "皮下注射"],
+      "mechanism": "抗IL-12/23抗体"
+    },
+    {
+      "genericName": "ミリキズマブ",
+      "brandNames": ["オンボー", "オンヴォー"],
+      "category": "biologic",
+      "dosageForms": ["点滴", "皮下注射"],
+      "mechanism": "抗IL-23p19抗体"
+    },
+    {
+      "genericName": "リサンキズマブ",
+      "brandNames": ["スキリージ"],
+      "category": "biologic",
+      "dosageForms": ["点滴", "皮下注射"],
+      "mechanism": "抗IL-23p19抗体",
+      "notes": "2024年6月UC適応追加"
+    },
+    {
+      "genericName": "グセルクマブ",
+      "brandNames": ["トレムフィア"],
+      "category": "biologic",
+      "dosageForms": ["点滴", "皮下注射"],
+      "mechanism": "抗IL-23p19抗体",
+      "notes": "2025年3月UC適応追加"
+    },
+    {
+      "genericName": "エトラシモド",
+      "brandNames": ["ベルスピティ"],
+      "category": "s1p_modulator",
+      "dosageForms": ["経口"],
+      "mechanism": "S1P受容体調節薬",
+      "notes": "2025年6月承認・9月発売。1日1回経口"
+    },
+    {
+      "genericName": "トファシチニブ",
+      "brandNames": ["ゼルヤンツ"],
+      "category": "jak_inhibitor",
+      "dosageForms": ["経口"]
+    },
+    {
+      "genericName": "フィルゴチニブ",
+      "brandNames": ["ジセレカ"],
+      "category": "jak_inhibitor",
+      "dosageForms": ["経口"]
+    },
+    {
+      "genericName": "ウパダシチニブ",
+      "brandNames": ["リンヴォック"],
+      "category": "jak_inhibitor",
+      "dosageForms": ["経口"],
+      "notes": "選択的JAK1阻害"
+    },
+    {
+      "genericName": "血球成分除去療法",
+      "brandNames": ["GCAP", "LCAP"],
+      "category": "other",
+      "dosageForms": ["体外循環"],
+      "notes": "炎症性白血球を体外で除去・保険適用あり"
+    }
+  ]
+}

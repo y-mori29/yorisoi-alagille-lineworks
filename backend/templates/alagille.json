@@ -1,0 +1,233 @@
+{
+  "id": "alagille",
+  "name": "アラジール症候群",
+  "shortName": "アラジール",
+  "description": "肝臓・心臓・腎臓・眼・骨格など複数の診療科にまたがる記録を、ご家族で整理しやすくします",
+  "color": "#2f7ddf",
+  "icon": "family_restroom",
+  "sortOrder": 10,
+  "modules": [
+    {
+      "id": "visit-notes",
+      "label": "診察メモ",
+      "description": "診察で聞いたことを録音・整理",
+      "icon": "clinical_notes",
+      "page": "simple/record.html",
+      "enabled": true,
+      "core": true
+    },
+    {
+      "id": "growth-curve",
+      "label": "成長曲線",
+      "description": "身長・体重の推移を記録",
+      "icon": "monitoring",
+      "page": "simple/growth.html",
+      "enabled": true,
+      "core": true
+    },
+    {
+      "id": "photo-album",
+      "label": "写真アルバム",
+      "description": "写真を横3枚グリッドで見返す",
+      "icon": "photo_library",
+      "page": "simple/album.html",
+      "enabled": true,
+      "core": true
+    },
+    {
+      "id": "calendar",
+      "label": "ふりかえる",
+      "description": "受診ごとの記録を時系列で確認",
+      "icon": "calendar_month",
+      "page": "simple/calendar.html",
+      "enabled": true,
+      "core": true
+    },
+    {
+      "id": "show",
+      "label": "みせる",
+      "description": "他院・他科で言われたことを診察で見せる",
+      "icon": "ios_share",
+      "page": "simple/show.html",
+      "enabled": true,
+      "core": true
+    },
+    {
+      "id": "handoff",
+      "label": "本人への引き継ぎ",
+      "description": "将来、保護者から本人へ記録を引き継ぐ準備",
+      "icon": "sync_alt",
+      "page": "simple/settings.html",
+      "enabled": true
+    }
+  ],
+  "medicationMaster": "alagille-medications.json",
+  "summaryHints": [
+    "アラジール症候群では肝臓・心臓・腎臓・眼・骨格など複数診療科にまたがる話が出やすい。どの診療科の話かを残す。",
+    "身長、体重、栄養、食事指導、脂溶性ビタミン、かゆみ、胆汁うっ滞に関する話は見落とさない。",
+    "薬の開始・変更・中止、検査予定、次回受診、紹介先、移植に関する説明は短く明確に残す。",
+    "保護者があとで家族に共有しやすいように、専門用語だけで終わらせず、患者・家族向けの言葉にする。",
+    "会話や患者メモに出ていない症状、薬剤名、検査値、医学判断は補完しない。"
+  ],
+  "growthConfig": {
+    "title": "成長曲線",
+    "intro": "身長・体重の変化を、受診の記録と一緒に見返せるようにします。表示は診断ではなく、記録の補助です。",
+    "metrics": [
+      {
+        "id": "heightCm",
+        "label": "身長",
+        "unit": "cm"
+      },
+      {
+        "id": "weightKg",
+        "label": "体重",
+        "unit": "kg"
+      },
+      {
+        "id": "headCircumferenceCm",
+        "label": "頭囲",
+        "unit": "cm",
+        "optional": true
+      }
+    ],
+    "disclaimer": "成長曲線は記録を見やすくするための参考表示です。医学的な判断は主治医にご確認ください。"
+  },
+  "albumConfig": {
+    "title": "写真アルバム",
+    "intro": "日々の写真や診察時の資料を、横3枚の一覧で見返せるようにします。",
+    "gridColumns": 3,
+    "tags": ["皮膚", "目", "食事", "薬", "資料", "成長", "その他"]
+  },
+  "resourcesConfig": {
+    "title": "支援情報",
+    "intro": "アラジール症候群とともに過ごすご家族が、相談先や制度を探すための入口です。",
+    "sections": [
+      {
+        "heading": "患者会・疾患情報",
+        "icon": "groups",
+        "items": [
+          {
+            "name": "日本アラジール症候群の会",
+            "url": "https://www.alagille.jp/",
+            "note": "患者さん・ご家族のつながりと情報共有の入口です。"
+          },
+          {
+            "name": "難病情報センター",
+            "url": "https://www.nanbyou.or.jp/",
+            "note": "指定難病や医療費助成に関する公的情報の入口です。"
+          }
+        ]
+      },
+      {
+        "heading": "医療費の支援",
+        "icon": "account_balance",
+        "items": [
+          {
+            "name": "高額療養費制度（厚生労働省）",
+            "url": "https://www.mhlw.go.jp/stf/seisakunitsuite/bunya/kenkou_iryou/iryouhoken/juuyou/kougakuiryou/index.html",
+            "note": "1か月の医療費の自己負担が上限額を超えた分が払い戻される制度です。"
+          },
+          {
+            "name": "医療費控除（国税庁）",
+            "url": "https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/1120.htm",
+            "note": "1年間の医療費が一定額を超えた場合、確定申告で所得控除を受けられることがあります。"
+          }
+        ]
+      }
+    ],
+    "footer": "掲載情報は執筆時点のものです。最新情報は各公式サイト・自治体・主治医にご確認ください。"
+  },
+  "labConfig": {
+    "items": [
+      {
+        "id": "ast",
+        "label": "AST",
+        "unit": "U/L",
+        "normalRange": [10, 30]
+      },
+      {
+        "id": "alt",
+        "label": "ALT",
+        "unit": "U/L",
+        "normalRange": [10, 30]
+      },
+      {
+        "id": "tbil",
+        "label": "総ビリルビン",
+        "unit": "mg/dL"
+      },
+      {
+        "id": "dbil",
+        "label": "直接ビリルビン",
+        "unit": "mg/dL"
+      },
+      {
+        "id": "ggt",
+        "label": "γ-GTP",
+        "unit": "U/L"
+      },
+      {
+        "id": "alp",
+        "label": "ALP",
+        "unit": "U/L"
+      },
+      {
+        "id": "albumin",
+        "label": "アルブミン",
+        "unit": "g/dL"
+      },
+      {
+        "id": "ptInr",
+        "label": "PT-INR",
+        "unit": ""
+      }
+    ]
+  },
+  "timelineCategories": [
+    {
+      "id": "diagnosis",
+      "label": "診断",
+      "color": "#dbeafe"
+    },
+    {
+      "id": "liver",
+      "label": "肝臓",
+      "color": "#fef3c7"
+    },
+    {
+      "id": "heart",
+      "label": "心臓",
+      "color": "#fee2e2"
+    },
+    {
+      "id": "kidney",
+      "label": "腎臓",
+      "color": "#e0f2fe"
+    },
+    {
+      "id": "eye",
+      "label": "眼",
+      "color": "#ede9fe"
+    },
+    {
+      "id": "growth",
+      "label": "成長",
+      "color": "#dcfce7"
+    },
+    {
+      "id": "nutrition",
+      "label": "栄養",
+      "color": "#ffedd5"
+    },
+    {
+      "id": "transplant",
+      "label": "移植の相談",
+      "color": "#fce7f3"
+    },
+    {
+      "id": "other",
+      "label": "その他",
+      "color": "#e5e5e5"
+    }
+  ]
+}

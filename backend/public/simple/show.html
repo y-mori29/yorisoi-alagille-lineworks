@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>先生に見せる - よりそい アラジール</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Symbols+Outlined">
+  <link rel="stylesheet" href="/css/alagille-family.css">
+  <link rel="stylesheet" href="/css/alagille-doctor-view.css">
+  <script src="/js/account-guard.js"></script>
+</head>
+<body>
+  <main class="app no-tabbar doctor-page" id="doctor-page">
+    <header class="screen-head">
+      <a class="round" href="/?disease=alagille" aria-label="ホームへ戻る"><span class="material-symbols-outlined">arrow_back</span></a>
+      <h1 class="screen-title">先生に見せる</h1>
+      <a class="round" href="/questions.html?disease=alagille" aria-label="次に聞くこと"><span class="material-symbols-outlined">contact_support</span></a>
+    </header>
+
+    <section class="doctor-patient" aria-label="健康記録の対象">
+      <img id="patient-avatar" src="/assets/alagille-brand/avatars/avatar-child-boy-v1.png" alt="">
+      <span><small>健康記録の対象</small><strong id="patient-name">読み込み中</strong></span>
+    </section>
+
+    <section class="panel doctor-intro">
+      <div><h2>記録した内容を、診察用にまとめます</h2><p>見せたい項目だけ選び、スマホ画面・コピー・印刷で共有できます。</p></div>
+      <img src="/assets/alagille-brand/trimmed/08-checkup-document.png" alt="診察資料の水彩イラスト">
+    </section>
+
+    <button class="doctor-tutorial" id="start-doctor-tutorial" type="button"><span class="material-symbols-outlined">play_circle</span>使い方をお試しする</button>
+    <p class="tutorial-state" id="tutorial-state" hidden>お試し用の架空記録です。本当の記録には追加されていません。</p>
+
+    <section class="panel doctor-controls" aria-label="表示する記録を選ぶ">
+      <h2>今日見せたいこと</h2>
+      <div class="range-grid"><label>開始日<input id="range-from" type="date"></label><label>終了日<input id="range-to" type="date"></label></div>
+      <div class="include-grid">
+        <label class="include-option"><input type="checkbox" data-section="visitNotes" checked>診察メモ</label>
+        <label class="include-option"><input type="checkbox" data-section="labs" checked>検査値</label>
+        <label class="include-option"><input type="checkbox" data-section="growth" checked>成長</label>
+        <label class="include-option"><input type="checkbox" data-section="medications" checked>お薬</label>
+        <label class="include-option"><input type="checkbox" data-section="dailyLogs" checked>日々の様子</label>
+        <label class="include-option"><input type="checkbox" data-section="questions" checked>次に聞くこと</label>
+      </div>
+      <button class="refresh-view" id="refresh-view" type="button">この内容でまとめ直す</button>
+      <p class="doctor-status" id="doctor-status" role="status"></p>
+    </section>
+
+    <div class="doctor-actions"><button class="doctor-action primary" id="copy-doctor-view" type="button"><span class="material-symbols-outlined">content_copy</span>コピー</button><button class="doctor-action" id="print-doctor-view" type="button"><span class="material-symbols-outlined">print</span>印刷</button></div>
+    <section id="doctor-view-root" aria-live="polite"></section>
+    <section class="panel doctor-warning">この画面は診断や判定を行うものではありません。記録した内容を診察で共有するための補助です。</section>
+  </main>
+
+  <script>
+    const avatarArtwork={"adult-man":"/assets/alagille-brand/avatars/avatar-adult-man-v1.png","adult-woman":"/assets/alagille-brand/avatars/avatar-adult-woman-v1.png","child-boy":"/assets/alagille-brand/avatars/avatar-child-boy-v1.png","child-girl":"/assets/alagille-brand/avatars/avatar-child-girl-v1.png"};
+    const categoryLabels={skin:"皮膚",stool:"便の色",itch:"かゆみ",meal:"食事",movement:"動き",other:"その他",doctor:"診察全般",medication:"お薬",test:"検査",growth:"成長・食事",daily:"日々の様子"};
+    const state={patientId:"",view:null,tutorial:false};
+    const $=(id)=>document.getElementById(id);
+
+    document.addEventListener("DOMContentLoaded",async()=>{
+      const today=new Date(),from=new Date(today.getTime()-90*86400000);$("range-to").value=dateValue(today);$("range-from").value=dateValue(from);
+      $("refresh-view").addEventListener("click",loadDoctorView);$("copy-doctor-view").addEventListener("click",copyDoctorView);$("print-doctor-view").addEventListener("click",()=>window.print());$("start-doctor-tutorial").addEventListener("click",toggleTutorial);
+      document.querySelectorAll("[data-section]").forEach((input)=>input.addEventListener("change",renderDoctorView));
+      await loadPatient();await loadDoctorView();
+    });
+
+    async function loadPatient(){const response=await fetch("/api/family/patients");if(!response.ok)throw new Error("patient load failed");const result=await response.json();const savedId=localStorage.getItem("alagille-current-patient-id");const patient=result.patients.find((item)=>item.id===savedId)||result.patients[0];if(!patient)throw new Error("patient missing");state.patientId=patient.id;$("patient-name").textContent=patient.displayName;$("patient-avatar").src=avatarArtwork[patient.avatarKey]||avatarArtwork["child-boy"];}
+    async function loadDoctorView(){state.tutorial=false;$("tutorial-state").hidden=true;$("start-doctor-tutorial").innerHTML='<span class="material-symbols-outlined">play_circle</span>使い方をお試しする';$("doctor-status").textContent="記録をまとめています…";try{const params=new URLSearchParams({patientId:state.patientId,from:$("range-from").value,to:$("range-to").value});const response=await fetch(`/api/doctor-view?${params}`);const result=await response.json();if(!response.ok)throw new Error(result.error||"load failed");state.view=result.view;$("doctor-status").textContent="";renderDoctorView();}catch{$("doctor-status").textContent="記録をまとめられませんでした。日付を確認してください。";}}
+    function toggleTutorial(){if(state.tutorial){loadDoctorView();return;}state.tutorial=true;state.view=sampleView();$("tutorial-state").hidden=false;$("start-doctor-tutorial").innerHTML='<span class="material-symbols-outlined">close</span>お試しを終える';$("doctor-status").textContent="架空の記録で、含める項目・コピー・印刷を試せます。";renderDoctorView();}
+
+    function included(){return Object.fromEntries([...document.querySelectorAll("[data-section]")].map((input)=>[input.dataset.section,input.checked]));}
+    function renderDoctorView(){const root=$("doctor-view-root");root.replaceChildren();if(!state.view){root.append(emptyCard("表示できる記録がありません。"));return;}const use=included();if(use.visitNotes)appendVisitNotes(root,state.view.visitNotes||[]);if(use.labs)appendLabs(root,state.view.labs||[]);if(use.growth)appendGrowth(root,state.view.growth||[]);if(use.medications)appendMedications(root,state.view.medications||[]);if(use.dailyLogs)appendDaily(root,state.view.dailyLogs||[]);if(use.questions)appendQuestions(root,state.view.questions||[],state.view.aiQuestionCandidates||[]);if(!root.children.length)root.append(emptyCard("表示する項目を選んでください。"));}
+    function section(title){const el=document.createElement("section");el.className="panel doctor-section";const h=document.createElement("h2");h.textContent=title;el.append(h);return el;}
+    function entry(title,body){const el=document.createElement("article");el.className="doctor-entry";const h=document.createElement("h3");h.textContent=title;el.append(h);if(body){const p=document.createElement("p");p.textContent=body;el.append(p);}return el;}
+    function list(items){const ul=document.createElement("ul");items.filter(Boolean).forEach((item)=>{const li=document.createElement("li");li.textContent=item;ul.append(li);});return ul;}
+    function emptyCard(text){const el=document.createElement("div");el.className="panel doctor-empty";el.textContent=text;return el;}
+    function appendOrEmpty(root,el,count,empty){if(count)root.append(el);else{const sectionEl=section(el.querySelector("h2")?.textContent||"");sectionEl.append(entry(empty,""));root.append(sectionEl);}}
+    function appendVisitNotes(root,items){const el=section("診察メモ");items.forEach((item)=>{const card=entry(`${item.visitDate||"日付未登録"} ${item.department||item.clinicName||""}`,item.summary||item.familyMemo||"");card.append(list(item.doctorSaid||[]));el.append(card);});appendOrEmpty(root,el,items.length,"期間内の診察メモはありません");}
+    function appendLabs(root,items){const el=section("検査値");items.forEach((item)=>{const card=entry(`${item.testDate} ${item.hospitalName||""}`,item.notes||"");const table=document.createElement("table");table.className="doctor-table";table.innerHTML="<thead><tr><th>項目</th><th>結果</th><th>基準範囲</th></tr></thead>";const body=document.createElement("tbody");(item.values||[]).forEach((value)=>{const row=document.createElement("tr");const name=document.createElement("td");name.textContent=value.name;const result=document.createElement("td");result.textContent=`${value.value}${value.unit?` ${value.unit}`:""}${value.flag?` ${value.flag}`:""}`;if(value.flag)result.className=`flag-${value.flag.toLowerCase()}`;const range=document.createElement("td");range.textContent=value.referenceRange||"";row.append(name,result,range);body.append(row);});table.append(body);card.append(table);el.append(card);});appendOrEmpty(root,el,items.length,"期間内の検査記録はありません");}
+    function appendGrowth(root,items){const el=section("成長");items.forEach((item)=>{const values=[item.heightCm!=null?`身長 ${item.heightCm}cm`:"",item.weightKg!=null?`体重 ${item.weightKg}kg`:"",item.memo||""].filter(Boolean).join(" / ");el.append(entry(item.measuredAt,values));});appendOrEmpty(root,el,items.length,"期間内の成長記録はありません");}
+    function appendMedications(root,items){const el=section("お薬");items.forEach((item)=>{const status=item.status==="stopped"?"終了":"服用中";el.append(entry(`${item.name||"薬名未入力"}（${status}）`,[item.dosageText,item.timingText,item.memo].filter(Boolean).join(" / ")));});appendOrEmpty(root,el,items.length,"お薬の記録はありません");}
+    function appendDaily(root,items){const el=section("日々の様子");items.forEach((item)=>{const card=entry(`${formatDate(item.occurredAt)} ${categoryLabels[item.category]||"その他"}`,[item.title,item.memo].filter(Boolean).join(" / "));if(item.media?.length){const media=document.createElement("div");media.className="doctor-media";item.media.forEach((source)=>{if(source.mediaType==="video"){const video=document.createElement("video");video.src=source.url;video.controls=true;video.preload="metadata";video.playsInline=true;media.append(video);}else{const image=document.createElement("img");image.src=source.url;image.alt="日々の様子の写真";media.append(image);}});card.append(media);}el.append(card);});appendOrEmpty(root,el,items.length,"期間内の日々の様子はありません");}
+    function appendQuestions(root,questions,candidates){const el=section("次に聞きたいこと");questions.forEach((item)=>{const card=entry(item.text,categoryLabels[item.category]||"その他");el.append(card);});candidates.forEach((item)=>{const card=entry(item.text,"");const source=document.createElement("p");source.className="source-note";source.textContent=`${item.sourceVisitDate||"日付未登録"}の診察メモからの候補（正規の質問には未追加）`;card.append(source);el.append(card);});appendOrEmpty(root,el,questions.length+candidates.length,"次に聞きたいことはありません");}
+
+    async function copyDoctorView(){try{let text;if(state.tutorial){text=sampleText();}else{const response=await fetch("/api/doctor-view/export",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({patientId:state.patientId,from:$("range-from").value,to:$("range-to").value,included:included()})});const result=await response.json();if(!response.ok)throw new Error(result.error);text=result.text;}await navigator.clipboard.writeText(text);const button=$("copy-doctor-view");button.innerHTML='<span class="material-symbols-outlined">check</span>コピーしました';setTimeout(()=>button.innerHTML='<span class="material-symbols-outlined">content_copy</span>コピー',1800);}catch{$("doctor-status").textContent="コピーできませんでした。ブラウザの権限を確認してください。";}}
+    function sampleView(){const today=dateValue(new Date());return{patient:{displayName:"お試し はるさん",ageLabel:"6歳3か月"},selectedRange:{from:$("range-from").value,to:$("range-to").value},visitNotes:[{id:"v",visitDate:today,department:"小児科",summary:"血液検査の結果と、次回の検査予定について話しました。",doctorSaid:["お薬は今までどおり続けると説明がありました。"],nextQuestions:["夜のかゆみについて聞く"]}],labs:[{id:"l",testDate:today,hospitalName:"お試し病院",values:[{name:"ALT",value:"58",unit:"U/L",referenceRange:"9〜30",flag:"H"}]}],growth:[{id:"g",measuredAt:today,heightCm:107.2,weightKg:17.6,memo:""}],medications:[{id:"m",name:"お試しのお薬",status:"active",dosageText:"1日2回",timingText:"朝・夕",memo:""}],dailyLogs:[{id:"d",occurredAt:new Date().toISOString(),category:"itch",title:"夜のかゆみ",memo:"冷やすと落ち着きました",media:[]}],questions:[{id:"q",text:"夜のかゆみが強い時の対応を聞く",category:"daily"}],aiQuestionCandidates:[{text:"次回検査の準備を確認する",sourceVisitDate:today}]};}
+    function sampleText(){return"【よりそい 診察共有メモ】\nお試し用の架空記録です。\n診察メモ、検査、成長、お薬、日々の様子、質問を選んで共有できます。";}
+    function dateValue(date){return date.toISOString().slice(0,10);}
+    function formatDate(value){return new Intl.DateTimeFormat("ja-JP",{year:"numeric",month:"numeric",day:"numeric"}).format(new Date(value));}
+  </script>
+</body>
+</html>

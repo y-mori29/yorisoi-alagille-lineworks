@@ -1,0 +1,24 @@
+{"kind":"deck","id":"pr/dy6iio","name":"Deck"}
+{"kind":"layout","layoutId":"fc8423bc-86dd-4490-bb36-faf6a561e31a","name":"Master","type":"master"}
+{"kind":"layout","layoutId":"a9cfbbf2-cb8f-4710-a623-c6272c4e8f07","name":"Title Slide","type":"title"}
+{"kind":"slide","id":"sl/1kzcn7","slide":1,"title":"Slide 1","textShapes":0}
+{"kind":"image","id":"im/r2p8nqxs","slide":1,"name":"","geometry":"rect","alt":"お子さんの今日を診察につなぐ概要","bbox":[0,0,1672,941]}
+{"kind":"notes","id":"nt/1kzcn7","slide":1,"text":""}
+{"kind":"slide","id":"sl/ea4mei","slide":2,"title":"Slide 2","textShapes":0}
+{"kind":"image","id":"im/m1cfa9w3","slide":2,"name":"","geometry":"rect","alt":"機能1 診察メモ","bbox":[0,0,1672,941]}
+{"kind":"notes","id":"nt/ea4mei","slide":2,"text":""}
+{"kind":"slide","id":"sl/555i78","slide":3,"title":"Slide 3","textShapes":0}
+{"kind":"image","id":"im/y90je9cv","slide":3,"name":"","geometry":"rect","alt":"機能2 成長のきろく","bbox":[0,0,1672,941]}
+{"kind":"notes","id":"nt/555i78","slide":3,"text":""}
+{"kind":"slide","id":"sl/d0pw41","slide":4,"title":"Slide 4","textShapes":0}
+{"kind":"image","id":"im/h4byhgn2","slide":4,"name":"","geometry":"rect","alt":"機能3 写真アルバム","bbox":[0,0,1672,941]}
+{"kind":"notes","id":"nt/d0pw41","slide":4,"text":""}
+{"kind":"slide","id":"sl/bltepq","slide":5,"title":"Slide 5","textShapes":0}
+{"kind":"image","id":"im/donyd0z6","slide":5,"name":"","geometry":"rect","alt":"機能4 先生に見せる","bbox":[0,0,1672,941]}
+{"kind":"notes","id":"nt/bltepq","slide":5,"text":""}
+{"kind":"slide","id":"sl/nfcq8z","slide":6,"title":"Slide 6","textShapes":0}
+{"kind":"image","id":"im/pg3ex0nu","slide":6,"name":"","geometry":"rect","alt":"共有導線 LINE WORKSから開く","bbox":[0,0,1672,941]}
+{"kind":"notes","id":"nt/nfcq8z","slide":6,"text":""}
+{"kind":"slide","id":"sl/cz6lkm","slide":7,"title":"Slide 7","textShapes":0}
+{"kind":"image","id":"im/yxobm58z","slide":7,"name":"","geometry":"rect","alt":"UI遷移画面","bbox":[0,0,1672,941]}
+{"kind":"notes","id":"nt/cz6lkm","slide":7,"text":""}

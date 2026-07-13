@@ -1,0 +1,243 @@
+{
+  "id": "sle",
+  "name": "全身性エリテマトーデス",
+  "shortName": "SLE",
+  "description": "全身性エリテマトーデス（SLE）の治療歴・薬・症状を管理",
+  "color": "#ec4899",
+  "icon": "immunology",
+
+  "modules": [
+    {
+      "id": "timeline",
+      "label": "治療タイムライン",
+      "description": "治療経歴を時系列で管理",
+      "icon": "timeline",
+      "page": "timeline.html",
+      "enabled": true,
+      "core": true
+    },
+    {
+      "id": "medications",
+      "label": "おくすり管理",
+      "description": "処方薬と変更履歴",
+      "icon": "medication",
+      "page": "medications.html",
+      "enabled": true,
+      "core": true
+    },
+    {
+      "id": "symptom-log",
+      "label": "症状きろく",
+      "description": "毎日の体調をかんたん記録",
+      "icon": "edit_note",
+      "page": "symptom-log.html",
+      "enabled": true
+    },
+    {
+      "id": "restroom",
+      "label": "トイレさがし",
+      "description": "近くのトイレをマップで表示",
+      "icon": "wc",
+      "page": "restroom.html",
+      "enabled": false
+    },
+    {
+      "id": "emergency-card",
+      "label": "緊急カード",
+      "description": "救急時に見せる情報カード",
+      "icon": "emergency",
+      "page": "emergency-card.html",
+      "enabled": true,
+      "core": true
+    },
+    {
+      "id": "lab-tracker",
+      "label": "検査値きろく",
+      "description": "血液検査の推移をグラフ表示",
+      "icon": "science",
+      "page": "lab-tracker.html",
+      "enabled": true,
+      "core": true
+    },
+    {
+      "id": "summary",
+      "label": "診察用サマリー",
+      "description": "診察時に医師に見せる画面",
+      "icon": "description",
+      "page": "summary.html",
+      "enabled": true,
+      "core": true,
+      "fullWidth": true
+    },
+    {
+      "id": "resources",
+      "label": "患者会・支援情報",
+      "description": "患者会・医療費助成・診療拠点情報",
+      "icon": "groups",
+      "page": "resources.html",
+      "enabled": true,
+      "core": true,
+      "fullWidth": true
+    }
+  ],
+
+  "medicationMaster": "sle-medications.json",
+
+  "resourcesConfig": {
+    "title": "患者会・支援情報",
+    "intro": "全身性エリテマトーデス（SLE、指定難病49）は20〜40代女性に多い自己免疫疾患で、国内受給者数は約6万人超。同じ経験を持つ仲間と繋がる、公的支援を使う、診療拠点を知る ── そんな時に役立つ情報をまとめました。",
+    "sections": [
+      {
+        "heading": "患者会・ピアサポート",
+        "icon": "groups",
+        "items": [
+          { "name": "一般社団法人 全国膠原病友の会", "url": "https://kougentomo.xsrv.jp/", "note": "全国35都道府県に支部。SLEを含む膠原病患者の交流・医療講演会・妊娠出産相談などを展開。" },
+          { "name": "NPO法人 膠原病・リウマチ・血管炎サポートネットワーク（膠サポ）", "url": "https://www.rheumatic-disease-community.org/", "note": "膠原病領域の患者支援コミュニティ。情報発信・交流イベントを通じてピアサポートを提供。" }
+        ]
+      },
+      {
+        "heading": "公的支援・医療費助成",
+        "icon": "account_balance",
+        "items": [
+          { "name": "難病情報センター：全身性エリテマトーデス（指定難病49）", "url": "https://www.nanbyou.or.jp/entry/215", "note": "疾患解説・重症度分類・医療費助成の要件・申請手続きを網羅した公式ページ。" },
+          { "name": "日本難病・疾病団体協議会（JPA）", "url": "https://nanbyo.jp/", "note": "難病相談支援センター・就労支援の全国窓口。制度の最新情報はここから。" }
+        ]
+      },
+      {
+        "heading": "医療情報・診療拠点",
+        "icon": "local_hospital",
+        "items": [
+          { "name": "日本リウマチ学会：全身性エリテマトーデス診療ガイドライン", "url": "https://www.ryumachi-jp.com/publish/others/sle/", "note": "専門医向け公式ガイドライン。ループス腎炎・妊娠・モニタリングなど章立てで整理。" },
+          { "name": "日本リウマチ学会：SLE疾患解説", "url": "https://www.ryumachi-jp.com/general/casebook/sle/", "note": "一般向けの病気の解説ページ。症状・治療・生活上の注意をコンパクトに確認できる。" }
+        ]
+      }
+    ],
+    "footer": "掲載情報は執筆時点のものです。手続き・治療方針の最新情報は各公式サイト・主治医にご確認ください。"
+  },
+
+  "symptomConfig": {
+    "title": "症状きろく",
+    "metrics": [
+      {
+        "id": "fatigue",
+        "label": "疲労度",
+        "type": "scale",
+        "min": 0,
+        "max": 5,
+        "description": "0=なし ← → 5=動けない"
+      },
+      {
+        "id": "jointPain",
+        "label": "関節の痛み",
+        "type": "scale",
+        "min": 0,
+        "max": 5,
+        "description": "0=なし ← → 5=とても痛い"
+      },
+      {
+        "id": "rash",
+        "label": "皮疹/紅斑",
+        "type": "toggle",
+        "dangerColor": true
+      },
+      {
+        "id": "fever",
+        "label": "発熱",
+        "type": "toggle",
+        "dangerColor": true
+      },
+      {
+        "id": "hairLoss",
+        "label": "脱毛",
+        "type": "toggle"
+      },
+      {
+        "id": "mouthUlcer",
+        "label": "口内炎",
+        "type": "toggle"
+      },
+      {
+        "id": "photosensitivity",
+        "label": "光線過敏（日光で悪化）",
+        "type": "toggle",
+        "dangerColor": true,
+        "description": "再燃のきっかけとして頻度が高い"
+      },
+      {
+        "id": "edema",
+        "label": "むくみ",
+        "type": "scale",
+        "min": 0,
+        "max": 3,
+        "labels": ["なし", "軽度", "中等度", "高度"],
+        "description": "0=なし ← → 3=高度"
+      }
+    ],
+    "summaryMetrics": [
+      { "id": "fatigue", "label": "平均疲労度", "aggregate": "avg" },
+      { "id": "jointPain", "label": "平均関節痛", "aggregate": "avg" },
+      { "id": "rash", "label": "皮疹日数", "aggregate": "countTrue" },
+      { "id": "fever", "label": "発熱日数", "aggregate": "countTrue" },
+      { "id": "photosensitivity", "label": "光線過敏日数", "aggregate": "countTrue" },
+      { "id": "edema", "label": "平均むくみ", "aggregate": "avg" }
+    ]
+  },
+
+  "labConfig": {
+    "items": [
+      { "id": "crp", "label": "CRP", "unit": "mg/dL", "normalRange": [0, 0.3], "warnHigh": 1.0 },
+      { "id": "anti_dsdna", "label": "抗dsDNA抗体", "unit": "IU/mL", "normalRange": [0, 10], "warnHigh": 15, "note": "測定法（ELISA/RIA）で基準異なる・施設基準参照" },
+      { "id": "c3", "label": "補体C3", "unit": "mg/dL", "normalRange": [86, 160], "warnLow": 80 },
+      { "id": "c4", "label": "補体C4", "unit": "mg/dL", "normalRange": [17, 45], "warnLow": 15 },
+      { "id": "anti_sm", "label": "抗Sm抗体", "unit": "index", "normalRange": [0, 10], "note": "SLE特異性高・分類基準項目" },
+      { "id": "anti_u1rnp", "label": "抗U1-RNP抗体", "unit": "index", "normalRange": [0, 10], "note": "MCTDとの鑑別" },
+      { "id": "anti_ssa", "label": "抗Ro/SS-A抗体", "unit": "index", "normalRange": [0, 10], "note": "新生児ループス・胎児心ブロックリスク" },
+      { "id": "anti_ssb", "label": "抗La/SS-B抗体", "unit": "index", "normalRange": [0, 10] },
+      { "id": "anti_phospholipid", "label": "抗リン脂質抗体", "unit": "U/mL", "normalRange": [0, 10], "note": "抗カルジオリピン・LA・抗β2GPI。血栓リスク評価" },
+      { "id": "egfr", "label": "eGFR", "unit": "mL/min/1.73m²", "normalRange": [60, 120], "warnLow": 45 },
+      { "id": "upcr", "label": "UPCR（尿蛋白/Cr比）", "unit": "mg/gCr", "normalRange": [0, 150], "warnHigh": 500, "note": "随時尿で測定可・EULAR 2019で≥500が腎生検適応" },
+      { "id": "urine_sediment", "label": "尿沈渣（赤血球/円柱）", "unit": "/HPF", "normalRange": [0, 5], "note": "ループス腎炎活動性評価" },
+      { "id": "coombs", "label": "直接クームス試験", "unit": "結果", "note": "AIHA合併の評価" },
+      { "id": "wbc", "label": "白血球数", "unit": "/μL", "normalRange": [3500, 9000], "warnLow": 2500 },
+      { "id": "hb", "label": "Hb（ヘモグロビン）", "unit": "g/dL", "normalRange": [12, 17], "warnLow": 10 },
+      { "id": "plt", "label": "血小板数", "unit": "万/μL", "normalRange": [15, 35], "warnLow": 10 },
+      { "id": "bun", "label": "BUN", "unit": "mg/dL", "normalRange": [8, 20], "warnHigh": 25 },
+      { "id": "cre", "label": "Cre", "unit": "mg/dL", "normalRange": [0.6, 1.1], "warnHigh": 1.5 },
+      { "id": "hbv_dna", "label": "HBV-DNA", "unit": "LogIU/mL", "normalRange": [0, 1.3], "note": "免疫抑制療法前必須" }
+    ]
+  },
+
+  "scoringTools": [
+    { "id": "sledai2k", "label": "SLEDAI-2K", "range": "0-105", "note": "SLE疾患活動性指標。指定難病重症度判定にも使用。≥4で活動性" },
+    { "id": "bilag", "label": "BILAG-2004", "range": "A-E", "note": "臓器系統別の活動性評価" }
+  ],
+
+  "emergencyConfig": {
+    "title": "緊急情報カード",
+    "subtitle": "全身性エリテマトーデス（SLE）",
+    "fields": [
+      { "id": "diagnosisYear", "label": "診断年", "placeholder": "例: 2020年" },
+      { "id": "organInvolvement", "label": "主な臓器障害", "placeholder": "例: ループス腎炎クラスIV" },
+      { "id": "severity", "label": "現在の活動性", "placeholder": "例: 低活動性・維持療法中" }
+    ],
+    "warnings": [
+      "免疫抑制剤使用中 — 感染症リスクが高いため、発熱時は早期受診を",
+      "ステロイド服用中 — 急な中断は副腎不全の危険。自己判断で減量・中止しないこと",
+      "易感染性 — 生ワクチン禁忌。帯状疱疹・肺炎球菌等の不活化ワクチン推奨",
+      "紫外線回避 — 直射日光で疾患が悪化する可能性あり。日焼け止め・長袖着用を推奨",
+      "妊娠計画時は必ず主治医に相談 — 使用中の薬剤によっては催奇形性あり",
+      "抗リン脂質抗体陽性の場合 — 血栓リスクに注意。長時間の不動・手術時は抗凝固療法の確認を"
+    ]
+  },
+
+  "timelineCategories": [
+    { "id": "diagnosis", "label": "診断", "color": "#dbeafe" },
+    { "id": "flare", "label": "再燃", "color": "#fca5a5" },
+    { "id": "medication_change", "label": "薬変更", "color": "#d1fae5" },
+    { "id": "exam", "label": "検査", "color": "#e9d5ff" },
+    { "id": "hospitalization", "label": "入院", "color": "#fde68a" },
+    { "id": "treatment_change", "label": "治療方針変更", "color": "#ffedd5" },
+    { "id": "self-log", "label": "じぶんメモ", "color": "#e0f2fe" },
+    { "id": "other", "label": "その他", "color": "#e5e5e5" }
+  ]
+}
