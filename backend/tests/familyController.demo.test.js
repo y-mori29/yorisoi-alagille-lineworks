@@ -60,6 +60,14 @@ async function main() {
     assert.equal(created.body.patient.diseaseId, 'alagille');
     assert.equal(created.body.patient.avatarKey, 'child-boy');
 
+    const updated = await run(controller.updateFamilyPatient, {
+        params: { patientId: created.body.patient.id },
+        body: { birthDate: '2025-01-10', avatarKey: 'child-girl' },
+    });
+    assert.equal(updated.statusCode, 200);
+    assert.equal(updated.body.patient.avatarKey, 'child-girl');
+    assert.equal(updated.body.patient.ageLabel, controller.ageLabelFromBirthDate('2025-01-10'));
+
     const after = await run(controller.listFamilyPatients);
     assert.equal(after.body.patients.length, 3);
 

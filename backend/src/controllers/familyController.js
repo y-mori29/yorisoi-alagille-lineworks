@@ -229,6 +229,44 @@ exports.createFamilyPatient = async (req, res) => {
     }
 };
 
+exports.updateFamilyPatient = async (req, res) => {
+    try {
+        const patientId = String(req.params.patientId || '').trim();
+        if (!patientId) return res.status(400).json({ ok: false, error: '記録する方を確認できませんでした' });
+
+        const allowedAvatarKeys = new Set(['adult-man', 'adult-woman', 'child-boy', 'child-girl']);
+        const displayName = String(req.body.displayName || '').trim().slice(0, 80);
+        const birthDateInput = String(req.body.birthDate || '').trim();
+        const birthDate = /^\d{4}-\d{2}-\d{2}$/.test(birthDateInput) ? birthDateInput : null;
+        const avatarKey = allowedAvatarKeys.has(req.body.avatarKey) ? req.body.avatarKey : null;
+        const updates = {};
+        if (displayName) updates.displayName = displayName;
+        if (Object.prototype.hasOwnProperty.call(req.body, 'birthDate')) updates.birthDate = birthDate;
+        if (avatarKey) updates.avatarKey = avatarKey;
+        if (!Object.keys(updates).length) return res.status(400).json({ ok: false, error: '更新する内容を入力してください' });
+
+        if (isDemoMode()) {
+            const patient = demoPatients.find((item) => item.id === patientId);
+            if (!patient) return res.status(404).json({ ok: false, error: '記録する方が見つかりません' });
+            Object.assign(patient, updates);
+            return res.json({ ok: true, familyId: DEMO_FAMILY_ID, patient: { ...patient, ageLabel: ageLabelFromBirthDate(patient.birthDate) } });
+        }
+
+        const familyId = getFamilyId(req);
+        await assertOwnedFamily(familyId, req.tenantId, req.user?.uid, ['owner', 'editor']);
+        const patientRef = familyRef(familyId).collection('patients').doc(patientId);
+        const patientDoc = await patientRef.get();
+        if (!patientDoc.exists || patientDoc.data().familyId !== familyId || patientDoc.data().tenantId !== req.tenantId) {
+            return res.status(404).json({ ok: false, error: '記録する方が見つかりません' });
+        }
+        await patientRef.set({ ...updates, updatedAt: admin.firestore.FieldValue.serverTimestamp() }, { merge: true });
+        const patient = { id: patientId, ...patientDoc.data(), ...updates };
+        return res.json({ ok: true, familyId, patient: { ...patient, ageLabel: ageLabelFromBirthDate(patient.birthDate) } });
+    } catch (error) {
+        return sendError(res, error);
+    }
+};
+
 exports.createFamilyInvitation = async (req, res) => {
     try {
         const role = req.body.role === 'editor' ? 'editor' : 'viewer';

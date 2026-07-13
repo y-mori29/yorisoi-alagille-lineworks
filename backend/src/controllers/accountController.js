@@ -19,6 +19,21 @@ function cleanText(value, maxLength) {
     return String(value || '').trim().slice(0, maxLength);
 }
 
+function normalizeBootstrapInput(body = {}) {
+    const recordTarget = body.recordTarget === 'self' ? 'self' : 'family';
+    const displayName = cleanText(body.displayName, 80);
+    const patientName = recordTarget === 'self' ? displayName : cleanText(body.patientName, 80);
+    const relationship = recordTarget === 'self'
+        ? 'self'
+        : (RELATIONSHIPS.has(body.relationship) ? body.relationship : 'other');
+    const avatarKey = AVATAR_KEYS.has(body.avatarKey)
+        ? body.avatarKey
+        : (recordTarget === 'self' ? 'adult-man' : 'child-boy');
+    const birthDate = /^\d{4}-\d{2}-\d{2}$/.test(String(body.birthDate || '')) ? body.birthDate : null;
+
+    return { recordTarget, displayName, patientName, relationship, avatarKey, birthDate };
+}
+
 exports.createSession = async (req, res) => {
     try {
         const authorization = String(req.headers.authorization || '');
@@ -59,14 +74,17 @@ exports.bootstrapAccount = async (req, res) => {
             return res.json({ ok: true, account: req.account, alreadyCreated: true });
         }
 
-        const displayName = cleanText(req.body.displayName, 80);
-        const patientName = cleanText(req.body.patientName, 80);
+        const {
+            displayName,
+            patientName,
+            relationship,
+            avatarKey,
+            birthDate,
+        } = normalizeBootstrapInput(req.body);
         if (!displayName || !patientName) {
-            return res.status(400).json({ ok: false, error: 'お名前と記録する方のお名前を入力してください' });
+            return res.status(400).json({ ok: false, error: '呼び名を入力してください' });
         }
 
-        const relationship = RELATIONSHIPS.has(req.body.relationship) ? req.body.relationship : 'other';
-        const avatarKey = AVATAR_KEYS.has(req.body.avatarKey) ? req.body.avatarKey : 'child-boy';
         const familyRef = db.collection('families').doc();
         const memberRef = familyRef.collection('members').doc(req.user.uid);
         const patientRef = familyRef.collection('patients').doc();
@@ -99,7 +117,7 @@ exports.bootstrapAccount = async (req, res) => {
                 familyId: familyRef.id,
                 tenantId: req.tenantId,
                 displayName: patientName,
-                birthDate: /^\d{4}-\d{2}-\d{2}$/.test(String(req.body.birthDate || '')) ? req.body.birthDate : null,
+                birthDate,
                 sex: ['male', 'female', 'other', 'unknown'].includes(req.body.sex) ? req.body.sex : 'unknown',
                 relationshipLabel: cleanText(req.body.relationshipLabel, 40) || (relationship === 'self' ? 'ご本人' : 'ご家族'),
                 diseaseId: 'alagille',
@@ -130,3 +148,5 @@ exports.bootstrapAccount = async (req, res) => {
         return res.status(500).json({ ok: false, error: '家族ノートを作成できませんでした' });
     }
 };
+
+module.exports.normalizeBootstrapInput = normalizeBootstrapInput;

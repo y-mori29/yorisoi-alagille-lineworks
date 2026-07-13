@@ -7,6 +7,7 @@ process.env.DEMO_MODE = '0';
 
 const { parseCookies, verifyAccountSession } = require('../src/middleware/accountAuth');
 const { getFamilyId } = require('../src/controllers/familyController');
+const { normalizeBootstrapInput } = require('../src/controllers/accountController');
 
 function createResponse() {
     return {
@@ -45,6 +46,23 @@ async function main() {
         () => getFamilyId({ query: {}, headers: {}, account: null }),
         (error) => error.status === 409,
     );
+
+    assert.deepEqual(normalizeBootstrapInput({ recordTarget: 'self', displayName: ' 森 ' }), {
+        recordTarget: 'self',
+        displayName: '森',
+        patientName: '森',
+        relationship: 'self',
+        avatarKey: 'adult-man',
+        birthDate: null,
+    });
+    assert.deepEqual(normalizeBootstrapInput({ recordTarget: 'family', displayName: '母', patientName: 'はる', birthDate: '2020-04-10' }), {
+        recordTarget: 'family',
+        displayName: '母',
+        patientName: 'はる',
+        relationship: 'other',
+        avatarKey: 'child-boy',
+        birthDate: '2020-04-10',
+    });
 
     console.log('account boundary tests passed');
 }

@@ -203,6 +203,22 @@ a, button { -webkit-tap-highlight-color: transparent; }
   white-space: nowrap;
 }
 
+.patient-demo-badge {
+  display: inline-block;
+  margin-top: 4px;
+  padding: 2px 7px 3px;
+  border-radius: 999px;
+  background: rgba(217, 155, 37, .16);
+  color: #8a6118;
+  font-size: 10px;
+  line-height: 1.2;
+  font-weight: 900;
+}
+
+.patient-demo-badge[hidden] {
+  display: none;
+}
+
 .patient-copy strong {
   font-size: 16px;
   line-height: 1.15;
@@ -1381,6 +1397,13 @@ a, button { -webkit-tap-highlight-color: transparent; }
   color: var(--ink);
   font-size: 13px;
   font-weight: 900;
+}
+
+.patient-add-form .optional-label,
+.avatar-choice-fieldset .optional-label {
+  color: var(--ink-soft);
+  font-size: 11px;
+  font-weight: 700;
 }
 
 .patient-add-form input {

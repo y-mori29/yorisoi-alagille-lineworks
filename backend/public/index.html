@@ -23,13 +23,14 @@
       </button>
     </header>
 
-    <button class="patient-selector-card" type="button" data-sheet="patient" aria-label="健康記録の対象を切り替える">
+    <button class="patient-selector-card" type="button" data-sheet="patient" aria-label="記録する方を切り替える">
       <span class="patient-avatar-frame">
         <img src="/assets/alagille-brand/avatars/avatar-child-boy-v1.png" alt="" class="patient-avatar">
       </span>
       <span class="patient-copy">
         <strong>読み込み中</strong>
-        <small>健康記録の対象を確認しています</small>
+        <small>記録する方を確認しています</small>
+        <span class="patient-demo-badge" hidden>デモデータ</span>
       </span>
       <span class="patient-switch">切り替え</span>
     </button>
@@ -183,6 +184,8 @@
     const patientName = document.querySelector(".patient-copy strong");
     const patientDetails = document.querySelector(".patient-copy small");
     const patientAvatar = document.querySelector(".patient-avatar");
+    const patientDemoBadge = document.querySelector(".patient-demo-badge");
+    let activePatient = null;
 
     const avatarArtwork = {
       "adult-man": "/assets/alagille-brand/avatars/avatar-adult-man-v1.png",
@@ -208,8 +211,11 @@
     }
 
     function setCurrentPatient(patient) {
+      activePatient = patient;
       patientName.textContent = patient.displayName;
-      patientDetails.textContent = `${patient.ageLabel || "年齢未登録"}・アラジール症候群`;
+      patientDetails.textContent = patient.ageLabel
+        ? `${patient.ageLabel}・アラジール症候群`
+        : "プロフィールはあとから設定できます";
       patientAvatar.src = avatarArtwork[patient.avatarKey] || avatarArtwork["child-boy"];
       window.localStorage.setItem("alagille-current-patient-id", patient.id);
       hydrateHomeAppointment(patient.id);
@@ -281,7 +287,7 @@
       const name = document.createElement("strong");
       name.textContent = patient.displayName;
       const age = document.createElement("small");
-      age.textContent = patient.ageLabel || "年齢未登録";
+      age.textContent = patient.ageLabel || "生年月日は未設定";
       copy.append(name, age);
 
       const check = document.createElement("span");
@@ -298,8 +304,8 @@
 
     function renderAddPatientForm() {
       kicker.textContent = "家族ノート";
-      title.textContent = "健康記録の対象を追加";
-      body.textContent = "診察・検査・薬・成長などの記録を分けて管理する方を追加します。";
+      title.textContent = "記録する方を追加";
+      body.textContent = "診察や検査などの記録を分けて残す方を追加します。";
       tags.hidden = true;
       contentRoot.replaceChildren();
 
@@ -317,7 +323,7 @@
             <label><input type="radio" name="avatarKey" value="child-girl"><img src="${avatarArtwork["child-girl"]}" alt=""><span>女の子</span></label>
           </div>
         </fieldset>
-        <button type="submit" class="sheet-primary-action">健康記録の対象に追加</button>
+        <button type="submit" class="sheet-primary-action">記録する方を追加</button>
         <p class="form-status" aria-live="polite"></p>
       `;
 
@@ -351,6 +357,75 @@
       contentRoot.append(form);
     }
 
+    function renderPatientProfile(patient = activePatient) {
+      if (!patient) return;
+      resetSheet();
+      kicker.textContent = "記録する方";
+      title.textContent = "プロフィールを整える";
+      body.textContent = "必要なときに追加できます。空欄のままでも記録は始められます。";
+      tags.hidden = true;
+
+      const form = document.createElement("form");
+      form.className = "patient-add-form";
+      form.innerHTML = `
+        <label>呼び名<input name="displayName" autocomplete="off" required maxlength="24"></label>
+        <label>生年月日 <span class="optional-label">任意</span><input name="birthDate" type="date"></label>
+        <fieldset class="avatar-choice-fieldset">
+          <legend>アバター <span class="optional-label">任意</span></legend>
+          <div class="avatar-choice-grid">
+            ${[
+              ["adult-man", "大人・男性"],
+              ["adult-woman", "大人・女性"],
+              ["child-boy", "男の子"],
+              ["child-girl", "女の子"]
+            ].map(([key, label]) => `<label><input type="radio" name="avatarKey" value="${key}" ${patient.avatarKey === key ? "checked" : ""}><img src="${avatarArtwork[key]}" alt=""><span>${label}</span></label>`).join("")}
+          </div>
+        </fieldset>
+        <button type="submit" class="sheet-primary-action">プロフィールを保存</button>
+        <button type="button" class="sheet-secondary-action" data-profile-later>あとで設定する</button>
+        <p class="form-status" aria-live="polite"></p>
+      `;
+      form.elements.displayName.value = patient.displayName;
+      form.elements.birthDate.value = patient.birthDate || "";
+      form.querySelector("[data-profile-later]").addEventListener("click", () => {
+        const url = new URL(location.href);
+        url.searchParams.delete("welcome");
+        history.replaceState({}, "", `${url.pathname}${url.search}${url.hash}`);
+        closeSheet();
+      });
+      form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        const submitButton = form.querySelector("button[type='submit']");
+        const status = form.querySelector(".form-status");
+        const formData = new FormData(form);
+        submitButton.disabled = true;
+        status.textContent = "保存しています…";
+        try {
+          const response = await fetch(`/api/family/patients/${encodeURIComponent(patient.id)}`, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              displayName: formData.get("displayName"),
+              birthDate: formData.get("birthDate") || null,
+              avatarKey: formData.get("avatarKey") || patient.avatarKey
+            })
+          });
+          const result = await response.json();
+          if (!response.ok) throw new Error(result.error || "保存できませんでした");
+          setCurrentPatient(result.patient);
+          const url = new URL(location.href);
+          url.searchParams.delete("welcome");
+          history.replaceState({}, "", `${url.pathname}${url.search}${url.hash}`);
+          closeSheet();
+        } catch (error) {
+          status.textContent = error.message || "保存できませんでした。もう一度お試しください。";
+          submitButton.disabled = false;
+        }
+      });
+      contentRoot.replaceChildren(form);
+      showSheet();
+    }
+
     function renderAccountMenu() {
       resetSheet();
       kicker.textContent = "アカウント";
@@ -361,13 +436,15 @@
       menu.className = "sheet-menu-actions";
       menu.innerHTML = `
         <button type="button" class="sheet-primary-action" data-account-action="family"><span class="material-symbols-outlined">group</span>家族共有</button>
-        <button type="button" class="sheet-secondary-action" data-account-action="patient"><span class="material-symbols-outlined">switch_account</span>健康記録の対象を切り替える</button>
+        <button type="button" class="sheet-secondary-action" data-account-action="profile"><span class="material-symbols-outlined">account_circle</span>記録する方のプロフィール</button>
+        <button type="button" class="sheet-secondary-action" data-account-action="patient"><span class="material-symbols-outlined">switch_account</span>記録する方を切り替える</button>
         <button type="button" class="sheet-secondary-action" data-account-action="help"><span class="material-symbols-outlined">help</span>よくある質問</button>
         <button type="button" class="sheet-secondary-action" data-account-action="logout"><span class="material-symbols-outlined">logout</span>ログアウト</button>
       `;
       menu.addEventListener("click", async (event) => {
         const action = event.target.closest("[data-account-action]")?.dataset.accountAction;
         if (action === "family") return renderFamilyShare();
+        if (action === "profile") return renderPatientProfile();
         if (action === "patient") return renderPatientSelector();
         if (action === "help") window.location.href = "/simple/help.html?disease=alagille";
         if (action === "logout") await window.yorisoiLogout?.();
@@ -378,7 +455,7 @@
 
     async function renderPatientSelector() {
       resetSheet();
-      kicker.textContent = "健康記録の対象";
+      kicker.textContent = "記録する方";
       title.textContent = "どなたの記録を開きますか？";
       body.textContent = "選んだ方の診察・検査・薬・成長の記録に切り替わります。";
       tags.hidden = true;
@@ -401,7 +478,7 @@
         const addButton = document.createElement("button");
         addButton.type = "button";
         addButton.className = "patient-add-button";
-        addButton.innerHTML = `<span class="material-symbols-outlined">add</span><span>健康記録の対象を追加する</span>`;
+        addButton.innerHTML = `<span class="material-symbols-outlined">add</span><span>記録する方を追加する</span>`;
         addButton.addEventListener("click", renderAddPatientForm);
         contentRoot.replaceChildren(list, addButton);
       } catch (error) {
@@ -412,9 +489,16 @@
     async function hydrateCurrentPatient() {
       const currentPatientId = window.localStorage.getItem("alagille-current-patient-id");
       try {
-        const response = await fetch("/api/family/patients");
+        const [response, accountResponse] = await Promise.all([
+          fetch("/api/family/patients"),
+          fetch("/api/account/me")
+        ]);
         if (!response.ok) return;
         const result = await response.json();
+        if (accountResponse.ok) {
+          const accountResult = await accountResponse.json();
+          patientDemoBadge.hidden = accountResult.account?.isDemo !== true;
+        }
         const currentPatient = result.patients.find((patient) => patient.id === currentPatientId) || result.patients[0];
         if (currentPatient) setCurrentPatient(currentPatient);
       } catch (error) {
@@ -668,6 +752,7 @@
     });
     hydrateCurrentPatient().then(() => {
       if (window.location.hash === "#family-share") renderFamilyShare();
+      else if (new URLSearchParams(location.search).get("welcome") === "1" && activePatient) renderPatientProfile(activePatient);
     });
   </script>
 </body>

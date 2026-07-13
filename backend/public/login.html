@@ -31,27 +31,29 @@
       </form>
 
       <form id="register-form" class="auth-form" hidden>
-        <label class="auth-field">メールアドレス<input id="register-email" type="email" autocomplete="email" required></label>
-        <label class="auth-field">パスワード<small>8文字以上</small><input id="register-password" type="password" autocomplete="new-password" minlength="8" required></label>
-        <h2 class="auth-section-title">このアプリを使う方</h2>
-        <p class="auth-field-note">ログインや家族共有で表示する、あなたのお名前です。</p>
-        <label class="auth-field">あなたのお名前<input id="display-name" type="text" maxlength="80" autocomplete="name" required></label>
-        <fieldset id="record-target-choice" class="auth-field record-target-choice" data-patient-setup><legend>どなたの健康記録をつけますか？</legend>
-          <label><input type="radio" name="recordTarget" value="self"><span><strong>自分の記録</strong><small>ご本人として使う</small></span></label>
-          <label><input type="radio" name="recordTarget" value="family" checked><span><strong>家族の記録</strong><small>お子さん・ご家族を支える</small></span></label>
-        </fieldset>
-        <label id="relationship-field" class="auth-field">健康記録の対象となる方との関係<select id="relationship"><option value="mother">母</option><option value="father">父</option><option value="self">本人</option><option value="grandparent">祖父母</option><option value="other">その他</option></select></label>
-        <h2 class="auth-section-title" data-patient-setup>健康記録の対象となる方</h2>
-        <p class="auth-field-note" data-patient-setup>診察・検査・薬・成長などを記録するご本人です。ご自身の記録の場合も入力してください。</p>
-        <label id="patient-name-field" class="auth-field" data-patient-setup>お名前・呼び名<input id="patient-name" type="text" maxlength="80" required></label>
-        <label class="auth-field" data-patient-setup>生年月日<small>任意</small><input id="birth-date" type="date"></label>
-        <fieldset class="auth-field" data-patient-setup><legend>アバター</legend><div class="avatar-options">
-          <label class="avatar-option"><input type="radio" name="avatar" value="child-boy" checked><span><img src="/assets/alagille-brand/avatars/avatar-child-boy-v1.png" alt="男の子"></span></label>
-          <label class="avatar-option"><input type="radio" name="avatar" value="child-girl"><span><img src="/assets/alagille-brand/avatars/avatar-child-girl-v1.png" alt="女の子"></span></label>
-          <label class="avatar-option"><input type="radio" name="avatar" value="adult-man"><span><img src="/assets/alagille-brand/avatars/avatar-adult-man-v1.png" alt="成人男性"></span></label>
-          <label class="avatar-option"><input type="radio" name="avatar" value="adult-woman"><span><img src="/assets/alagille-brand/avatars/avatar-adult-woman-v1.png" alt="成人女性"></span></label>
-        </div></fieldset>
-        <button id="register-submit" class="auth-primary" type="submit">アカウントと家族ノートを作る</button>
+        <div class="auth-progress" aria-label="登録の進み具合"><span data-register-progress="1">1</span><i></i><span data-register-progress="2">2</span></div>
+        <section id="register-account-step" class="auth-step" aria-labelledby="register-account-title">
+          <h2 id="register-account-title" class="auth-section-title">アカウントを作る</h2>
+          <p class="auth-field-note">まずは、ログインに使う情報だけを登録します。</p>
+          <label class="auth-field">メールアドレス<input id="register-email" type="email" autocomplete="email" required></label>
+          <label class="auth-field">パスワード<small>8文字以上</small><input id="register-password" type="password" autocomplete="new-password" minlength="8" required></label>
+          <button id="register-next" class="auth-primary" type="button">次へ</button>
+        </section>
+        <section id="register-profile-step" class="auth-step" aria-labelledby="register-profile-title" hidden>
+          <h2 id="register-profile-title" class="auth-section-title">どなたの記録を始めますか？</h2>
+          <p class="auth-field-note" data-patient-setup>細かなプロフィールは、あとから設定できます。</p>
+          <fieldset id="record-target-choice" class="auth-field record-target-choice" data-patient-setup><legend class="visually-hidden">記録する方</legend>
+            <label><input type="radio" name="recordTarget" value="self"><span><strong>自分の記録</strong><small>ご自身の診察や検査を残す</small></span></label>
+            <label><input type="radio" name="recordTarget" value="family" checked><span><strong>家族の記録</strong><small>お子さんやご家族の記録を残す</small></span></label>
+          </fieldset>
+          <label class="auth-field">あなたの呼び名<input id="display-name" type="text" maxlength="80" autocomplete="name" required placeholder="例：お母さん"></label>
+          <label id="patient-name-field" class="auth-field" data-patient-setup>記録する方の呼び名<input id="patient-name" type="text" maxlength="80" required placeholder="例：はるくん"></label>
+          <p class="auth-skip-note" data-patient-setup>生年月日やアバターは、記録を始めてから追加できます。</p>
+          <div class="auth-step-actions">
+            <button id="register-back" class="auth-secondary" type="button">戻る</button>
+            <button id="register-submit" class="auth-primary" type="submit">記録を始める</button>
+          </div>
+        </section>
       </form>
       <p id="auth-message" class="auth-message" role="alert" aria-live="polite"></p>
     </section>
@@ -76,6 +78,7 @@
     const params = new URLSearchParams(location.search);
     const inviteToken = params.get('invite') || '';
     let hasServerSession = false;
+    let registerStep = 1;
     const nextPath = (() => { const value = params.get('next') || '/?disease=alagille'; return value.startsWith('/') && !value.startsWith('//') ? value : '/?disease=alagille'; })();
 
     function showMode(mode) {
@@ -85,16 +88,32 @@
       $('login-tab').setAttribute('aria-selected', String(login));
       $('register-tab').setAttribute('aria-selected', String(!login));
       $('auth-message').textContent = '';
+      if (!login) showRegisterStep(hasServerSession ? 2 : 1);
+    }
+
+    function showRegisterStep(step) {
+      registerStep = step === 2 ? 2 : 1;
+      $('register-account-step').hidden = registerStep !== 1;
+      $('register-profile-step').hidden = registerStep !== 2;
+      document.querySelectorAll('[data-register-progress]').forEach((item) => {
+        item.classList.toggle('is-current', Number(item.dataset.registerProgress) === registerStep);
+        item.classList.toggle('is-complete', Number(item.dataset.registerProgress) < registerStep);
+      });
+      $('register-back').hidden = hasServerSession;
+      $('auth-message').textContent = '';
     }
 
     function syncRecordTarget() {
       if (inviteToken) return;
       const self = document.querySelector('input[name="recordTarget"]:checked')?.value === 'self';
-      $('relationship-field').hidden = self;
       $('patient-name-field').hidden = self;
       $('patient-name').required = !self;
-      if (self) $('relationship').value = 'self';
-      else if ($('relationship').value === 'self') $('relationship').value = 'mother';
+    }
+
+    function pathWithWelcome() {
+      const target = new URL(nextPath, location.origin);
+      target.searchParams.set('welcome', '1');
+      return `${target.pathname}${target.search}${target.hash}`;
     }
 
     function friendlyError(error) {
@@ -119,7 +138,7 @@
       const response = await fetch(`/api/family/invitations/${encodeURIComponent(inviteToken)}/accept`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ displayName: $('display-name').value, relationship: $('relationship').value })
+        body: JSON.stringify({ displayName: $('display-name').value, relationship: 'other' })
       });
       const result = await response.json();
       if (!response.ok) throw new Error(result.error || '家族ノートに参加できませんでした。');
@@ -134,6 +153,11 @@
 
     $('login-tab').addEventListener('click', () => showMode('login'));
     $('register-tab').addEventListener('click', () => showMode('register'));
+    $('register-next').addEventListener('click', () => {
+      if (!$('register-email').reportValidity() || !$('register-password').reportValidity()) return;
+      showRegisterStep(2);
+    });
+    $('register-back').addEventListener('click', () => showRegisterStep(1));
     document.querySelectorAll('input[name="recordTarget"]').forEach((input) => input.addEventListener('change', syncRecordTarget));
 
     $('login-form').addEventListener('submit', (event) => {
@@ -143,7 +167,7 @@
         await createServerSession(credential.user);
         const me = await fetch('/api/account/me').then((response) => response.json());
         if (inviteToken && !me.needsOnboarding) { await acceptInvitation(); await signOut(auth); location.replace(nextPath); return; }
-        if (me.needsOnboarding) { showMode('register'); $('register-email').value = credential.user.email || ''; $('register-email').disabled = true; $('register-password').closest('label').hidden = true; return; }
+        if (me.needsOnboarding) { showMode('register'); showRegisterStep(2); $('register-email').value = credential.user.email || ''; $('register-email').disabled = true; $('register-password').closest('label').hidden = true; return; }
         await signOut(auth);
         location.replace(nextPath);
       });
@@ -168,18 +192,16 @@
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
+            recordTarget: document.querySelector('input[name="recordTarget"]:checked')?.value || 'family',
             displayName: $('display-name').value,
-            relationship: $('relationship').value,
             patientName: document.querySelector('input[name="recordTarget"]:checked')?.value === 'self' ? $('display-name').value : $('patient-name').value,
-            birthDate: $('birth-date').value,
-            avatarKey: document.querySelector('input[name="avatar"]:checked').value
           })
         });
         const result = await response.json();
         if (!response.ok) throw new Error(result.error || '家族ノートを作成できませんでした。');
         if (result.patientId) localStorage.setItem('alagille-current-patient-id', result.patientId);
         if (auth.currentUser) await signOut(auth);
-        location.replace(nextPath);
+        location.replace(pathWithWelcome());
       });
     });
 
@@ -194,6 +216,7 @@
     syncRecordTarget();
     if (inviteToken) {
       document.querySelector('.auth-lead').textContent = '招待された家族ノートへ参加します。';
+      $('register-profile-title').textContent = 'あなたの呼び名を教えてください';
       $('register-submit').textContent = '家族ノートに参加する';
       document.querySelectorAll('[data-patient-setup]').forEach((element) => { element.hidden = true; });
       $('patient-name').required = false;
@@ -208,6 +231,7 @@
           location.replace(nextPath);
         } else {
           showMode('register');
+          showRegisterStep(2);
           $('register-email').value = me.user?.email || '';
           $('register-email').disabled = true;
           $('register-password').required = false;
